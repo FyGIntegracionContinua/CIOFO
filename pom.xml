@@ -225,6 +225,30 @@
 	<build>
 		<plugins>
 			<plugin>
+				    <groupId>org.codehaus.mojo</groupId>
+				    <artifactId>findbugs-maven-plugin</artifactId>
+				    <version>2.3.3</version>
+				    <configuration>
+				        <trace>false</trace>
+				        <effort>Max</effort>
+				        <threshold>Low</threshold>
+				        <xmlOutput>true</xmlOutput>
+				        <failOnError>false</failOnError>
+				        <jvmArgs>
+					        <jvmArg>-Xmx1024m</jvmArg>
+					        <jvmArg>-Xms256m</jvmArg>
+					    </jvmArgs>
+				    </configuration>
+				    <executions>
+				        <execution>
+				            <phase>verify</phase>
+				            <goals>
+				                <goal>findbugs</goal>
+				            </goals>
+				        </execution>
+				    </executions>
+				</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.3.1</version>
