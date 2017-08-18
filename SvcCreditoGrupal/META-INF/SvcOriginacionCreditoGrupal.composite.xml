@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+ 		name="SvcOriginacionCreditoGrupal"
+ 		targetNamespace="urn:independencia.creditogrupal.negocio"
+ 		autowire="true">
+
+    <component name="OriginacionCreditoGrupal">
+        <implementation.java class="negocio.originacion.OriginacionCreditoGrupalImpl"/>
+        <service name="OriginacionCreditoGrupal">
+            <binding.ws uri="/CIOF/SvcOriginacionCreditoGrupal"/>
+        </service>
+   	   	<reference multiplicity="1..1" name="cliente" target="OriginacionCliente"/>
+	    <reference multiplicity="1..1" name="grupo" target="OriginacionGrupo"/>
+    	<reference multiplicity="1..1" name="credito" target="OriginacionCredito"/>
+    	<reference multiplicity="1..1" name="consultas" target="OriginacionConsultas"/>
+    	<reference multiplicity="1..1" name="kitImpresion" target="ImpresionDocsInformacion"/>
+    	<reference multiplicity="1..1" name="chequesSIC" target="ChequesSIC"/>
+    </component>
+</composite>

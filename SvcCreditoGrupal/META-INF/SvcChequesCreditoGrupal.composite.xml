@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+ 		name="SvcChequesCreditoGrupal"
+ 		targetNamespace="urn:independencia.creditogrupal.negocio"
+ 		autowire="true">
+
+    <component name="ChequesCreditoGrupal">
+        <implementation.java class="negocio.chequescreditogrupal.ChequesCreditoGrupalImpl"/>
+        <service name="ChequesCreditoGrupal">
+            <binding.ws uri="/CIOF/SvcChequesCreditoGrupal"/>
+        </service>
+        <reference multiplicity="1..1" name="chequesCreditoGrupalTarea" target="ChequesCreditoGrupalTareaImpl"/>
+        <reference multiplicity="1..1" name="transformador" target="Transformador"/>
+    </component>
+
+</composite>

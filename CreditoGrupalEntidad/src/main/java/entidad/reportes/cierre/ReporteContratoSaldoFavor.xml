@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<!-- Namespace es un nombre cualquiera -->
+<mapper namespace="creditogrupal.entity.reportes.cierre.ibatis">
+
+	<!-- ******************************************************************************************* -->
+	<!-- SECCION PARA DEFINIR LOS RESULT MAPS QUE SERÁN EMPLEADOS POR ALGUN
+		QUERY DESDE ESTE ARCHIVO -->
+	<!-- ******************************************************************************************* -->
+
+	<!-- type sale del archivo ConfigNTx.xml del typeAlias, id= nombre cualquiera
+		para identificar el resultMap generado -->
+
+	<!-- Mapeo para obtener los datos del reporte de contratos activos con saldo
+		a favor -->
+	<resultMap id="contratosActivosSaldoFavorId" type="contratosActivosSaldoFavor">
+		<!-- property=campo en mi OV, column=nombre_campo_tabla (en dado caso el
+			que esta despues de AS) -->
+		<result property="contrato" column="Contrato" />
+		<result property="numGrupo" column="No_Grupo" />
+		<result property="nombreGrupo" column="Nombre_Grupo" />
+		<result property="producto" column="Producto" />
+		<result property="saldo" column="Saldo" />
+		<result property="claveT24" column="clave_finsol" />
+		<result property="fechaApertura" column="Fecha_Apertura" />
+		<result property="numSucursal" column="No_Sucursal" />
+		<result property="nombreSucursal" column="Nombre_Sucursal" />
+		<result property="fechaUltimoMovCredito" column="Fecha_Ultimo_Mov_Credito" />
+
+	</resultMap>
+
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR EL NUMERO DE REGISTROS A PROCESAR -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Contamos todos los registros a procesar para el reporte Contratos Activos
+		Saldo A Favor --><!-- <select id ="obtenerTotalRegistrosReporteCierreSaldoFavor" resultType="Integer">
+		<![CDATA[ SELECT COUNT(*) AS TotalContratos FROM contratos c WHERE c.status
+		='P' AND c.clave_empresa = '100000003' AND c.capital_insoluto < 0 ]]> </select> -->
+	<select id="obtenerTotalRegistrosReporteCierreSaldoFavor"
+		resultType="Integer">
+		 <![CDATA[
+			SELECT
+				COUNT(*)  AS TotalContratos
+			FROM
+				contratos c
+			WHERE c.status ='P'
+			AND c.clave_empresa = '100000003'
+			AND c.capital_insoluto < 0
+		]]>
+	</select>
+
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR LOS QUERIES QUE SERÁN EJECUTADOS DESDE ALGUNA
+		CLASE DE JAVA -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Obtenemos el bloque correspondiente de registros (contratosActivosSaldoAFavor) -->
+	<!--<select id="obtenerReporteCierreContratosSaldoFavor" resultMap="contratosActivosSaldoFavorId">
+		<![CDATA[ SELECT distinct contrato_clave_finsol.contrato_LD AS Contrato,
+		c.cliente AS No_Grupo, personas.nombre AS Nombre_Grupo, productos.descripcion
+		AS Producto, c.capital_insoluto AS Saldo, convert(char(10), c.fecha_contrato,
+		103) AS Fecha_Apertura, c.sucursal AS No_Sucursal, sucursales.nombre AS Nombre_Sucursal,
+		r.clave_finsol AS ClaveT24, convert(char(10), c.fecha_ult_mov, 103) AS Fecha_Ultimo_Mov_Credito
+		FROM contratos c, contrato_clave_finsol, personas, sucursales, productos,relacion_clave_finsol
+		r WHERE contrato_clave_finsol.contrato = c.contrato AND personas.persona
+		= c.cliente AND sucursales.sucursal = c.sucursal AND productos.producto =
+		c.producto AND personas.persona = r.persona AND c.status ='P' AND c.clave_empresa
+		= '100000003' AND c.capital_insoluto < 0 ORDER BY c.contrato ]]> </select> -->
+
+	<select id="obtenerReporteCierreContratosSaldoFavor" resultMap="contratosActivosSaldoFavorId">
+		<![CDATA[
+		SELECT
+				cf.contrato_LD 								AS Contrato,
+				c.cliente									AS No_Grupo,
+				g.nombre									AS Nombre_Grupo,
+				p.descripcion								AS Producto,
+				c.capital_insoluto							AS Saldo,
+				convert(char(10), c.fecha_contrato, 103)	AS Fecha_Apertura,
+				c.sucursal									AS No_Sucursal,
+				s.nombre									AS Nombre_Sucursal,
+				r.clave_finsol								AS ClaveT24,
+				convert(char(10), c.fecha_ult_mov, 103)		AS Fecha_Ultimo_Mov_Credito
+		FROM
+				contratos c
+			INNER JOIN contrato_clave_finsol cf (INDEX PK_contrato_clave_finsol)
+				ON cf.contrato  = c.contrato
+			INNER JOIN personas g
+				ON g.persona = c.cliente
+			INNER JOIN sucursales s
+				ON s.sucursal = c.sucursal
+			INNER JOIN productos p
+				ON p.producto = c.producto
+			INNER JOIN relacion_clave_finsol r
+				ON r.persona = g.persona
+			WHERE c.status ='P'
+			AND c.clave_empresa = '100000003'
+			AND c.capital_insoluto < 0
+		 ]]>
+	</select>
+
+</mapper>

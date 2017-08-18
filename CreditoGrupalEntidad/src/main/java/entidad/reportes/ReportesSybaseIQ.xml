@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="creditogrupal.entity.reportes.ibatis">
+
+	<select id="obtenerDatosRM" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		DECLARE @fecha varchar(10)
+		SET @fecha =
+		#{ultimoDiaMes,jdbcType=VARCHAR}
+		SELECT ( CASE WHEN ( datediff(day,
+		@fecha, c.fecha_esp_liq) ) <![CDATA[ < ]]>
+		8 THEN '1 a 7 dias'
+		WHEN datediff(day, @fecha, c.fecha_esp_liq) BETWEEN 8 AND 30 THEN '7 dias
+		a 1 mes'
+		WHEN datediff(day, @fecha, c.fecha_esp_liq) BETWEEN 31 AND 89 THEN '1 a 3
+		meses'
+		WHEN datediff(day, @fecha, c.fecha_esp_liq) BETWEEN 90 AND 179 THEN '3 a 6
+		meses'
+		WHEN datediff(day, @fecha, c.fecha_esp_liq) BETWEEN 180 AND 365 THEN '6
+		meses a 1 año'
+		WHEN datediff(day, @fecha, c.fecha_esp_liq) BETWEEN 366 AND 730 THEN '1 a
+		2 años'
+		ELSE 'OTRO' END ) AS bucket,
+		s.status_cv AS status,
+		s.propietario AS propietario,
+		count(1) AS cuantos,
+		sum(round(round(s.capital_insoluto,2) + round(s.devengado_por_pagar,2),2)) AS monto
+		FROM
+		finsol_contratos_hist c
+		JOIN finsol_saldos_hist s ON c.contrato = s.contrato
+		WHERE s.mes = #{yearmonth, jdbcType=NUMERIC}
+		AND c.mes = #{yearmonth,
+		jdbcType=NUMERIC}
+		AND s.status IN ('D','N')
+		AND s.propietario =
+		'000002011'
+		GROUP BY ( CASE WHEN ( datediff(day, @fecha,
+		c.fecha_esp_liq) ) <![CDATA[ < ]]>
+		8 THEN '1 a 7 dias'
+		WHEN datediff(day, @fecha, c.fecha_esp_liq) BETWEEN 8 AND 30 THEN '7 dias
+		a 1 mes'
+		WHEN datediff(day, @fecha, c.fecha_esp_liq) BETWEEN 31 AND 89 THEN '1 a 3
+		meses'
+		WHEN datediff(day, @fecha, c.fecha_esp_liq) BETWEEN 90 AND 179 THEN '3 a 6
+		meses'
+		WHEN datediff(day, @fecha, c.fecha_esp_liq) BETWEEN 180 AND 365 THEN '6
+		meses a 1 año'
+		WHEN datediff(day, @fecha, c.fecha_esp_liq) BETWEEN 366 AND 730 THEN '1 a
+		2 años'
+		ELSE 'OTRO' END ) ,
+		s.status_cv,
+		s.propietario
+	</select>
+</mapper>

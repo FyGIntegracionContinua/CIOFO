@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.consultas.ntx">
+
+	<resultMap id="reporteDatosClienteId" type="reporteDatosCliente">
+		<!-- property=campo en mi OV, column=nombre_campo_tabla (en dado caso el
+			que esta despues de AS) -->
+		<result property="persona" column="Persona" />
+		<result property="apellidoPat" column="Apellido_Paterno" />
+		<result property="apellidoMat" column="Apellido_Materno" />
+		<result property="nombre" column="Nombre" />
+		<result property="fechanacimiento" column="Fecha_de_Nacimiento" />
+		<result property="sexo" column="Sexo" />
+		<result property="calle" column="Calle_y_Numero" />
+		<result property="colonia" column="Colonia" />
+		<result property="municipio" column="Delegacion_o_Municipio" />
+		<result property="estado" column="Estado" />
+		<result property="cp" column="Codigo_Postal" />
+		<result property="numeroIdentificacion" column="IFE" />
+		<result property="estatus" column="Estatus" />
+		<result property="rfc" column="RFC" />
+		<result property="sucursal" column="Sucursal" />
+		<result property="cliente" column="cliente" />
+		<result property="nombreGrupo" column="Nombre de Grupo" />
+		<result property="ciclo" column="Ciclo" />
+		<result property="montoOtorgado" column="Monto_Prestamo" />
+		<result property="tipoIdentificacion" column="TipoIdentificacion" />
+		<result property="claveT24" column="claveT24" />
+		<result property="edad" column="edad" />
+		<result property="nombreSucursal" column="nombreSucursal" />
+	</resultMap>
+
+	<resultMap id="asesorOVId" type="asesorOV">
+		<result property="daot24" column="daot24" />
+		<result property="nombre" column="nombre" />
+		<result property="apellidoPaterno" column="apellidop" />
+		<result property="apellidoMaterno" column="apellidom" />
+		<result property="rfc" column="rfc" />
+		<result property="persona" column="nomina" />
+	</resultMap>
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR LOS QUERIES QUE SER�N EJECUTADOS DESDE ALGUNA
+		CLASE DE JAVA -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Obtenemos el bloque correspondiente de registros (contratosActivosMora) -->
+	<select id="obtenerReporteCierreDatosCliente" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.ReporteDatosCliente">
+
+		SELECT universo.persona AS cliente,
+		universo.apellido_pat AS apellidoPat,
+		universo.apellido_mat AS apellidoMat,
+		universo.nombre AS nombre,
+		universo.fecha_nacimiento AS fechanacimiento,
+		universo.sexo AS sexo,
+		universo.calle AS calle,
+		universo.colonia AS colonia,
+		universo.municipio AS municipio,
+		universo.estado AS estado,
+		universo.cp AS cp,
+		universo.telefono AS telefono,
+		I.status AS estatus,
+		universo.edad AS edad,
+		universo.rfc AS rfc,
+		C.sucursal AS sucursal,
+		universo.nombreSucursal AS nombreSucursal,
+		RC.clave_finsol AS codigoGrupo,
+		PE.nombre AS nombreGrupo,
+		CCF.contrato_LD AS ultimoLD,
+		universo.ciclo AS ciclo,
+		I.monto_otorgado AS montoOtorgado,
+		universo.tipo_identificacion AS tipoIdentificacion,
+		universo.numero_identificacion AS numeroIdentificacion,
+		universo.personalidad AS Personalidad,
+		universo.clave_finsol AS claveT24,
+		universo.contrato AS contrato,
+		CCF.contrato_LD AS contratoLD
+		FROM (
+		select
+		P.persona ,
+		P.apellido_pat ,
+		P.apellido_mat ,
+		P.nombre ,
+		P.fecha_nacimiento ,
+		P.sexo ,
+		P.calle ,
+		P.colonia ,
+		P.municipio ,
+		E.estado ,
+		P.cp ,
+		P.numero_identificacion ,
+		P.rfc ,
+		P.ciclo ,
+		P.personalidad ,
+		P.tipo_identificacion ,
+		RCF.clave_finsol ,
+		CONVERT(INT,DATEDIFF(DAY, P.fecha_nacimiento, GETDATE())/365.25) AS edad,
+		S.nombre as nombreSucursal ,
+		PT.telefono ,
+		MAX(C.contrato) AS contrato
+		FROM contratos C
+		INNER JOIN integrante_grupo I on I.contrato=C.contrato
+		INNER JOIN sucursales S on S.sucursal=C.sucursal
+		INNER JOIN personas P on I.integrante=P.persona
+		INNER JOIN relacion_clave_finsol RCF ON RCF.persona = P.persona
+		INNER JOIN estados E ON P.entidad = E.codigo_financiera
+		LEFT JOIN persona_telefono PT ON PT.persona = P.persona AND
+		PT.tipo_telefono='DIRE'
+		WHERE
+		<if test="mascaraNombre != null">
+			<if test="nombre != null">
+		                			<![CDATA[ P.nombre like ( #{nombre} )  ]]>
+				<if test="apellidoPaterno != null">
+		                				<![CDATA[ AND P.apellido_pat like ( #{apellidoPaterno} ) ]]>
+				</if>
+				<if test="apellidoMaterno != null">
+		                				<![CDATA[ AND P.apellido_mat like ( #{apellidoMaterno} ) ]]>
+				</if>
+			</if>
+			<if test="nombre == null">
+				<if test="apellidoPaterno != null">
+		                	    		<![CDATA[ P.apellido_pat like ( #{apellidoPaterno} ) ]]>
+					<if test="apellidoMaterno != null">
+		                					<![CDATA[ AND P.apellido_mat like ( #{apellidoMaterno} ) ]]>
+					</if>
+				</if>
+				<if test="apellidoPaterno == null">
+					<if test="apellidoMaterno != null">
+		                	    			<![CDATA[ P.apellido_mat like ( #{apellidoMaterno} ) ]]>
+					</if>
+				</if>
+			</if>
+		</if>
+		<if test="mascaraExtra != null">
+			<if test="mascaraNombre != null">
+		                			<![CDATA[ AND ]]>
+			</if>
+			<if test="nombreGrupo != null">
+		                			<![CDATA[ P.persona IN (SELECT integrante FROM personas join contratos on personas.persona = contratos.cliente
+									JOIN integrante_grupo ON integrante_grupo.contrato = contratos.contrato
+									WHERE nombre like ( #{nombreGrupo} ) ) ]]>
+				<if test="sucursal != null">
+		                				<![CDATA[ AND ( C.sucursal = #{sucursal} ) ]]>
+				</if>
+			</if>
+			<if test="nombreGrupo == null">
+		                			<![CDATA[ ( C.sucursal = #{sucursal} ) ]]>
+			</if>
+		</if>
+
+		GROUP by
+		P.persona ,
+		P.apellido_pat ,
+		P.apellido_mat ,
+		P.nombre ,
+		P.fecha_nacimiento ,
+		P.sexo ,
+		P.calle ,
+		P.colonia ,
+		P.municipio ,
+		E.estado ,
+		P.cp ,
+		P.numero_identificacion ,
+		P.rfc ,
+		P.ciclo ,
+		P.personalidad ,
+		P.tipo_identificacion ,
+		RCF.clave_finsol ,
+		(datediff(month,P.fecha_nacimiento, getdate())/12) ,
+		S.nombre ,
+		PT.telefono
+		) universo
+		INNER JOIN contrato_clave_finsol CCF ON CCF.contrato = universo.contrato
+		INNER JOIN contratos C ON C.contrato = universo.contrato
+		INNER JOIN relacion_clave_finsol RC ON RC.persona = C.cliente
+		INNER JOIN personas PE ON PE.persona = C.cliente AND PE.personalidad='G'
+		INNER JOIN integrante_grupo I ON I.contrato = universo.contrato AND
+		I.integrante = universo.persona
+
+
+
+	</select>
+
+
+	<!-- ******************************************************************************** -->
+	<!-- CONSULTAS PARA SOPORTE A OPERACION SISEFIN -->
+	<!-- ******************************************************************************** -->
+	<select id="consultarDatosSISEFIN" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.ConsultaSISEFINVO">
+		SELECT
+		rcf.clave_finsol as codigoCliente,
+		p.nombre,
+		p.apellido_pat as apPaterno,
+		p.apellido_mat as apMaterno,
+		p.fecha_nacimiento as fechaNacimiento,
+		p.sexo,
+		p.rfc,
+		p.pais,
+		e.estado as entidad,
+		p.municipio,
+		p.ciudad,
+		p.colonia,
+		p.cp,
+		p.calle,
+		c.sucursal as codigoSucursal,
+		s.nombre as nombreSucursal,
+		c.fecha_disposicion as fechaApertura,
+		p.edo_civil as estadoCivil,
+		rcfg.clave_finsol as codigoGrupo,
+		pg.nombre as nombreGrupo,
+		ig.ciclo_integrante as ciclo,
+		ccf.contrato_LD as contratoLD,
+		c.fecha_liq as fechaFinCredito,
+		ISNULL(pt.lada,'00') + ISNULL(pt.telefono,'00000000') as telefono
+		FROM personas p
+		JOIN
+		relacion_clave_finsol rcf ON rcf.persona = p.persona
+		JOIN
+		integrante_grupo ig ON ig.integrante = p.persona
+		JOIN contratos c ON
+		c.contrato = ig.contrato
+		JOIN contrato_clave_finsol ccf ON ccf.contrato
+		= c.contrato
+		JOIN relacion_clave_finsol rcfg ON rcfg.persona =
+		c.cliente
+		JOIN personas pg ON pg.persona = rcfg.persona
+		JOIN estados e
+		ON e.codigo_financiera = p.entidad
+		JOIN sucursales s ON s.sucursal =
+		c.sucursal
+		LEFT JOIN persona_telefono pt ON pt.persona = p.persona AND
+		tipo_telefono='DIRE'
+		WHERE 1 = 1
+
+		<if test="sucursal != null"> AND c.sucursal = #{sucursal} </if>
+
+		<if test="nombre != null"> AND p.nombre = #{nombre} </if>
+
+		<if test="apellidoPaterno != null"> AND p.apellido_pat = #{apellidoPaterno} </if>
+
+		<if test="apellidoMaterno != null"> AND p.apellido_mat = #{apellidoMaterno} </if>
+
+		<if test="codigoPersona != null"> AND rcf.clave_finsol = #{codigoPersona} </if>
+
+		<if test="contratoLD != null"> AND ccf.contrato_LD = #{contratoLD} </if>
+
+		<if test="claveGrupo != null"> AND rcfg.clave_finsol = #{claveGrupo} </if>
+
+		<if test="fechaInicio != null">
+			<![CDATA[ AND fecha_disposicion >= #{fechaInicio} ]]>
+		</if>
+
+		<if test="fechaFin != null">
+			<![CDATA[ AND fecha_disposicion <= #{fechaFin} ]]>
+		</if>
+		ORDER BY rcf.clave_finsol, c.fecha_disposicion ASC
+	</select>
+
+	<!-- Consulta para obtener los asesores, apartir de la red operativa -->
+	<select id="obtenerListaAsesores" resultMap="asesorOVId">
+		SELECT ro.no_DAO AS daot24 , p.nombre, p.apellido_pat AS apellidop,
+		p.apellido_mat AS apellidom, p.rfc, p.persona AS nomina
+		FROM red_operativa ro
+		JOIN personas p
+		ON p.persona = ro.persona
+		WHERE 1 = 1
+		AND ro.nivel = 'ASES'
+	</select>
+
+	<!-- ************************************* -->
+	<!-- Saldos a favor masivo -->
+	<!-- ************************************* -->
+	<select id="consultarCreditosSaldoAFavor" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.SaldoAFavorCreditoVigenteVO">
+
+		<!-- SELECT ccf.contrato_LD AS contrato, pro.descripcion AS tipoCredito,
+			p.nombre AS nombreGrupo, s.nombre AS sucursal, ABS( c.capital_insoluto )
+			AS importeAplicado, cccf.contrato_LD AS contratoVigente FROM contratos c
+			JOIN contrato_clave_finsol ccf ON ccf.contrato = c.contrato JOIN personas
+			p ON p.persona = c.cliente JOIN sucursales s ON s.sucursal = c.sucursal JOIN
+			productos pro ON c.producto = pro.producto JOIN contratos ccc ON ccc.cliente
+			= c.cliente AND ccc.status = 'D' JOIN contrato_clave_finsol cccf ON cccf.contrato
+			= ccc.contrato WHERE 1 = 1 <![CDATA[ AND c.capital_insoluto < 0 ]]> <if test="sucursal
+			!= 0"> AND c.sucursal = #{sucursal} </if> ORDER BY ccf.contrato -->
+
+
+		SELECT universo.contratoLD AS contrato,
+		universo.contrato AS contratoCredprod,
+		universo.tipoCredito,
+		universo.nombreGrupo,
+		universo.sucursal,
+		universo.fechaAplicacion,
+		universo.medioPago,
+		universo.importeAplicado,
+		universo.contratoVigente,
+		ccf.contrato AS contratoCredprodVigente,
+		pro.descripcion AS tipoCreditoVigente,
+		p.nombre AS nombreGrupoVigente,
+		s.nombre AS sucursalVigente,
+		c.fecha_prox_pago AS fechaProximoPagoVigente,
+		c.monto_pago AS parcialidadVigente
+		FROM (
+		SELECT max (m.fecha_valor) AS fechaAplicacion,
+		ISNULL(pc.nombre_prod_corto,'') AS medioPago,
+		creditos_saldo_a_favor.contratoLD,
+		creditos_saldo_a_favor.contrato,
+		creditos_saldo_a_favor.tipoCredito,
+		creditos_saldo_a_favor.nombreGrupo,
+		creditos_saldo_a_favor.sucursal,
+		creditos_saldo_a_favor.importeAplicado,
+		creditos_saldo_a_favor.contratoVigente
+		FROM movimientos m
+		INNER JOIN (
+		SELECT ccf.contrato_LD AS contratoLD,
+		ccf.contrato AS contrato,
+		pro.descripcion AS tipoCredito,
+		p.nombre AS nombreGrupo,
+		s.nombre AS sucursal,
+		ABS( c.capital_insoluto ) AS importeAplicado,
+		cccf.contrato_LD AS contratoVigente
+		FROM contratos c
+		JOIN contrato_clave_finsol ccf ON ccf.contrato = c.contrato
+		JOIN personas p ON p.persona = c.cliente
+		JOIN sucursales s ON s.sucursal = c.sucursal
+		JOIN productos pro ON c.producto = pro.producto
+		JOIN contratos ccc ON ccc.cliente = c.cliente AND ccc.status = 'D'
+		JOIN contrato_clave_finsol cccf ON cccf.contrato = ccc.contrato
+		WHERE 1 = 1
+							<![CDATA[
+	   							AND c.capital_insoluto < 0
+							]]>
+		<if test="sucursal != 0">
+			AND c.sucursal = #{sucursal}
+		</if>
+		) creditos_saldo_a_favor ON creditos_saldo_a_favor.contrato =
+		m.contrato
+		LEFT JOIN productos_cliente pc ON pc.clave_prod = m.codigo_servicio
+		WHERE m.codigo = 'PSAF'
+		AND m.status IS NULL
+		GROUP BY ISNULL(pc.nombre_prod_corto,''),
+		creditos_saldo_a_favor.contratoLD,
+		creditos_saldo_a_favor.contrato,
+		creditos_saldo_a_favor.tipoCredito,
+		creditos_saldo_a_favor.nombreGrupo,
+		creditos_saldo_a_favor.sucursal,
+		creditos_saldo_a_favor.importeAplicado,
+		creditos_saldo_a_favor.contratoVigente
+		) universo
+		JOIN contrato_clave_finsol ccf ON ccf.contrato_LD =
+		universo.contratoVigente
+		JOIN contratos c ON c.contrato = ccf.contrato
+		JOIN personas p ON c.cliente = p.persona
+		JOIN sucursales s ON
+		c.sucursal = s.sucursal
+		JOIN productos pro ON c.producto = pro.producto
+		ORDER BY contratoLD desc
+
+	</select>
+
+
+
+	<select id="obtenDatosPagoSaldoAFavor" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+		SELECT TOP 1 m.fecha_valor AS fechaAplicacion,
+		ISNULL(pc.nombre_prod_corto,'') AS medioPago
+		FROM movimientos m
+		JOIN
+		contrato_clave_finsol ccf ON ccf.contrato = m.contrato
+		LEFT JOIN productos_cliente pc ON pc.clave_prod = m.codigo_servicio
+		WHERE
+		ccf.contrato_LD = #{contratoLD}
+		AND m.codigo = 'PSAF'
+		AND m.status IS NULL
+	</select>
+
+	<select id="obtenDatosContratoVigente" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+		SELECT ccf.contrato_LD AS contratoLD,
+		pro.descripcion AS tipoCredito,
+		p.nombre AS nombreGrupo,
+		s.nombre AS sucursalNombre,
+		c.fecha_prox_pago AS proximoPago,
+		c.monto_pago AS parcialidad
+		FROM contratos c
+		JOIN contrato_clave_finsol ccf ON
+		c.contrato = ccf.contrato
+		JOIN personas p ON c.cliente = p.persona
+		JOIN
+		sucursales s ON c.sucursal = s.sucursal
+		JOIN productos pro ON
+		c.producto = pro.producto
+		WHERE ccf.contrato_LD = #{contratoLD}
+	</select>
+
+
+	<select id="obtenerPagosImportados"   parameterType="java.lang.String"	resultType="utilitario.mensajes.reportes.comun.PagoImportado">
+	SELECT
+	    pe.fecha_alta AS fechaProceso,
+	    pe.fecha_pago AS fechaValor,
+	    isnull(pe.referencia4,' ') AS referencia,
+	    pe.importe AS monto,
+	    str_replace(str_replace(UPPER(pe.id_proceso_archivo), 'FINSOL_',''), '_DEP','') AS medioPago,
+	    estatus = CASE pe.status WHEN 'A' THEN 'Pago Aplicado' WHEN 'N' THEN 'Pago no aplicado' WHEN 'E' THEN 'Error al aplicar el pago' WHEN 'X' THEN 'Pago a cancelar' ELSE 'Error al aplicar el pago' END,
+	    isnull(ccf.contrato, ' ') AS contrato,
+	    pe.referencia1  AS "contratoLD",
+	    isnull(s.nombre, ' ') AS nombreSucursal,
+	    isnull(pe.observaciones, ' ') AS observaciones,
+	    grupoPago = CASE
+	    				WHEN CHARINDEX('BANAMEX', upper(pe.id_proceso_archivo)) > 0 AND CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) = 0 AND charindex('43D', pe.referencia1) > 0  THEN 'SEGURO VIDA'
+	    				WHEN CHARINDEX('BANAMEX', upper(pe.id_proceso_archivo)) > 0 AND CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) = 0 AND charindex('43E', pe.referencia1) > 0  THEN 'SEGURO ENFERMEDAD'
+	    				WHEN CHARINDEX('BANCOMER', upper(pe.id_proceso_archivo)) > 0 AND CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) = 0 AND substring(pe.referencia1,8,1) = 'D'  THEN 'SEGURO VIDA'
+	    				WHEN CHARINDEX('BANCOMER', upper(pe.id_proceso_archivo)) > 0 AND CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) = 0 AND substring(pe.referencia1,8,1) = 'E'  THEN 'SEGURO ENFERMEDAD'
+	    				WHEN CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) > 0  THEN 'GARANTIA'
+	    				ELSE 'CREDITO'
+	    			END,
+	    'pagos_externos' origen
+	FROM credprod..pagos_externos pe
+	left JOIN credprod_finsol..contrato_clave_finsol ccf ON ccf.contrato_LD = rtrim(ltrim(stuff(pe.referencia1,8,1,'0')))
+	left JOIN credprod_finsol..contratos c ON (c.contrato = ccf.contrato)
+	LEFT JOIN credprod_finsol..sucursales s ON c.sucursal = s.sucursal
+	WHERE convert(DATETIME,convert(VARCHAR(10),fecha_alta,111)) = #{fecha}
+	AND	pe.id_proceso_archivo IN ('FINSOL_BANAMEX', 'FINSOL_BANAMEX_DEP', 'FINSOL_BANCOMER', 'FINSOL_BANCOMER_DEP', 'FINSOL_OXXO', 'FINSOL_OXXO_DEP')
+	UNION ALL
+	SELECT
+	    pe.fecha_alta AS fechaProceso,
+	    pe.fecha_pago AS fechaValor,
+	    isnull(pe.referencia1,' ') AS referencia,
+	    pe.importe AS monto,
+	    str_replace(str_replace(UPPER(pe.id_proceso_archivo), 'FINSOL_',''), '_DEP','') AS medioPago,
+	    estatus = CASE pe.status WHEN 'A' THEN 'Pago Aplicado' WHEN 'N' THEN 'Pago no aplicado' WHEN 'E' THEN 'Error al aplicar el pago' WHEN 'X' THEN 'Pago a cancelar' ELSE 'Error al aplicar el pago' END,
+	    isnull(ccf.contrato, ' ') AS contrato,
+		"contratoLD" = CASE
+						WHEN substring(pe.referencia1,1,4) = '8003' THEN 'LD' + substring(pe.referencia1,5,10)
+						WHEN substring(pe.referencia1,1,4) = '8004' OR substring(pe.referencia1,1,4) = '8005' THEN 'CTE' + convert(VARCHAR(12),convert(DECIMAL(12,0),substring(pe.referencia1, 5, 12)))
+						ELSE ' '
+					 END,
+	    isnull(s.nombre, ' ') AS nombreSucursal,
+	    isnull(pe.observaciones, ' ') AS observaciones,
+	    grupoPago = CASE
+	    				WHEN CHARINDEX('HSBC', upper(pe.id_proceso_archivo)) > 0 AND CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) = 0 AND substring(pe.referencia1,1,4) = '8004'  THEN 'SEGURO VIDA'
+	    				WHEN CHARINDEX('HSBC', upper(pe.id_proceso_archivo)) > 0 AND CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) = 0 AND substring(pe.referencia1,1,4) = '8005'  THEN 'SEGURO ENFERMEDAD'
+	    				WHEN CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) > 0  THEN 'GARANTIA'
+	    				ELSE 'CREDITO'
+	    			END,
+	    'pagos_externos' origen
+	FROM credprod..pagos_externos pe
+	left JOIN credprod_finsol..contrato_clave_finsol ccf ON ccf.contrato_LD = 'LD' + substring(pe.referencia1,5,10)
+	left JOIN credprod_finsol..contratos c ON (c.contrato = ccf.contrato)
+	LEFT JOIN credprod_finsol..sucursales s ON c.sucursal = s.sucursal
+	WHERE convert(DATETIME,convert(VARCHAR(10),fecha_alta,111)) = #{fecha}
+	AND	pe.id_proceso_archivo  IN ('FINSOL_HSBC','FINSOL_HSBC_DEP')
+	UNION ALL
+	SELECT
+	    ac.fecha_operacion AS fechaProceso,
+	    ac.fecha_operacion AS fechaValor,
+	    isnull(ac.referencia_1,' ') AS referencia,
+	    ac.monto AS monto,
+	    'FISA' AS medioPago,
+	    CASE ac.status WHEN 'X' THEN 'Pago Cancelado' WHEN 'O' THEN 'Pago Aplicado' END AS estatus,
+	    isnull(ccf.contrato, ' ') AS contrato,
+	    'LD1' + substring(ac.linea_captura,2,9) AS "contratoLD",
+	    isnull(s.nombre, ' ') AS nombreSucursal,
+	    CASE ac.referencia_4 WHEN 'P' THEN 'Pago Aplicado' WHEN 'E' THEN isnull(ac.referencia_5, ' ') ELSE 'Error al aplicar el pago' END AS observaciones,
+	    CASE clave_prod
+	    	WHEN 'SOLM'  THEN 'CREDITO'
+	    	WHEN 'SOLS'  THEN 'SEGURO'
+	    	ELSE 'DESCONOCIDO'
+	    END AS grupoPago,
+	    'auditoria_cajas' origen
+	FROM credprod..auditoria_cajas ac
+	left JOIN credprod_finsol..contrato_clave_finsol ccf ON ccf.contrato_LD = 'LD1' + substring(ac.linea_captura,2,9)
+	left JOIN credprod_finsol..contratos c ON (c.contrato = ccf.contrato)
+	LEFT JOIN credprod_finsol..sucursales s ON c.sucursal = s.sucursal
+	WHERE convert(DATETIME,convert(VARCHAR(10),ac.fecha_operacion,111)) = #{fecha}
+	AND ac.clave_cte = 12
+	AND ac.codigo_op = 'PGSV'
+	UNION ALL
+	SELECT 	isnull(convert(DATETIME,p.fecha_aplicacion),'1900-01-01'),
+			fecha_contable = CASE
+								WHEN isnull(p.contrato,'0') != '0' THEN isnull(c.fecha_contable, '1900-01-01')
+  								WHEN isnull(p.persona, '0') != '0' THEN isnull(psc.fecha_deposito, '1900-01-01')
+  								ELSE '1900-01-01'
+							END, p.contrato,
+			monto = CASE
+						WHEN isnull(p.contrato,'0') != '0' THEN isnull(c.monto,0)
+						WHEN isnull(p.persona, '0') != '0' THEN isnull(psc.monto_deposito,0)
+						ELSE 0
+					END,
+			medio_pago = mp.nombre_cte + ' LINEA',
+			estatus = CASE
+	    					WHEN p.estatus = 'APLI' AND p.tipo_operacion = 'PLPA'   THEN 'Pago aplicado'
+							WHEN p.estatus = 'APLI' AND p.tipo_operacion = 'PLRE'   THEN 'Reversa aplicada'
+	    					WHEN p.estatus IS NULL AND p.tipo_operacion = 'PLPA'   THEN 'Pago no aplicado'
+							WHEN p.estatus IS NULL AND p.tipo_operacion = 'PLRE'   THEN 'Reversa no aplicada'
+							WHEN p.estatus = 'DESC' AND p.tipo_operacion = 'PLPA'   THEN 'Pago descartado'
+							ELSE ' '
+
+					END,
+			p.contrato,
+			contratoLD = CASE
+							WHEN isnull(p.contrato,'0') != '0' THEN p.contrato
+  							WHEN p.persona IS NOT NULL AND p.persona != '0' THEN 'CTE' + p.persona
+						END,
+			isnull(s.nombre, ' ') AS nombreSucursal,
+	    	observaciones = CASE
+	    					WHEN p.estatus = 'APLI' AND p.tipo_operacion = 'PLPA'   THEN 'Pago realizado correctamente'
+							WHEN p.estatus = 'APLI' AND p.tipo_operacion = 'PLRE'   THEN 'Reversa realizada correctamente'
+							WHEN p.estatus = 'DESC' AND p.tipo_operacion = 'PLPA'   THEN 'Pago descartado correctamente'
+							ELSE ' '
+	    				END,
+	    	grupoPago = CASE
+	    					WHEN (p.tipo_operacion = 'PLPA' OR p.tipo_operacion = 'PLRE') AND isnull(p.contrato,'0') != '0' THEN 'CREDITO'
+	    					WHEN (p.tipo_operacion = 'PLPA' OR p.tipo_operacion = 'PLRE') AND isnull(p.persona,'0') != '0' THEN 'SEGURO ' + psc.clave_prod
+							ELSE ' '
+	    				END,
+	    'pagos_en_linea' origen
+	FROM credprod_finsol..bitacora_pagos_linea p
+	LEFT JOIN credprod_finsol..auditoria_cajas c ON (isnull(c.referencia_3,'-1') = convert(VARCHAR(40),p.folio) OR isnull(c.referencia_3,'-1') = isnull(p.id_tran_proveedor,'-1')) AND convert(INT,c.contrato) = convert(INT,p.contrato) AND c.fecha_contable >= #{fecha}
+	LEFT JOIN credprod..pago_seguros_contado psc ON psc.persona = p.persona AND psc.clave_cte = p.clave_cte AND psc.fecha_deposito >= #{fecha}
+	LEFT JOIN credprod_finsol..sucursales s ON s.sucursal = c.sucursal
+	INNER JOIN credprod_finsol..cliente mp ON mp.clave_cte = p.clave_cte
+	WHERE p.tipo_operacion in ('PLPA', 'PLRE')
+	AND p.fecha_peticion = #{fecha}
+	AND p.respuesta IS NOT NULL
+	</select>
+
+
+</mapper>

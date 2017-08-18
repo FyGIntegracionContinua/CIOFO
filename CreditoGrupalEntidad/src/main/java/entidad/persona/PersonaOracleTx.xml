@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.originacion.tx">
+
+	<select id="buscarClaveT24" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT COUNT( curs.CUSTOMER_ID ) registros
+		FROM
+		CU_REG_SISTEMA curs
+		WHERE curs.CODIGO = #{claveFinsol}
+		AND
+		curs.CUSTOMER_VALID = '1'
+	</select>
+
+	<select id="existeCuRegSistema" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT COUNT( curs.CUSTOMER_ID ) registros
+		FROM
+		CU_REG_SISTEMA curs
+		WHERE curs.CUSTOMER_ID = #{claveCU}
+		AND
+		curs.CUSTOMER_VALID = '1'
+	</select>
+
+	<insert id="registrarCURegSistema" parameterType="utilitario.mensajes.persona.RelacionClaveFinsolOV">
+		INSERT INTO
+		CU_REG_SISTEMA ( CUSTOMER_ID, CDGEM, CODIGO, FCH_REGISTRO,
+		CUSTOMER_VALID, CODIGO_CP )
+		VALUES ( #{claveCU}, 'T24', #{claveFinsol},
+		SYSDATE, '1', #{claveFinsol} )
+	</insert>
+
+	<insert id="registrarClienteUnico" parameterType="java.util.HashMap">
+		INSERT INTO
+		cu_cliente
+		(
+		CUSTOMER_ID, FIRST_NAME, OTHER_NAME, SECOND_NAME, LAST_NAME, BIRTHDATE, RFC,
+		GENDER, EDOCIVIL,CURP, ESCOLARIDAD, TITULO, APODO, TELEFONO_CEL,
+		ALERTAS_OBS, INICIA_NEGOCIO,
+		MONTO_PAG_SEM, NOMBRE_PAREJA, TELPAREJA_CEL, TELPAREJA_FIJO, OCUPACION_PAREJA,
+		DIRECCION_OCUPACION_PAREJA,
+		NO_HIJOS_DEP, NO_DEPENDIENTES, TELEFONO_FIJO, IFE, DIAS_LOCALIZACION,
+		HORARIO_LOCALIZACION , EMAIL,
+		DATE_UPDATE, USER_ID, USER_NAME, DATE_INSERCION, MARCA_CLIENTE, STATUS,
+		UPDATE_SUCURSAL
+		)
+		VALUES (
+		#{custumerID}, #{firstName}, #{otherName}, #{secondName}, #{lastName}, #{birthday} ,
+		#{rfc},
+		#{gender}, #{edoCivil}, #{curp}, #{escolaridad}, #{titulo}, #{apodo},
+		#{telefonoCel}, #{alertasObs}, #{iniciaNegocio},
+		#{monotPagSem},#{nombrePareja}, #{telParejaCel}, #{telParejaFijo},
+		#{ocupacionPareja}, #{direccionOcupacionPareja},
+		#{noHijosDep}, #{noDependientes}, #{telefonoFijo}, #{ife}, #{diasLocalizacion} ,
+		#{horarioLocalizacion} , #{correo} ,
+		SYSDATE /*DATE_UPDATE*/ , #{userID}, #{userName}, SYSDATE /*DATE_INSERCION*/,
+		'', 1, SYSDATE/*UPDATE_SUCURSAL*/
+		)
+
+	</insert>
+
+
+
+	<insert id="registrarCUDomicilio" parameterType="java.util.HashMap">
+		INSERT INTO
+		CU_DOMICILIOS
+		(
+		DOMICILIO_ID,
+		CUSTOMER_ID, CALLE, COD_POSTAL, COLONIA, MUNICIPIO, ESTADO, PAIS,
+		REF_UBICACION, TIPO_PROPIEDAD, DOMICILIO_ACTUAL, LOCALIDAD, DATE_INSERCION,
+		TIEMPO_RESID, TIPO_LOCALIDAD, ID_NEIGHBOURHOOD, TIPO_PROPIEDAD_OTRO
+		)
+		VALUES (
+		(SELECT MAX (domicilio_id) + 1 FROM CU_DOMICILIOS) ,
+		#{customerID}, #{calle}, #{codPostal}, #{colonia}, #{municipio}, #{estado}, #{pais},
+		#{refUbicacion}, #{tipoPropiedad}, #{domicilioActual}, #{localidad},
+		SYSDATE ,
+		#{tiempoResid}, #{tipoLocalidad}, #{IDNeighbourhood}, #{tipoPropiedadOtro}
+		)
+
+	</insert>
+
+	<insert id="registrarCUReferencia" parameterType="java.util.HashMap">
+		INSERT INTO
+		CU_REFERENCIAS
+		(
+		REFERENCIAS_ID,
+		CUSTOMER_ID, NOMBRE_COMPLETO, TELEFONO, TELEFONOCEL, DIRECCION, RELACION_CLIENTE,
+		REFERENCIA_IDX, HORA_LOCALIZA_DESDE, HORA_LOCALIZA_HASTA,
+		DATE_INSERCION,
+		LOCALIZA_LUNES, LOCALIZA_MARTES, LOCALIZA_MIERCOLES, LOCALIZA_JUEVES,
+		LOCALIZA_VIERNES, LOCALIZA_SABADO, LOCALIZA_DOMINGO)
+		VALUES (
+		(SELECT MAX (REFERENCIAS_ID) + 1 FROM CU_REFERENCIAS) ,
+		#{customerID}, #{nombreCompleto}, #{telefono}, #{telefonoCel}, #{direccion},
+		#{relacionCliente},
+		#{referenciaID}, #{horaLocalizaDesde}, #{horaLocalizaHasta}, SYSDATE ,
+		#{localizaLunes}, #{localizaMartes}, #{localizaMiercoles},
+		#{localizaJueves}, #{localizaViernes}, #{localizaSabado},
+		#{localizaDomingo}
+		)
+
+	</insert>
+
+
+	<insert id="registrarCUSocioeconomico" parameterType="java.util.HashMap">
+		INSERT INTO
+		CU_SOCIOECONOMICOS
+		(
+		SOCIOECONOMICO_ID,
+		CUSTOMER_ID, EMPRESA, TELEFONO, GIRO_NEGOCIO, TIPO_ACTIVIDAD,
+		TIPO_NEGOCIO, EXP_RUBRO, EXP_NEGOCIO, VENTAS, GANANCIA_NETA, INGRESOS_OTROS,
+		GANANCIA_ACT_SEC, GASTOS_FAMILIARES, INVENTARIO, MOBILIARIO_EQUIPO,
+		SUPERAVIT,
+		DATE_INSERCION, DIAS_VENDE_TIANGUIS
+		)
+		VALUES
+		(
+		(SELECT MAX (SOCIOECONOMICO_ID) + 1 FROM CU_SOCIOECONOMICOS) ,
+		#{customerID}, #{empresa}, #{telefono}, #{giroEmpresa}, #{tipoActividad},
+		#{tipoNegocio}, #{expRubro}, #{expNegocio}, #{ventas},
+		#{gananciaNeta}, #{ingresosOtros},
+		#{gananciaActSec}, #{gastosFamiliares}, #{inventario}, #{mobiliarioEquipo},
+		#{superavit},
+		SYSDATE, #{diasVendeTianguis}
+		)
+	</insert>
+
+
+
+
+
+	<insert id="registrarCUInfoFinsol" parameterType="java.util.HashMap">
+		INSERT INTO CU_INFO_FINSOL
+		(
+		INFOFINSOL_ID, CUSTOMER_ID, DATE_INSERCION, BRANCH_CODE, DAO_ASESOR
+		<!-- , NOMBRE_ASESOR, NOMBRE_GRUPO, FLAG_REG, -->
+		)
+		VALUES
+		(
+		(SELECT MAX (INFOFINSOL_ID) + 1 FROM CU_INFO_FINSOL), #{customerID}, SYSDATE,
+		#{branchCode} , #{daoAsesor}
+		<!-- #{nombreAsesor}, #{nombreGrupo}, #{branchCode}, #{flagReg}, SYSDATE,
+			#{daoAsesor} -->
+		)
+	</insert>
+
+	<select id="buscarCUClienteComplementoMaximo" resultType="java.lang.Long">
+		SELECT
+		MAX (ID) FROM CU_CLIENTE_COMPLEMENTO
+	</select>
+
+	<insert id="registrarCUClienteComplemento">
+		INSERT INTO CU_CLIENTE_COMPLEMENTO
+		(
+		ID,
+		CUSTOMER_ID, ID_TIPO_TELEFONO, EXPERIENCIA_CREDITO_GRUPAL,
+		LOCALIZA_LUNES, LOCALIZA_MARTES,LOCALIZA_MIERCOLES, LOCALIZA_JUEVES,
+		LOCALIZA_VIERNES, LOCALIZA_SABADO, LOCALIZA_DOMINGO,
+		LOCALIZA_HORA_DESDE, LOCALIZA_HORA_HASTA
+		)
+		VALUES
+		(
+		(SELECT MAX (ID) + 1 FROM CU_CLIENTE_COMPLEMENTO),
+		#{customerID}, #{IDTipoTelefono}, #{experienciaCreditoGrupal},
+		#{localizaLunes}, #{localizaMartes},#{localizaMiercoles}, #{localizaJueves},
+		#{localizaViernes}, #{localizaSabado}, #{localizaDomingo},
+		#{horaLocalizaDesde}, #{horaLocalizaHasta}
+		)
+	</insert>
+
+
+
+	<!-- ******************************************************************************************************* -->
+	<!-- *******************************************actualizacion*********************************************** -->
+	<!-- ******************************************************************************************************* -->
+
+	<update id="actualizarClienteUnico" parameterType="java.util.HashMap">
+		UPDATE CU_CLIENTE
+		<set>
+			DATE_UPDATE = SYSDATE
+			,UPDATE_SUCURSAL = SYSDATE
+
+			<if test="sucursal == 0">
+				<if test="firstName != null">,FIRST_NAME = #{firstName}</if>
+				<if test="otherName != null">,OTHER_NAME = #{otherName}</if>
+				<if test="secondName != null">,SECOND_NAME = #{secondName}</if>
+				<if test="lastName != null">,LAST_NAME = #{lastName}</if>
+				<if test="birthday != null">,BIRTHDATE = #{birthday}</if>
+				<if test="rfc != null">,RFC = #{rfc}</if>
+			</if>
+
+			<if test="gender != null">,GENDER = #{gender}</if>
+			<if test="edoCivil != null">,EDOCIVIL = #{edoCivil}</if>
+			<if test="curp != null">,CURP = #{curp}</if>
+			<if test="escolaridad != null">,ESCOLARIDAD = #{escolaridad}</if>
+			<if test="titulo != null">,TITULO = #{titulo}</if>
+			<if test="apodo != null">,APODO = #{apodo}</if>
+			<if test="telefonoCel != null">,TELEFONO_CEL = #{telefonoCel}</if>
+			<if test="alertasObs != null">,ALERTAS_OBS = #{alertasObs}</if>
+			<if test="iniciaNegocio != null">,INICIA_NEGOCIO = #{iniciaNegocio}</if>
+			<if test="monotPagSem != null">,MONTO_PAG_SEM = #{monotPagSem}</if>
+			<if test="nombrePareja != null">,NOMBRE_PAREJA = #{nombrePareja}</if>
+			<if test="telParejaCel != null">,TELPAREJA_CEL = #{telParejaCel}</if>
+			<if test="telParejaFijo != null">,TELPAREJA_FIJO = #{telParejaFijo}</if>
+			<if test="ocupacionPareja != null">,OCUPACION_PAREJA = #{ocupacionPareja}</if>
+			<if test="direccionOcupacionPareja != null">,DIRECCION_OCUPACION_PAREJA = #{direccionOcupacionPareja}
+			</if>
+			<if test="noHijosDep != null">,NO_HIJOS_DEP = #{noHijosDep}</if>
+			<if test="noDependientes != null">,NO_DEPENDIENTES = #{noDependientes}</if>
+			<if test="telefonoFijo != null">,TELEFONO_FIJO = #{telefonoFijo}</if>
+			<if test="ife != null">,IFE = #{ife}</if>
+			<if test="diasLocalizacion != null">,DIAS_LOCALIZACION = #{diasLocalizacion}</if>
+			<if test="horarioLocalizacion != null">,HORARIO_LOCALIZACION = #{horarioLocalizacion}</if>
+			<if test="correo != null">,EMAIL = #{correo}</if>
+			<if test="userID != null">,USER_ID = #{userID}</if>
+			<if test="userName != null">,USER_NAME = #{userName}</if>
+		</set>
+		WHERE CUSTOMER_ID = #{custumerID}
+
+	</update>
+
+	<update id="actualizarCUDomicilio" parameterType="java.util.HashMap">
+		UPDATE CU_DOMICILIOS
+		<set>
+			PAIS = 'MEXICO'
+			<if test="calle != null">,CALLE = #{calle}</if>
+			<if test="codPostal != null">,COD_POSTAL = #{codPostal}</if>
+			<if test="colonia != null">,COLONIA = #{colonia}</if>
+			<if test="municipio != null">,MUNICIPIO = #{municipio}</if>
+			<if test="estado != null">,ESTADO = #{estado}</if>
+			<if test="refUbicacion != null">,REF_UBICACION = #{refUbicacion}</if>
+			<if test="tipoPropiedad != null">,TIPO_PROPIEDAD = #{tipoPropiedad}</if>
+			<if test="localidad != null">,LOCALIDAD = #{localidad}</if>
+			<if test="tiempoResid != null">,TIEMPO_RESID = #{tiempoResid}</if>
+			<if test="tipoLocalidad != null">,TIPO_LOCALIDAD = #{tipoLocalidad}</if>
+		</set>
+		WHERE CUSTOMER_ID = #{customerID}
+		AND DOMICILIO_ACTUAL =
+		#{domicilioActual}
+
+	</update>
+
+
+
+	<update id="actualizarCUSocioEconomico" parameterType="java.util.HashMap">
+
+		UPDATE CU_SOCIOECONOMICOS
+
+		<set>
+			DIAS_VENDE_TIANGUIS = ''
+			<if test="empresa != null">,EMPRESA = #{empresa}</if>
+			<if test="telefono != null">,TELEFONO = #{telefono}</if>
+			<if test="giroEmpresa != null">,GIRO_NEGOCIO = #{giroEmpresa}</if>
+			<if test="tipoActividad != null">,TIPO_ACTIVIDAD = #{tipoActividad}</if>
+			<if test="tipoNegocio != null">,TIPO_NEGOCIO = #{tipoNegocio}</if>
+			<if test="expRubro != null">,EXP_RUBRO = #{expRubro}</if>
+			<if test="expNegocio != null">,EXP_NEGOCIO = #{expNegocio}</if>
+			<if test="ventas != null">,VENTAS = #{ventas}</if>
+			<if test="gananciaNeta != null">,GANANCIA_NETA = #{gananciaNeta}</if>
+			<if test="ingresosOtros != null">,INGRESOS_OTROS = #{ingresosOtros}</if>
+			<if test="gananciaActSec != null">,GANANCIA_ACT_SEC = #{gananciaActSec}</if>
+			<if test="gastosFamiliares != null">,GASTOS_FAMILIARES = #{gastosFamiliares}</if>
+			<if test="inventario != null">,INVENTARIO = #{inventario}</if>
+			<if test="mobiliarioEquipo != null">,MOBILIARIO_EQUIPO = #{mobiliarioEquipo}</if>
+			<if test="superavit != null">,SUPERAVIT = #{superavit}</if>
+		</set>
+		WHERE CUSTOMER_ID = #{customerID}
+
+	</update>
+
+	<update id="actualizarCUInfoFinsol" parameterType="java.util.HashMap">
+		UPDATE CU_INFO_FINSOL
+		<set>
+			<if test="nombreAsesor != null">,NOMBRE_ASESOR = #{nombreAsesor}</if>
+			<if test="nombreGrupo != null">,NOMBRE_GRUPO = #{nombreGrupo}</if>
+			<if test="branchCode != null">,BRANCH_CODE = #{branchCode}</if>
+			<if test="daoAsesor != null">,DAO_ASESOR = #{daoAsesor}</if>
+		</set>
+		WHERE CUSTOMER_ID = #{customerID}
+	</update>
+
+	<update id="actualizarCUClienteComplemento" parameterType="java.util.HashMap">
+		UPDATE CU_CLIENTE_COMPLEMENTO
+		<set>
+			ID_TIPO_TELEFONO = #{IDTipoTelefono}
+			<if test="experienciaCreditoGrupal != null">,EXPERIENCIA_CREDITO_GRUPAL = #{experienciaCreditoGrupal}
+			</if>
+			<if test="localizaLunes != null">,LOCALIZA_LUNES = #{localizaLunes}</if>
+			<if test="localizaMartes != null">,LOCALIZA_MARTES = #{localizaMartes}</if>
+			<if test="localizaMiercoles != null">,LOCALIZA_MIERCOLES = #{localizaMiercoles}</if>
+			<if test="localizaJueves != null">,LOCALIZA_JUEVES = #{localizaJueves}</if>
+			<if test="localizaViernes != null">,LOCALIZA_VIERNES = #{localizaViernes}</if>
+			<if test="localizaSabado != null">,LOCALIZA_SABADO = #{localizaSabado}</if>
+			<if test="localizaDomingo != null">,LOCALIZA_DOMINGO = #{localizaDomingo}</if>
+			<if test="localizaHoraDesde != null">,LOCALIZA_HORA_DESDE = #{horaLocalizaDesde}</if>
+			<if test="localizaHoraHasta != null">,LOCALIZA_HORA_HASTA = #{horaLocalizaHasta}</if>
+
+		</set>
+		WHERE CUSTOMER_ID = #{customerID}
+	</update>
+
+	<select id="existeClienteComplemento" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT COUNT( curs.CUSTOMER_ID ) registros
+		FROM
+		CU_CLIENTE_COMPLEMENTO curs
+		WHERE curs.CUSTOMER_ID = #{claveCU}
+	</select>
+
+	<select id="existeCUSocioeconomico" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT COUNT( curs.CUSTOMER_ID ) registros
+		FROM
+		CU_SOCIOECONOMICOS curs
+		WHERE curs.CUSTOMER_ID = #{claveCU}
+	</select>
+
+</mapper>

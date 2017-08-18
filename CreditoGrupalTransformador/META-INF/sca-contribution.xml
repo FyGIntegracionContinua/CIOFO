@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contribution xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+			  xmlns:infra="urn:independencia.creditogrupal.infra">
+    <deployable composite="infra:TransformadorCreditoGrupal"/>
+    <export.java package="transformador"/>
+    <export.java package="datamapper"/>
+    <export.java package="parser"/>
+    <import.java package="utilitario"/>
+ </contribution>

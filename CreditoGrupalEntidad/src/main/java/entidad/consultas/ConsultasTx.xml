@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.consultas.ConsultasTx">
+
+    <insert id="insertaRegistroEntrada" parameterType="java.lang.String">
+		INSERT INTO dbo.registro_operacion_analista
+		(persona, fecha_inicio_operacion, hora_inicio_operacion)
+        VALUES
+         (#{1}, getdate(), getdate())
+	</insert>
+
+	<update id="actulizarRegistroSalida" parameterType="java.lang.String">
+		UPDATE dbo.registro_operacion_analista
+           SET fecha_fin_operacion = getdate(),
+               hora_fin_operacion = getdate()
+           WHERE persona = #{1}
+           AND fecha_inicio_operacion = getdate()
+	</update>
+
+	<insert id="insertaReferencia" parameterType="java.lang.Integer">
+		INSERT INTO referencias (
+			<if test="contrato != null">
+				contrato,
+			</if>
+			<if test="persona != null">
+				persona,
+			</if>
+				tipo_producto,
+				clave_cte,
+				referencia,
+				fecha_hora,
+				status )
+		VALUES (
+		<if test="contrato != null">
+			#{contrato},
+		</if>
+		<if test="persona != null">
+			#{persona},
+		</if>
+			#{tipo_producto},
+			#{clave_cte},
+			#{referencia},
+			 getdate(),
+			 'A' )
+
+	</insert>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+		name="SolicitudesCredito" 
+		targetNamespace="urn:independencia.creditogrupal.tarea.solicitudes">
+
+ 	<component name="SolicitudesCreditoTarea">
+		<implementation.java class="tarea.solicitudes.SolicitudesCreditoTareaImpl"/>
+		<reference name="comun" target="ComunCreditoGrupal"/>
+		<reference multiplicity="1..1" name="grupo" target="OriginacionGrupo"/>
+		<reference multiplicity="1..1" name="consultas" target="ConsultasCreditoGrupalTarea"/>
+		<reference name="planilla" target="PlanillaAprobacion"/>
+		<reference multiplicity="1..1" name="buroCreditoTarea" target="BuroCreditoTareaImpl"/>
+		<reference name="administracionPersona" target="AdministracionPersona"/>
+		<reference name="administracionTelefonica" target="AdministracionTelefonica"/>
+		<reference name="seguros" target="SegurosTarea"/>
+		<reference name="consultasOriginacion" target="OriginacionConsultas"/>
+		<reference name="transformador" target="Transformador"/>
+	</component>
+</composite>

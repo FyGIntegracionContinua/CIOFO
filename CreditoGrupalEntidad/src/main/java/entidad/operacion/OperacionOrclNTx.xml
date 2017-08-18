@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="entidad.operacion.orclntx">
+
+	<select id="obtenerRegistrosPreimportados" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT count(cdgem) AS regs FROM esiacom.t24_mp
+		WHERE frealdep = to_date(#{1},'YYYY/MM/DD')
+	</select>
+
+	<select id="obtenerRegistrosPendientes" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT count(cdgem) AS regs FROM esiacom.t24_mp
+		WHERE frealdep = to_date(#{1},'YYYY/MM/DD')
+		AND status = 'R'
+	</select>
+
+	<select id="obtenerChequesContrato" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+
+		SELECT folio, clienteid, sucursalid, status FROM
+		esiacom.REL_CHEQUE_FISA_FINSOL
+		WHERE contract_no = #{value}
+
+	</select>
+
+	<!-- <select id="obtenerAsignacionSolicitudes" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionOV"> select to_number(dia_reunion)
+		as diaReunion, hora_reunion as horaReunion, count(*) as numContratos from
+		esiacom.credito_temp where 1 = 1 and fecha_desembolso >= #{fechaContable}
+		and contrato_LD is null and visualiza_cec = 'true' and producto not in ('21060')
+		and sucursal = #{numeroSucursal} group by dia_reunion, hora_reunion ORDER
+		BY dia_reunion, hora_reunion </select> -->
+
+
+	<!-- <select id="obtenerAsignacionDetalleOracle" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionDetalleOV"> select to_char(ct.id)
+		as contratoLD, to_char(ct.id) AS contrato, cgt.nombre AS nombreGrupo, to_number(ct.ciclo)
+		AS cicloGrupo, to_char(ct.cdg_asesor) AS numeroAsesor, '' AS nombreAsesor,
+		(select count(*) from esiacom.credito_clientes_temp WHERE id_credito = ct.id)
+		as totalIntegrantes, ct.producto AS producto, case when ct.producto = '21050'
+		then 'CREDITO COMUNAL' when ct.producto = '21057' then 'CREDITO COMUNAL CATORCENAL'
+		when ct.producto = '21056' then 'CREDITO COMUNAL MENSUAL' when ct.producto
+		= '21051' then 'CREDITO GRUPO SOLIDARIO' when ct.producto = '21059' then
+		'CREDITO GRUPO SOLIDARIO CATORCENAL' when ct.producto = '21060' then 'CREDITO
+		OPORTUNIDAD' when ct.producto = '21070' then 'CRÉDITO COMUNAL DEPOSITO GARANTÍA'
+		when ct.producto = '21071' then 'CRÉDITO COMUNAL DEPOSITO GARANTÍA CATORCENAL'
+		else ct.producto end AS descProd, ct.fecha_desembolso AS fechaInicio, ct.fecha_fin
+		AS fechaFin, to_number(ct.plazo) AS numeroPagos, 0 AS pagosRestantes, 0 AS
+		diasMora, ct.nuevo_credito_solicitado AS saldoTotal, hora_reunion AS horaReunionInicio,
+		hora_reunion AS horaReunionFin, to_number(nvl(ct.dia_reunion,0)) AS diaReunion,
+		CASE WHEN ct.frecuencia_pago ='Semanal' THEN 'S' WHEN ct.frecuencia_pago
+		='Catorcenal' THEN 'C' ELSE ct.frecuencia_pago END AS frecuencia, 'SOLICITUD'
+		as tipoActividad, 0 as parcialidad from esiacom.credito_temp ct left join
+		esiacom.credito_grupo_temp cgt on ct.id = cgt.id_credito where 1 = 1 and
+		fecha_desembolso >= to_date (#{fechaContable} , 'YYYY-MM-DD') and contrato_LD
+		is null and visualiza_cec = 'true' and producto not in ('21060') and sucursal
+		= #{numeroSucursal} <if test="horaReunion != null"> and hora_reunion = #{horaReunion}
+		</if> <if test="diaReunion != null"> and dia_reunion = #{diaReunion} </if>
+		<if test="vendedor != null"> and cdg_asesor = #{vendedor} </if> </select> -->
+
+
+</mapper>

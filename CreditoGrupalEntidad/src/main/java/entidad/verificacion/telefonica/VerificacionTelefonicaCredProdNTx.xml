@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.verificacion.telefonica">
+	<select id="obtenerClaveFinsolSybase" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select  rcf.persona,
+				rcf.clave_finsol,
+				rcf.clave_cu
+		from    relacion_clave_finsol rcf
+		where	rcf.clave_finsol = #{claveFinsolOracle}
+	</select>
+
+	<select id="consultaTelefonosPersonas" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 	pt.persona,
+				pt.consecutivo,
+				pt.tipo_telefono,
+				pt.lada,
+				pt.telefono,
+				pt.extension,
+				pt.nombre,
+				pt.apellido_pat,
+				pt.apellido_mat,
+				pt.relacion,
+				pt.codigo_resolucion,
+				pt.status,
+				pt.fecha_alta,
+				pt.usuario_alta,
+				pt.fecha_ult_mod,
+				pt.usuario_mod,
+				pt.fecha_ult_verif,
+				pt.lugar,
+				pt.origen,
+				pt.cve_provee_servicios,
+				pt.tipo_plan,
+				pt.motivo,
+				pt.fecha_contacto,
+				pt.fecha_status,
+				pt.id_relacion
+		from    persona_telefono  pt
+		where   pt.persona = #{claveFinsolSybase}
+		and     pt.tipo_telefono IN ('DIRE','CELU','EMPL','RECA')
+		and 	pt.status != 'I'
+		ORDER by pt.tipo_telefono, pt.status desc, pt.consecutivo desc
+
+	</select>
+
+	<select id="consultaTelefonosPersonasSolicitud" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 	pt.persona,
+				pt.consecutivo,
+				pt.tipo_telefono,
+				pt.lada,
+				pt.telefono,
+				pt.extension,
+				pt.nombre,
+				pt.apellido_pat,
+				pt.apellido_mat,
+				pt.relacion,
+				pt.codigo_resolucion,
+				pt.status,
+				pt.fecha_alta,
+				pt.usuario_alta,
+				pt.fecha_ult_mod,
+				pt.usuario_mod,
+				pt.fecha_ult_verif,
+				pt.lugar,
+				pt.origen,
+				pt.cve_provee_servicios,
+				pt.tipo_plan,
+				pt.motivo,
+				pt.fecha_contacto,
+				pt.fecha_status,
+				pt.id_relacion
+		from    persona_telefono  pt
+		where   pt.persona = #{claveFinsolSybase}
+		and     pt.tipo_telefono IN ('DIRE','CELU','EMPL','RECA')
+		ORDER by pt.tipo_telefono, pt.consecutivo
+
+	</select>
+
+	<select id="existeBitacoraSolicitud" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+
+		select  count(*)
+		from    bitacora_verificacion_finsol
+		where	solicitud = #{idSolicitud}
+
+	</select>
+
+	<select id="consultaBitacoraVerificacionFinsol" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select	bvf.solicitud,
+				bvf.estatus_verificacion,
+				bvf.fecha_envio_verificacion,
+				bvf.fecha_respuesta_verificacion,
+				bvf.usuario_envio_verificacion,
+				bvf.estatus_aprobacion,
+				bvf.fecha_aprobacion,
+				bvf.usuario_aprobacion,
+				bvf.comentarios_envio_verificacion
+		from 	bitacora_verificacion_finsol bvf
+		where	bvf.solicitud	= #{idSolicitud}
+	</select>
+
+	<select id="consultaBitacoraVerificacionFinsolSucursal" parameterType="java.util.HashMap" resultType="utilitario.mensajes.verificacion.telefonica.BitacoraVerificacionFinsolOV">
+		select	bvf.solicitud,
+				bvf.sucursal,
+				bvf.nombre_grupo as grupo,
+				bvf.estatus_verificacion as estatusVerificacion,
+				bvf.fecha_envio_verificacion as fechaEnvioVerificacion,
+				bvf.fecha_respuesta_verificacion as fechaRespuestaVerificacion,
+				bvf.usuario_envio_verificacion as usuarioEnvioVerificacion,
+				bvf.estatus_aprobacion as estatusAprobacion,
+				bvf.fecha_aprobacion as fechaAprobacion,
+				bvf.usuario_aprobacion as usuarioAprobacion,
+				bvf.comentarios_envio_verificacion as comentariosEnvioVerificacion
+		from 	bitacora_verificacion_finsol bvf
+		where	1 = 1
+		<if test="sucursal != 0">    AND bvf.sucursal = #{sucursal}</if>
+		<if test="estatus != null">  AND bvf.estatus_verificacion = #{estatus}</if>
+		<if test="horas != 0">
+						<![CDATA[	 AND datediff(hh, bvf.fecha_envio_verificacion, getdate())  <= #{horas} ]]>
+		</if>
+	</select>
+
+	<select id="consultaCatalogosVerificacionTelefonica" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 	cod.descripcion,
+				cod.codigo
+		from 	codigos cod
+		where 	cod.tipo_codigo =  #{tipoCodigo} and
+				cod.status 		=  #{status}
+	</select>
+
+	<select id="consultaInformacionVerificacion" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+
+		SELECT 	sf.oficina - 12000 AS SUCURSAL,
+			sf.vendedor AS CDG_ASESOR,
+			sf.codigo_producto AS PRODUCTO,   
+			sf.tasa AS TASA,
+			sf.plazo AS PLAZO,
+			CASE
+					WHEN sf.frecuencia_pago = 'S' THEN 'Semanal'
+					WHEN sf.frecuencia_pago = 'C' THEN 'Catorcenal'
+					ELSE sf.frecuencia_pago
+			END	 AS FRECUENCIA_PAGO	,
+			isnull(sf.dia_reunion, 0)  AS DIA_REUNION,
+			isnull(sf.hora_reunion, ' ') AS HORA_REUNION,
+			convert(DECIMAL(12,2),sf.efectivo_solicitado) AS NUEVO_CREDITO_SOLICITADO,
+			sf.fecha_resolucion AS FECHA_DESEMBOLSO,
+			CASE
+					WHEN sf.frecuencia_pago = 'S' THEN DateADD(Week, isnull(sf.plazo, 0), sf.fecha_captura )
+					ELSE DateADD(Week, isnull(sf.plazo, 0) * 2, sf.fecha_captura )
+			END	AS FECHA_FIN,
+			sf.ciclo AS CICLO,
+			sf.cliente AS CODIGO_GRUPO,
+			pg.nombre AS NOMBRE_GRUPO,
+			sip.cliente AS PRESIDENTE,
+			sis.cliente AS SECRETARIO,
+			sit.cliente AS TESORERO,
+			sisup.cliente AS COORDINADOR,
+			rcf.clave_cu AS CUSTOMER_ID,
+			pa.nombre + ' '+
+			pa.apellido_pat + ' '+
+			pa.apellido_mat AS NOMBRE_CLIENTE,
+			convert(DECIMAL(12,2),si.efectivo_solicitado) AS MONTO_SOLICITADO_CLIENTE,
+		    rcf.persona AS NUMERO_PERSONA,
+			rcf.clave_finsol AS CLAVE_FINSOL,
+			s.nombre AS NOMBRE_SUCURSAL,
+			CASE
+				WHEN p.categoria = 'COMN' THEN 'COMUNAL'
+				WHEN p.categoria = 'SOLN' THEN 'SOLIDARIO'
+				ELSE p.categoria
+			END TIPO_PRODUCTO
+		FROM solicitudes_finsol sf
+		INNER JOIN solicitud_integrantes si ON si.solicitud = sf.solicitud
+		INNER JOIN relacion_clave_finsol rcf ON rcf.persona = si.cliente
+		INNER JOIN sucursales s ON s.sucursal = sf.oficina
+		INNER JOIN productos p ON sf.codigo_producto = p.producto
+		left JOIN solicitud_integrantes sip ON sip.solicitud = sf.solicitud AND sip.cargo_mesa_directiva = 'PRES' AND sip.status = 'A'
+		left JOIN solicitud_integrantes sis ON sis.solicitud = sf.solicitud AND sis.cargo_mesa_directiva = 'SECR' AND sis.status = 'A'
+		left JOIN solicitud_integrantes sit ON sit.solicitud = sf.solicitud AND sit.cargo_mesa_directiva = 'TESO' AND sit.status = 'A'
+		left JOIN solicitud_integrantes sisup ON sisup.solicitud = sf.solicitud AND sisup.cargo_mesa_directiva = 'SUPE'
+		LEFT JOIN personas pg ON pg.persona = sf.cliente
+		LEFT JOIN personas pa ON pa.persona = si.cliente
+		WHERE sf.solicitud = #{idSolicitud}
+		AND si.status = 'A'
+
+		<if test="visualiza_cec != null">AND sf.etapa = #{visualiza_cec}</if>
+		<if test="aprobado != null">AND si.aprobado = #{aprobado}</if>
+
+
+	</select>
+
+</mapper>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<!-- Namespace es un nombre cualquiera -->
+<mapper namespace="creditogrupal.entity.reportes.cierre.ibatis">
+
+	<!-- ******************************************************************************************* -->
+	<!-- SECCION PARA DEFINIR LOS RESULT MAPS QUE SERÁN EMPLEADOS POR ALGUN
+		QUERY DESDE ESTE ARCHIVO -->
+	<!-- ******************************************************************************************* -->
+
+	<!-- type sale del archivo ConfigNTx.xml del typeAlias, id= nombre cualquiera
+		para identificar el resultMap generado -->
+
+	<resultMap id="carteraActivaId" type="carteraActiva">
+		<!-- property=campo en mi OV, column=nombre_campo_tabla (en dado caso el
+			que esta despues de AS) -->
+		<result property="noContrato" column="NoContrato" />
+		<result property="noGrupo" column="NoGrupo" />
+		<result property="nombreGrupo" column="Nombre_Grupo" />
+		<result property="sucursal" column="Sucursal" />
+		<result property="asesor" column="Asesor" />
+
+		<result property="producto" column="Producto" />
+		<result property="fechaInicio" column="Fecha_Inicio" />
+		<result property="fechaFin" column="Fecha_Fin" />
+		<result property="cantidadEntregada" column="Cantidad_Entregada" />
+		<result property="parcialidad" column="Parcialidad" />
+
+		<result property="plazo" column="Plazo" />
+		<result property="tasa" column="Tasa" />
+		<result property="pagadoCapital" column="Pagado_Capital" />
+		<result property="pagadoIntereses" column="Pagado_Interes" />
+		<result property="pagoParcial" column="Pago_Parcial" />
+
+		<result property="incd" column="INCD" />
+		<result property="saldoCapital" column="Saldo_Capital" />
+		<result property="noMiembros" column="No_Miembros" />
+		<result property="fechaEspLiq" column="fechaEspLiq" />
+		<result property="fechaProxPago" column="fechaProxPago" />
+
+		<result property="iva" column="IVA" />
+		<result property="frecPago" column="Frec_Pago" />
+		<result property="claveT24" column="clave_finsol" />
+		<result property="fechaContrato" column="Fecha_Contrato" />
+		<result property="contrato" column="Contrato" />
+		<result property="noSucursal" column="NumeroSucursal" />
+		<result property="interesTotal" column="InteresTotal" />
+		<result property="ivaInteresTotal" column="IvaInteresTotal" />
+	</resultMap>
+
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR EL NUMERO DE REGISTROS A PROCESAR -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Contamos todos los registros a procesar -->
+	<!--<select id ="obtenerTotalRegistrosReporteCierreCarteraActiva" resultType="Integer">
+		SELECT distinct count(c.contrato) AS TotalContratos FROM contratos c, contrato_clave_finsol,
+		personas, sucursales, productos, contrato_grupo, relacion_clave_finsol r
+		WHERE contrato_clave_finsol.contrato = c.contrato AND personas.persona =
+		c.cliente AND r.persona = personas.persona AND sucursales.sucursal = c.sucursal
+		AND productos.producto = c.producto AND contrato_grupo.contrato = c.contrato
+		AND c.status = 'D' AND c.clave_empresa = '100000003' </select> -->
+
+	<select id="obtenerTotalRegistrosReporteCierreCarteraActiva"
+		parameterType="java.util.HashMap" resultType="Integer">
+		<![CDATA[ SELECT
+			count(c.contrato)	AS TotalContratos
+		FROM
+			contratos c
+			INNER JOIN productos p
+				ON p.producto = c.producto
+			INNER JOIN personas g
+				ON g.persona = c.cliente
+			INNER JOIN contrato_clave_finsol cf
+				ON cf.contrato = c.contrato
+			INNER JOIN sucursales s
+				ON s.sucursal = c.sucursal
+			INNER JOIN contrato_grupo cg
+				ON cg.contrato  = c.contrato
+			INNER JOIN relacion_clave_finsol r
+				ON r.persona = g.persona
+		WHERE c.clave_empresa = '100000003'
+			AND c.status IN ( 'D', 'N' )
+			AND c.fecha_disposicion >= #{fechaInicio}
+			AND c.fecha_disposicion <= #{fechaFin}
+			 ]]>
+	</select>
+
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR LOS QUERIES QUE SERÁN EJECUTADOS DESDE ALGUNA
+		CLASE DE JAVA -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Obtenemos el bloque correspondiente de registros (carteraActiva) --><!-- <select id="obtenerReporteCierreCarteraActiva" parameterType="java.lang.String"
+		resultMap="carteraActivaId"> <![CDATA[ SELECT distinct contrato_clave_finsol.contrato_LD
+		AS NoContrato, c.cliente AS NoGrupo, personas.nombre AS Nombre_Grupo, sucursales.nombre
+		AS Sucursal, rtrim(contrato_grupo.asesor) AS Asesor, productos.descripcion
+		AS Producto, convert(char(10), c.fecha_disposicion, 103) AS Fecha_Inicio,
+		convert(char(10), c.fecha_esp_liq, 103) AS Fecha_Fin, c.monto AS Cantidad_Entregada,
+		c.monto_pago AS Parcialidad, c.no_pagos AS Plazo, c.tasa AS Tasa, ( SELECT
+		-SUM(monto_concepto) FROM movimientos m LEFT JOIN codigos_caja cod ON m.codigo
+		= cod.codigo WHERE m.contrato = c.contrato AND cod.tipo_codigo = 'ABO' )
+		AS Pagado_Capital, ( SELECT -SUM(monto_concepto+iva_concepto) FROM movimientos
+		m LEFT JOIN codigos_caja cod ON m.codigo = cod.codigo WHERE m.contrato =
+		c.contrato AND cod.tipo_codigo = 'INT' ) AS Pagado_Interes, contrato_grupo.monto_devuelto
+		AS Pago_Parcial, 'Pendiente' AS INCD, c.capital_insoluto AS Saldo_Capital,
+		( SELECT count(integrante) FROM integrante_grupo i WHERE i.contrato = c.contrato
+		AND i.status='A' ) AS No_Miembros, convert(char(10), c.fecha_esp_liq, 103)
+		AS fechaEspLiq, convert(char(10), c.fecha_prox_pago, 103) AS fechaProxPago,
+		( SELECT MAX(valor) FROM valores_historicos vh WHERE vh.codigo = 'IVIN' AND
+		vh.sucursal = c.sucursal AND vh.fecha_inicial < #{1} ) AS IVA, c.frecuencia_pago
+		AS Frec_Pago, r.clave_finsol AS ClaveT24 FROM contratos c, contrato_clave_finsol,
+		personas, sucursales, productos, contrato_grupo, relacion_clave_finsol r
+		WHERE contrato_clave_finsol.contrato = c.contrato AND personas.persona =
+		c.cliente AND r.persona = personas.persona AND sucursales.sucursal = c.sucursal
+		AND productos.producto = c.producto AND contrato_grupo.contrato = c.contrato
+		AND c.status = 'D' AND c.clave_empresa = '100000003' ORDER BY c.fecha_disposicion
+		]]> </select> -->
+
+	<select id="obtenerReporteCierreCarteraActiva" parameterType="java.util.HashMap"
+		resultMap="carteraActivaId">
+  	<![CDATA[
+			  	SELECT
+				cf.contrato_LD								AS NoContrato,
+				cf.contrato 								AS Contrato,
+				c.cliente									AS NoGrupo,
+			    g.nombre									AS Nombre_Grupo,
+			    s.nombre									AS Sucursal,
+			    rtrim(cg.asesor)							AS Asesor,
+			    p.descripcion								AS Producto,
+			    convert(char(10), c.fecha_disposicion, 103)	AS Fecha_Inicio,
+			    convert(char(10), c.fecha_esp_liq, 103)		AS Fecha_Fin,
+			    c.monto 									AS Cantidad_Entregada,
+			    c.monto_pago 								AS Parcialidad,
+			    c.no_pagos 									AS Plazo,
+			    c.tasa										AS Tasa,
+			    c.fecha_contrato							AS Fecha_Contrato,
+			    c.sucursal									AS NumeroSucursal,
+			    c.interes_total								AS InteresTotal,
+			    c.iva_interes_total							AS IvaInteresTotal,
+				(SELECT -SUM(m.monto_concepto)
+			    	FROM movimientos m
+			    	LEFT JOIN codigos_caja cod
+			    		ON m.codigo = cod.codigo
+			    	WHERE m.contrato = c.contrato
+			    	AND cod.tipo_codigo = 'ABO'
+			    )											AS Pagado_Capital,
+			    (SELECT -SUM(m.monto_concepto + m.iva_concepto)
+			    	FROM movimientos m
+			    	LEFT JOIN codigos_caja cod
+			    		ON m.codigo = cod.codigo
+			    	WHERE m.contrato = c.contrato
+			    	AND cod.tipo_codigo = 'INT'
+			    )											AS Pagado_Interes,
+			    cg.monto_devuelto							AS Pago_Parcial,
+			    'Pendiente'									AS INCD,
+			    c.capital_insoluto							AS Saldo_Capital,
+			    (SELECT count(i.integrante)
+			    	FROM integrante_grupo i
+			    	WHERE i.contrato = c.contrato
+			    	AND i.status='A' )						AS No_Miembros,
+			    convert(char(10), c.fecha_esp_liq, 103)		AS fechaEspLiq,
+			    convert(char(10), c.fecha_prox_pago, 103)	AS fechaProxPago,
+			    (SELECT MAX(vh.valor)
+			    	FROM valores_historicos vh
+			    	WHERE vh.codigo = 'IVIN'
+			    	AND vh.sucursal = c.sucursal
+			    	AND vh.fecha_inicial < #{fechaInicial}
+			    )											AS IVA,
+			    c.frecuencia_pago							AS Frec_Pago,
+			    r.clave_finsol								AS ClaveT24
+			FROM
+				contratos c
+			INNER JOIN productos p
+				ON p.producto = c.producto
+			INNER JOIN personas g
+				ON g.persona = c.cliente
+			INNER JOIN contrato_clave_finsol cf
+				ON cf.contrato = c.contrato
+			INNER JOIN sucursales s
+				ON s.sucursal = c.sucursal
+			INNER JOIN contrato_grupo cg
+				ON cg.contrato  = c.contrato
+			INNER JOIN relacion_clave_finsol r
+				ON r.persona = g.persona
+			WHERE c.clave_empresa = '100000003'
+			AND c.status IN ( 'D', 'N' )
+			AND c.fecha_disposicion >= #{fechaInicio}
+			AND c.fecha_disposicion <= #{fechaFin}
+           ORDER BY c.contrato desc
+
+		]]>
+
+	</select>
+
+</mapper>

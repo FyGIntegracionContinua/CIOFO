@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+ 		name="SvcOperacionCreditoGrupal"
+ 		targetNamespace="urn:independencia.creditogrupal.negocio"
+ 		autowire="true">
+
+  	<component name="OperacionCreditoGrupal">
+		<implementation.java class="negocio.operacion.OperacionCreditoGrupalImpl"/>
+		<service name="OperacionCreditoGrupal">
+            <binding.ws uri="/CIOF/SvcOperacionCreditoGrupal"/>
+        </service>
+        <reference multiplicity="1..1" name="pagos" target="PagosCredito"/>
+		<reference multiplicity="1..1" name="transformador" target="Transformador"/>
+ 	</component>
+
+</composite>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<!-- Namespace es un nombre cualquiera -->
+<mapper namespace="creditogrupal.entity.reportes.cierre.ibatis">
+
+	<!-- ******************************************************************************************* -->
+	<!-- SECCION PARA DEFINIR LOS RESULT MAPS QUE SERÁN EMPLEADOS POR ALGUN
+		QUERY DESDE ESTE ARCHIVO -->
+	<!-- ******************************************************************************************* -->
+
+	<!-- type sale del archivo ConfigNTx.xml del typeAlias, id= nombre cualquiera
+		para identificar el resultMap generado -->
+
+	<!-- Mapeo para obtener los datos del reporte de contratos activos con mora -->
+	<resultMap id="desembolsoRepaymentstId" type="desembolsoRepayments">
+		<!-- property=campo en mi OV, column=nombre_campo_tabla (en dado caso el
+			que esta despues de AS) -->
+		<result property="numContrato" column="No_Contrato" />
+		<result property="numSucursal" column="No_Sucursal" />
+		<result property="nombreSucursal" column="Nombre_Sucursal" />
+		<result property="montoPago" column="Monto_Pago" />
+	</resultMap>
+
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR EL NUMERO DE REGISTROS A PROCESAR -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Contamos todos los registros a procesar para el reporte Contratos Activos
+		Mora -->
+	<!--<select id ="obtenerTotalRegistrosReporteCierreRepayment" parameterType="java.lang.String"
+		resultType="Integer"> SELECT count( distinct c.contrato ) AS TotalRepayments
+		FROM contratos c, movimientos m JOIN codigos_caja cod ON m.codigo = cod.codigo
+		AND cod.tipo_codigo = 'ABO' AND cod.tipo_operacion in ('PAGO','PADO') WHERE
+		c.clave_empresa = '100000003' AND m.contrato = c.contrato AND m.fecha_contable
+		= #{1} </select> -->
+	<select id="obtenerTotalRegistrosReporteCierreRepayment"
+		parameterType="java.lang.String" resultType="Integer">
+		SELECT
+		count( DISTINCT c.contrato ) AS TotalRepayments
+		FROM
+		contratos c
+		INNER JOIN movimientos m (INDEX PK_movimientos)
+		ON m.contrato = c.contrato
+		AND m.fecha_contable = #{1}
+		INNER JOIN codigos_caja cod
+		ON m.codigo = cod.codigo
+		AND cod.tipo_codigo = 'ABO'
+		AND cod.tipo_operacion IN ('PAGO','PADO')
+		WHERE c.clave_empresa = '100000003'
+	</select>
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR LOS QUERIES QUE SERÁN EJECUTADOS DESDE ALGUNA
+		CLASE DE JAVA -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Obtenemos el bloque correspondiente de registros (contratosActivosMora) -->
+	<!--<select id="obtenerReporteCierreDesembolsoRepayment" parameterType="java.lang.String"
+		resultMap="desembolsoRepaymentstId"> SELECT distinct ccf.contrato_LD AS No_Contrato,
+		c.sucursal AS No_Sucursal, s.nombre AS Nombre_Sucursal, SUM(monto_capital)*-1
+		AS Monto_Pago FROM contratos c, contrato_clave_finsol ccf, sucursales s,
+		movimientos m JOIN codigos_caja cod ON m.codigo = cod.codigo AND cod.tipo_codigo
+		= 'ABO' AND cod.tipo_operacion in ('PAGO','PADO') WHERE c.clave_empresa =
+		'100000003' AND ccf.contrato = c.contrato AND s.sucursal = c.sucursal AND
+		m.contrato = c.contrato AND m.fecha_contable = #{1} GROUP BY ccf.contrato_LD,
+		c.sucursal, s.nombre ORDER BY ccf.contrato_LD </select> -->
+	<select id="obtenerReporteCierreDesembolsoRepayment"
+		parameterType="java.lang.String" resultMap="desembolsoRepaymentstId">
+		SELECT
+		ccf.contrato_LD AS No_Contrato,
+		c.sucursal AS No_Sucursal,
+		s.nombre AS Nombre_Sucursal,
+		SUM(monto_capital)*-1 AS Monto_Pago
+		FROM contratos c
+		INNER JOIN contrato_clave_finsol ccf (INDEX PK_contrato_clave_finsol)
+		ON ccf.contrato = c.contrato
+		INNER JOIN sucursales s
+		ON s.sucursal = c.sucursal
+		INNER JOIN movimientos m (INDEX PK_movimientos)
+		ON m.contrato = c.contrato
+		AND m.fecha_contable = #{1}
+		INNER JOIN codigos_caja cod
+		ON m.codigo = cod.codigo
+		AND cod.tipo_codigo = 'ABO'
+		AND cod.tipo_operacion in ('PAGO','PADO')
+		WHERE c.clave_empresa = '100000003'
+		GROUP BY ccf.contrato_LD, c.sucursal, s.nombre
+	</select>
+</mapper>

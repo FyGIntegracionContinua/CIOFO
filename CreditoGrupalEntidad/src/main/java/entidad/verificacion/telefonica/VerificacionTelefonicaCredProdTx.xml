@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.verificacion.telefonica">
+	<insert id="registroBitacoraSolicitud" parameterType="java.util.HashMap">
+
+		INSERT INTO bitacora_verificacion_finsol
+		(
+		  solicitud , estatus_verificacion , fecha_envio_verificacion , usuario_envio_verificacion, solicitud_cc,
+		  sucursal , nombre_grupo
+		)
+		VALUES
+		(
+		  #{idSolicitud} , #{estatusVerificacion} , #{fechaEnvioVerificacion} , #{usuarioEnvioVerificacion} , #{solicitudCC},
+		   #{sucursal} , #{nombreGrupo}
+		)
+
+	</insert>
+	<update id="actualizarBitacoraSolicitud" parameterType="java.util.HashMap" >
+
+		UPDATE bitacora_verificacion_finsol
+		<set>
+			<if test="estatusVerificacion != null">  estatus_verificacion = #{estatusVerificacion} , </if>
+			<if test="fechaEnvioVerificacion != null"> fecha_envio_verificacion = #{fechaEnvioVerificacion} ,</if>
+			<if test="fechaRespuestaVerificacion != null"> fecha_respuesta_verificacion = #{fechaRespuestaVerificacion} ,</if>
+			<if test="usuarioEnvioVerificacion != null"> usuario_envio_verificacion = #{usuarioEnvioVerificacion} ,</if>
+			<if test="estatusAprobacion != null"> estatus_aprobacion = #{estatusAprobacion} ,</if>
+			<if test="fechaAprobacion != null"> fecha_aprobacion = #{fechaAprobacion} ,</if>
+			<if test="comentariosEnvioVerificacion != null"> comentarios_envio_verificacion = #{comentariosEnvioVerificacion} ,</if>
+			<if test="solicitudCC != null"> solicitud_cc = #{solicitudCC} ,</if>
+			<if test="usuarioAprobacion != null"> usuario_aprobacion = #{usuarioAprobacion}</if>
+		</set>
+		where
+		solicitud = #{idSolicitud}
+
+	</update>
+
+	<update id="actualizarPersonaTelefono" parameterType="java.util.HashMap" >
+
+		UPDATE persona_telefono
+		<set>
+			fecha_status 			= GETDATE()
+			,fecha_ult_mod 			= GETDATE()
+			<if test="status != ''">  						,status  				= #{status} 				</if>
+			<if test="fechaUltVer != ''">  					,fecha_ult_verif 		= #{fechaUltVer}  			</if>
+			<if test="fechaContacto != ''">  				,fecha_contacto 		= #{fechaContacto}  		</if>
+			<if test="motivo != ''">  						,motivo 				= #{motivo}  				</if>
+			<if test="tipoPlan != ''">  					,tipo_plan 				= #{tipoPlan}  				</if>
+			<if test="cveProveeServicios != ''">  			,cve_provee_servicios 	= #{cveProveeServicios} 	</if>
+			<if test="codigoResolucion != ''"> 				,codigo_resolucion 		= #{codigoResolucion}  		</if>
+			<if test="tipoTelefonoCorrecto != null "> 		,tipo_telefono 			= #{tipoTelefonoCorrecto}  	</if>
+			<if test="consecutivoNuevo != null "> 			,consecutivo 			= convert(int,#{consecutivoNuevo})  	</if>
+
+		</set>
+		<where>
+			<if test="persona != ''">		AND persona 		= #{persona}					</if>
+			<if test="tipoTelefono != ''">	AND tipo_telefono 	= #{tipoTelefono}				</if>
+			<if test="telefono != ''">		AND telefono 		= #{telefono}					</if>
+			<if test="consecutivo != ''">	AND consecutivo 	= convert(int,#{consecutivo})	</if>
+		</where>
+
+	</update>
+
+	<select id="obtenerConseutivoTelefonos" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT isnull(max(consecutivo),0)
+		FROM persona_telefono
+		WHERE persona = #{persona}
+		AND tipo_telefono = #{tipoTelefono}
+	</select>
+
+	<update id="actualizacionSolicitudMO" parameterType="java.util.HashMap">
+		UPDATE solicitudes_finsol SET  etapa = #{visualiza_cec}
+		where solicitud =  #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+           xmlns:f3="urn:fabric3.org"
+           name="SvcRestModuloCEC"
+           targetNamespace="urn:independencia.creditogrupal.negocio"
+           autowire="true">
+
+	<component name="RestModuloCECService">
+        <implementation.java class="negocio.solicitudes.RestModuloCecImpl"/>
+        <service name="RestModuloCecImpl">
+            <f3:binding.rs uri="/moduloCEC"/>
+        </service>
+    	<reference multiplicity="1..1" name="consultas" target="ConsultasCreditoGrupalTarea"/>
+    	<reference multiplicity="1..1" name="transformador" target="Transformador"/>
+    	<reference multiplicity="1..1" name="solicitudesCredito" target="SolicitudesCreditoTarea"/>
+    </component>
+
+</composite>

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="entidad.operacion.ntx">
+
+	<!-- select id="consultaSaldoFv" parameterType="java.util.HashMap" resultMap="java.util.HashMap">
+		{call sp_consulta_saldos_fv( #{numeroContrato}, #{fechaValor})} </select -->
+
+	<select id="realizarCierreFinsol" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+		{call gen_cobranza_finsol( 1, #{FechaCierre}, -1 )}
+	</select>
+
+	<select id="obtenerAsignacionSolicitudes" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionOV">
+
+		SELECT dia_reunion AS diaReunion,
+		hora_reunion AS horaReunion,
+		count(*) AS numContratos
+		FROM solicitudes_finsol
+		WHERE 1=1
+		AND fecha_resolucion >= #{fechaContable}
+		AND ( contrato IS NULL OR
+		contrato = '')
+		AND etapa = 'true'
+		AND codigo_producto NOT IN ('GOS1')
+		AND oficina = #{numeroSucursal}
+		GROUP BY dia_reunion, hora_reunion
+		ORDER BY dia_reunion, hora_reunion
+
+	</select>
+
+
+	<select id="obtenerAsignacionDetalleSolicitudes" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionDetalleOV">
+
+		SELECT rtrim(ltrim(convert(VARCHAR(12),sf.solicitud))) AS contratoLD,
+		rtrim(ltrim(convert(VARCHAR(12),sf.solicitud))) AS contrato,
+		sf.cliente AS cliente,
+		pg.nombre AS nombreGrupo,
+		sf.ciclo AS cicloGrupo,
+		sf.vendedor AS numeroAsesor,
+		pa.nombre + ' '+
+		pa.apellido_pat + ' '+
+		pa.apellido_mat AS nombreAsesor,
+		sf.numero_integrantes AS totalIntegrantes,
+		sf.codigo_producto AS producto,
+		pr.descripcion AS descProd,
+		convert(DATE,sf.fecha_resolucion,120) AS fechaInicio,
+		convert(DATE,CASE
+		WHEN sf.frecuencia_pago = 'S' THEN DateADD(Week, isnull(sf.plazo, 0),
+		sf.fecha_captura )
+		ELSE DateADD(Week, isnull(sf.plazo, 0) * 2, sf.fecha_captura )
+		END,120)
+		AS fechaFin,
+		sf.plazo AS numeroPagos,
+		0 AS pagosRestantes,
+		0 AS diasMora,
+		sf.monto_solicitado AS saldoTotal,
+		sf.dia_reunion AS diaReunion,
+		sf.hora_reunion AS horaReunionInicio,
+		sf.hora_reunion_fin AS horaReunionFin,
+		sf.frecuencia_pago AS frecuencia,
+		'SOLICITUD' as tipoActividad,
+		0 as parcialidad
+		FROM solicitudes_finsol sf
+		LEFT JOIN personas pg ON
+		pg.persona = sf.cliente
+		LEFT JOIN personas pa ON pa.persona =
+		sf.vendedor
+		LEFT JOIN productos pr ON pr.producto = sf.codigo_producto
+		WHERE 1=1
+
+		AND ( contrato IS NULL OR contrato = '')
+		AND etapa = 'true'
+		AND codigo_producto NOT IN ('GOS1')
+		AND sf.status != 'X'
+		AND fecha_resolucion >= #{fechaContable}
+
+		<if test="numeroAsesor != null">
+			AND sf.vendedor = #{numeroAsesor}
+		</if>
+		<if test="numeroSucursal != null">
+			AND sf.oficina = #{numeroSucursal}
+		</if>
+		<if test="horaReunion != null">
+			AND sf.hora_reunion = #{horaReunion}
+		</if>
+		<if test="diaReunion != null">
+			AND sf.dia_reunion = #{diaReunion}
+		</if>
+
+	</select>
+
+
+    <select id="consultaValidacionCancelacionPagoConvenio" parameterType="java.util.HashMap"
+            resultType="utilitario.mensajes.operacion.pagos.CancelaPagoConexiaValidaOV">
+
+        SELECT
+        ABS(sum(monto_capital)) AS monto,
+        id_trx_caja AS idTransaccion
+        FROM
+        movimientos
+        WHERE
+        contrato  = #{numeroContrato} AND
+        fecha_contable = #{fechaContable} AND
+        referencia = #{numeroIntegrante} AND
+        codigo_servicio = 'SOLI'
+        AND status IS null
+        GROUP BY id_trx_caja
+        ORDER BY id_trx_caja DESC
+
+    </select>
+
+	<select id="consultaValidacionCancelacionPagoGarantia" parameterType="java.util.HashMap"
+            resultType="utilitario.mensajes.operacion.pagos.CancelaPagoConexiaValidaOV">
+
+        SELECT
+        ABS(sum(monto_capital)) AS monto,
+        id_trx_caja AS idTransaccion
+        FROM  movimientos
+        WHERE
+        contrato  = #{numeroContrato}
+        AND fecha_contable = #{fechaContable}
+        AND codigo_servicio = #{medioPago}
+        AND status IS null
+        GROUP BY id_trx_caja
+        ORDER BY id_trx_caja DESC
+    </select>
+
+	<select id="consultarPagosNoConciliados" parameterType="java.util.HashMap"
+            resultType="utilitario.mensajes.operacion.pagos.PagoDTO">
+
+	SELECT fechaProceso,
+		   referencia,
+		   monto,
+		   medioPago,
+		   observaciones,
+		   grupoPago,
+		   procesoArchivo,
+		   idRegistro
+		FROM
+		(
+			SELECT
+			    convert(DATETIME,convert(VARCHAR(10),fecha_pago,111)) AS fechaProceso,
+				CASE
+					WHEN str_replace(referencia4,' ', NULL) IS NULL THEN isnull(pe.referencia1,'')
+					ELSE isnull(pe.referencia4,'')
+				END AS referencia,
+			    isnull(pe.importe,0) AS monto,
+			    str_replace(str_replace(UPPER(pe.id_proceso_archivo), 'FINSOL_',''), '_DEP','') AS medioPago,
+			    isnull(pe.observaciones, ' ') AS observaciones,
+			    grupoPago = CASE
+			    				WHEN CHARINDEX('BANAMEX', upper(pe.id_proceso_archivo)) > 0 AND CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) = 0 AND charindex('43D', pe.referencia1) > 0  THEN 'SEGURO VIDA'
+			    				WHEN CHARINDEX('BANAMEX', upper(pe.id_proceso_archivo)) > 0 AND CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) = 0 AND charindex('43E', pe.referencia1) > 0  THEN 'SEGURO ENFERMEDAD'
+			    				WHEN CHARINDEX('BANCOMER', upper(pe.id_proceso_archivo)) > 0 AND CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) = 0 AND substring(pe.referencia1,8,1) = 'D'  THEN 'SEGURO VIDA'
+			    				WHEN CHARINDEX('BANCOMER', upper(pe.id_proceso_archivo)) > 0 AND CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) = 0 AND substring(pe.referencia1,8,1) = 'E'  THEN 'SEGURO ENFERMEDAD'
+			    				WHEN CHARINDEX('HSBC', upper(pe.id_proceso_archivo)) > 0 AND CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) = 0 AND substring(pe.referencia1,1,4) = '8004'  THEN 'SEGURO VIDA'
+			    				WHEN CHARINDEX('HSBC', upper(pe.id_proceso_archivo)) > 0 AND CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) = 0 AND substring(pe.referencia1,1,4) = '8005'  THEN 'SEGURO ENFERMEDAD'
+			    				WHEN CHARINDEX('_DEP', upper(pe.id_proceso_archivo)) > 0  THEN 'GARANTIA'
+			    				ELSE 'CREDITO'
+			    			END,
+			    pe.id_proceso_archivo AS procesoArchivo,
+			    pe.id_registro AS idRegistro
+			FROM credprod..pagos_externos pe
+			left JOIN credprod_finsol..contrato_clave_finsol ccf ON ccf.contrato_LD = rtrim(ltrim(stuff(pe.referencia1,8,1,'0')))
+			left JOIN credprod_finsol..contratos c ON (c.contrato = ccf.contrato)
+			LEFT JOIN credprod_finsol..sucursales s ON c.sucursal = s.sucursal
+			WHERE convert(DATETIME,convert(VARCHAR(10),fecha_pago,111)) >= #{fechaUniverso}
+
+			AND	pe.id_proceso_archivo IN
+			<foreach collection="procesos" item="item" open="("	separator="," close=")">
+					#{item}
+			</foreach>
+
+			AND pe.status in ('E')
+		) a
+		WHERE grupoPago IN ('GARANTIA','CREDITO')
+		AND fechaProceso BETWEEN #{fechaInicial} AND #{fechaFinal}
+		<if test="referencia != null">
+			AND referencia = #{referencia}
+		</if>
+		ORDER BY fechaProceso
+
+    </select>
+
+	<select id="consultaDatosContratoConciliar" parameterType="java.util.HashMap"
+            resultType="java.util.HashMap">
+
+        SELECT producto, status
+        from contratos
+        where contrato =  #{contrato}
+
+    </select>
+
+	<select id="consultaPagoConciliado" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	       SELECT count(*) AS existe FROM credprod..pagos_externos WHERE id_registro =  convert(NUMERIC(18,0), #{idRegistro})  and 	status = 'E'
+	</select>
+
+	<select id="consultaPagosLineaDuplicados" parameterType="java.util.HashMap"
+            resultType="utilitario.mensajes.operacion.pagos.PagoLineaDTO">
+
+		SELECT
+			 	p.contrato AS contrato,
+       			ccf.contrato_LD AS contratoLD,
+       			p.folio AS folio,
+       			pr.monto AS monto,
+       			pr.fecha_peticion AS fechaPeticion,
+       			p.hora_peticion AS horaPeticion
+		FROM bitacora_pagos_linea p
+		INNER JOIN contrato_clave_finsol ccf on ccf.contrato = p.contrato
+		INNER JOIN auditoria_cajas cd ON convert(VARCHAR(30),isnull(cd.referencia_3,'-1')) = convert(VARCHAR(30),p.folio)
+			AND convert(INT,cd.contrato) = convert(INT,p.contrato) AND cd.clave_prod = 'POXO'
+			AND convert(DATE,convert(VARCHAR(10),cd.fecha_operacion,111)) >= #{fechaInicial}
+		INNER JOIN (
+			SELECT count(c.contrato) pagos_repetidos, c.monto, c.contrato, bpl.fecha_peticion, sum(c.monto) AS monto_total_pagos,
+			(SELECT sum(monto) FROM archivos_pagos_linea_det apd where apd.contrato = c.contrato
+				AND apd.fecha_operacion = bpl.fecha_peticion
+				AND (apd.fecha_operacion BETWEEN #{fechaInicial} AND dateadd(day, #{dias}, #{fechaInicial}))) AS monto_pagos_reportados
+			FROM bitacora_pagos_linea bpl
+			INNER JOIN auditoria_cajas c ON convert(VARCHAR(30),isnull(c.referencia_3,'-1')) = convert(VARCHAR(30),bpl.folio)
+				AND convert(INT,c.contrato) = convert(INT,bpl.contrato) AND c.clave_prod = 'POXO'
+				AND convert(DATE,convert(VARCHAR(10),c.fecha_operacion,111)) >= #{fechaInicial}
+			WHERE bpl.fecha_peticion >= #{fechaInicial}
+			AND bpl.tipo_operacion = 'PLPA'
+			AND bpl.estatus = 'APLI'
+			AND bpl.folio NOT IN (SELECT folio FROM bitacora_pagos_linea WHERE contrato = bpl.contrato AND folio = bpl.folio AND tipo_operacion = 'PLRE' AND estatus = 'APLI')
+			GROUP BY c.contrato, c.monto, bpl.fecha_peticion
+			HAVING count(c.contrato) > 1) AS pr ON pr.contrato = p.contrato AND pr.fecha_peticion = p.fecha_peticion
+		WHERE p.fecha_peticion = #{fechaInicial}
+		AND p.tipo_operacion = 'PLPA'
+		AND p.folio NOT IN (SELECT folio FROM bitacora_pagos_linea WHERE contrato = p.contrato AND folio = p.folio AND tipo_operacion = 'PLRE' AND estatus = 'APLI')
+		AND cd.monto = pr.monto
+		AND pr.monto_total_pagos != pr.monto_pagos_reportados
+		ORDER BY p.contrato
+    </select>
+    <select id="validarArchivoOxxo" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	       SELECT count(*) AS existe
+	       FROM archivos_pagos_linea
+	       WHERE nombre_archivo =  #{archivo}
+	</select>
+	<select id="consultarPagosLineaNoEncontrados" parameterType="java.util.HashMap"
+            resultType="utilitario.mensajes.operacion.pagos.PagoLineaDTO">
+
+		SELECT t.contrato AS contrato,
+			   (SELECT x.contrato_LD FROM contrato_clave_finsol x WHERE x.contrato = t.contrato) AS contratoLD,
+				t.folio AS folio,
+				t.monto  AS monto,
+				t.fecha_peticion AS fechaPeticion,
+				t.hora_peticion AS horaPeticion
+		FROM (
+			SELECT p.contrato, p.folio, cd.monto, p.fecha_peticion, p.hora_peticion, apd.contrato AS contrato1
+			FROM bitacora_pagos_linea p
+			INNER JOIN auditoria_cajas cd ON convert(VARCHAR(30),isnull(cd.referencia_3,'-1')) = convert(VARCHAR(30),p.folio)
+					AND convert(INT,cd.contrato) = convert(INT,p.contrato) AND cd.clave_prod = 'POXO'
+					AND convert(DATE,convert(VARCHAR(10),cd.fecha_operacion,111)) >= #{fechaInicial}
+			LEFT JOIN (
+				SELECT * FROM archivos_pagos_linea_det
+				 WHERE fecha_operacion BETWEEN #{fechaInicial} AND dateadd(day, #{dias}, #{fechaInicial})) apd ON apd.contrato = p.contrato AND apd.monto = cd.monto AND p.fecha_peticion = apd.fecha_operacion
+			WHERE p.fecha_peticion = #{fechaInicial}
+			AND p.tipo_operacion = 'PLPA'
+			AND p.estatus = 'APLI'
+			AND p.folio NOT IN (SELECT folio FROM bitacora_pagos_linea WHERE contrato = p.contrato AND folio = p.folio AND tipo_operacion = 'PLRE' AND estatus = 'APLI')
+		) t
+		WHERE t.contrato1 IS NULL
+		ORDER BY t.contrato
+    </select>
+
+	<!-- Se agrega query para la consulta de traspasos de pagos -->
+   	<select id="consultaTraspasosPagos" parameterType="java.util.HashMap"
+           resultType="utilitario.mensajes.operacion.TraspasoPagos">
+
+	SELECT ISNULL(CONVERT(nvarchar, pg.fecha_contable, 103), '') AS fechaPago,
+		pg.contrato_origen AS contratoLiquidado,
+		ISNULL(CONVERT(nvarchar, pg.fecha_valor, 103), '') AS fechaAplicacion,
+		pg.contrato_destino AS contratoCorrecto,
+		pg.monto AS monto,
+		pg.codigo_servicio AS medioPago,
+		pe.nombre AS grupo,
+		s.nombre AS sucursal
+	FROM pago_traspasos pg
+	LEFT JOIN contratos  con		ON con.contrato  = pg.contrato_origen
+	LEFT JOIN	personas pe   		ON pe.persona    = con.cliente
+	LEFT JOIN productos prod 		ON prod.producto = con.producto
+	LEFT JOIN sucursales s   	    ON s.sucursal 	 = con.sucursal
+
+	<if test="fechaPago != null">
+		WHERE pg.fecha_valor BETWEEN #{fechaInicio} AND #{fechaFin}
+	</if>
+
+	<if test="fechaAplicacion != null">
+		WHERE pg.fecha_contable BETWEEN #{fechaInicio} AND #{fechaFin}
+	</if>
+
+	<if test="sucursal != null">
+		and con.sucursal = #{sucursal}
+	</if>
+
+   </select>
+</mapper>

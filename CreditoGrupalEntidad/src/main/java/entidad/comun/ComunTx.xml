@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.comun.tx">
+
+	<resultMap id="respuestaOperacionCaja" type="resultado">
+		<result property="codigoRetorno" column="codigo_retorno" />
+		<result property="mensaje" column="mensaje" />
+	</resultMap>
+
+
+	<select id="registraCajaInventario" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.lang.String">
+		{ call
+		caja_inventario(#{sucursal}, 0, '' , #{monto} , #{fechaContable} )}
+	</select>
+
+	<select id="registraOperacionCaja" statementType="CALLABLE"
+		parameterType="map" resultMap="respuestaOperacionCaja">
+		set nocount on{ call
+		caja_registra_operacion( #{codigo}, #{contrato} ,0 , null, null,
+		null,#{sucursal},#{usuario}, #{fechaContable},#{monto},
+		null, #{idTrxCaja},null, #{fechaActual}, #{sucursal}, 2 , #{medioRecepcion}
+		,
+		#{usuario}, 1, #{clave}, #{clave_produccion},#{referencia1},#{referencia2}, #{referencia3},
+		'', '',0,0,0,'0','',null)
+		}
+	</select>
+
+	<select id="registraOperacionCajaServicio" statementType="CALLABLE"
+		parameterType="map" resultMap="respuestaOperacionCaja">
+		set nocount on{ call
+		caja_registra_operacion( #{codigo}, #{contrato} , 0 , null, null,
+		null,#{sucursal},#{usuario}, #{fechaContable},#{monto},
+		null, #{idTrxCaja},null, #{fechaActual}, #{sucursal}, 2 , #{medioRecepcion}
+		,
+		#{usuario}, 1, #{clave}, #{clave_produccion},#{referencia1},#{referencia2},
+		#{referencia3}, #{referencia4}, #{referencia5} ,
+		#{monto} , #{comision} , #{ivaComision} ,'0','', #{fechaValor} )
+		}
+	</select>
+
+	<update id="actualizarInteresIvaContratos" parameterType="java.util.HashMap">
+		UPDATE
+		contratos SET interes_total = #{interesTotal}, iva_interes_total =
+		#{ivaInteresTotal}
+		WHERE contrato = #{contrato}
+	</update>
+
+	<select id="calcularPorcentajeParcipacionIntegrantes"
+		parameterType="java.lang.String" resultType="java.util.HashMap">
+		set nocount on {
+		call grupal_act_integrante ( /*display*/1 , /*contrato*/#{contrato},
+		/*resultado*/1, /*mensaje*/'')
+		}
+	</select>
+
+	<insert id="insertControlServicio" parameterType="java.util.HashMap"
+	keyProperty="idRegistro">
+		INSERT INTO control_servicio (
+		cve_servicio ,
+		id_proceso_servicio,
+		fecha_operacion,
+		fecha_inicio,
+		fecha_fin)
+		VALUES(
+		#{cveServicio},
+		#{idProceso},
+		#{fechaOperacion},
+		getdate(),
+		'19000101')
+		<selectKey resultType="java.lang.Integer" keyProperty="idRegistro">
+			SELECT max(id_registro) as value FROM control_servicio
+		</selectKey>
+	</insert>
+
+	<update id="actualizaControlServicioFin" parameterType="java.util.HashMap">
+		UPDATE
+		control_servicio set
+		fecha_fin = getdate()
+		WHERE id_registro = #{idRegistro}
+	</update>
+</mapper>

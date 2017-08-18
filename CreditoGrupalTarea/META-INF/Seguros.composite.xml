@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+		name="Seguros" 
+		targetNamespace="urn:independencia.creditogrupal.tarea.seguros">
+
+ 	<component name="SegurosTarea">
+		<implementation.java class="tarea.seguros.SegurosTareaImpl"/>
+		
+		<reference multiplicity="1..1" name="comun" target="ComunCreditoGrupal"/>
+	</component>
+</composite>

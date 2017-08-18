@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.buro.BuroInternoNTx">
+
+	<select id="consultaDatosBuro" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.buro.BuroInternoOV">
+		SELECT ccf.contrato as contrato,
+		ccf.contrato_LD as
+		numeroContratoLD,
+		ig.ciclo_integrante as cicloCliente,
+		c.fecha_disposicion as fechaInicio,
+		c.fecha_esp_liq as liquidation,
+		c.fecha_liq as fechaFin,
+		datediff(day, c.fecha_esp_liq , c.fecha_liq)
+		as diasAtraso,
+		ig.monto_otorgado as montoTotal,
+		case
+		WHEN c.status = 'D' THEN 'Vigente'
+		WHEN c.status = 'P' THEN 'Liquidado'
+		WHEN c.status = 'X' THEN 'Cancelado'
+		WHEN c.status = 'V' THEN 'Vendido'
+		END AS status,
+		c.capital_insoluto as
+		interesTotal,
+		c.saldo_capital_vencido as totalaPagar,
+		c.no_retrasos AS
+		numeroRetrasos,
+		c.maximo_retraso AS maximoRetraso
+		FROM integrante_grupo ig
+		INNER JOIN contrato_clave_finsol ccf ON ccf.contrato = ig.contrato
+		INNER
+		JOIN contratos c ON c.contrato = ig.contrato
+		WHERE ig.integrante =
+		#{contrato}
+		ORDER BY ig.ciclo_integrante DESC
+	</select>
+
+</mapper>

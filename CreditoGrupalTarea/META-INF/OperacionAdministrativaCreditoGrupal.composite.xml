@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+ 		name="OperacionAdministrativaGrupalTarea"
+ 		targetNamespace="urn:independencia.creditogrupal.tarea.operacionadministrativa">
+	
+ 	<component name="OperacionAdministrativaGrupalTarea">
+		<implementation.java class="tarea.operacionadministrativa.OperacionAdministrativaImpl"/>
+		<producer name="cierreFinsol" target="OperacionAdministrativa"/>
+		<reference multiplicity="1..1" name="comun" target="ComunCreditoGrupal"/>		
+	</component>	
+ 	
+</composite>
+

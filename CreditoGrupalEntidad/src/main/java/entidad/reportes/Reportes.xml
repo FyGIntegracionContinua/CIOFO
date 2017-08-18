@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="creditogrupal.entity.reportes.ibatis">
+
+	<resultMap id="reportePagoId" type="reportePago">
+		<result property="fechaContable" column="p_fcontable" />
+		<result property="fechaEsperada" column="p_fesperada" />
+		<result property="fechaPago" column="p_fpago" />
+		<result property="atraso" column="p_atraso" />
+		<result property="numeroPago" column="p_no_pago" />
+		<result property="referenciaPago" column="p_ref_pago" />
+		<result property="total" column="p_total" />
+		<result property="capital" column="p_capital" />
+		<result property="interes" column="p_interes" />
+		<result property="otros" column="p_otros" />
+		<result property="moratorio" column="p_moratorio" />
+		<result property="cobranza" column="p_cobranza" />
+		<result property="saldo" column="p_saldo" />
+	</resultMap>
+
+	<resultMap id="reporteCreditoId" type="reporteCredito">
+		<result property="codigo" column="codigo" />
+		<result property="mensaje" column="mensaje" />
+		<result property="cliente" column="cliente" />
+		<result property="fechaContrato" column="fecha_contrato" />
+		<result property="fechaHoy" column="fecha_hoy" />
+		<result property="montoTotal" column="monto_total" />
+		<result property="montoPago" column="monto_pago" />
+		<result property="numeroPagos" column="no_pagos" />
+		<result property="frecuenciaPago" column="frecuencia_pago" />
+		<result property="tasa" column="tasa" />
+		<result property="producto" column="producto" />
+		<result property="retrasoMaximo" column="retraso_max" />
+		<result property="saldo" column="saldo" />
+		<result property="fechaUltimoCorte" column="ult_corte" />
+		<result property="fechaProximoPago" column="fecha_prox_pago" />
+		<result property="numeroUltimoPago" column="num_ult_pago" />
+		<result property="estado" column="estado" />
+		<result property="limiteCredito" column="limite_credito" />
+		<result property="montoDisponible" column="monto_disponible" />
+		<result property="tasaMoratoriaAnual" column="tasa_moratoria_anual" />
+		<result property="pagosPendientes" column="pagos_pendientes" />
+		<result property="fechaTresMesesAtras" column="fecha_3meses_atras" />
+		<result property="descripcionProducto" column="des_producto" />
+		<result property="calculoInteres" column="calculo_interes" />
+		<result property="costoAnualTotal" column="costo_anual_total" />
+		<result property="tipoProducto" column="tipo_producto" />
+		<result property="sucursal" column="sucursal" />
+		<result property="montoDevuelto" column="monto_devuelto" />
+		<result property="montoReal" column="monto_real" />
+		<result property="fechaFin" column="fecha_esp_liq" />
+	</resultMap>
+
+	<resultMap id="resumenSaldoId" type="resumenSaldo">
+		<result property="codigo" column="p_codigo" />
+		<result property="mensaje" column="p_mensaje" />
+		<result property="fechaHoy" column="p_fhoy" />
+		<result property="vencido" column="p_vencido" />
+		<result property="insoluto" column="p_insoluto" />
+		<result property="interes" column="p_interes" />
+		<result property="total" column="p_total" />
+		<result property="pagos" column="p_pagos" />
+		<result property="disposiciones" column="p_disposiciones" />
+		<result property="comiciones" column="p_comiciones" />
+		<result property="bonificaciones" column="p_bonificaciones" />
+		<result property="ivaInteres" column="p_iva_interes" />
+		<result property="capitalPagado" column="p_capital_pagado" />
+		<result property="interesPagado" column="p_interes_pagado" />
+		<result property="moraPagado" column="p_mora_pagado" />
+		<result property="disponible" column="p_disponible" />
+		<result property="impuestosRetenidos" column="p_impuestos_retenidos" />
+	</resultMap>
+
+	<resultMap id="creditoGrupoId" type="creditoGrupo">
+		<result property="grupo" column="cliente" />
+		<result property="nombreGrupo" column="nombre_grupo" />
+		<result property="ciclo" column="ciclo_grupo" />
+		<result property="sucursal" column="sucursal" />
+		<result property="nombreSucursal" column="nombre_sucursal" />
+		<result property="asesor" column="asesor" />
+		<result property="numeroContrato" column="contrato" />
+		<result property="producto" column="producto" />
+		<result property="nombreProducto" column="descripcion" />
+		<result property="contratoLD" column="contrato_LD" />
+	</resultMap>
+
+	<select id="obtenerDetalleEstadoDeCuenta" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultMap="reportePagoId">
+		set nocount on { call sp_edocta_detalle ('', #{numeroCuenta},
+		#{muestraCancelaciones}, 'S', 0 ) }
+	</select>
+	<select id="obtenerDatosEstadoDeCuenta" statementType="CALLABLE"
+		parameterType="java.lang.String" resultMap="reporteCreditoId">
+		set nocount on { call sp_edocta_datos ('', #{numeroCuenta}) }
+	</select>
+	<select id="obtenerFinalEstadoDeCuenta" statementType="CALLABLE"
+		parameterType="java.lang.String" resultMap="resumenSaldoId">
+		set nocount on { call sp_edocta_final ('', #{numeroCuenta}) }
+	</select>
+	<select id="obtenerVencidoEstadoDeCuenta" statementType="CALLABLE"
+		parameterType="java.lang.String" resultMap="reportePagoId">
+		set nocount on { call sp_edocta_vencido ('', #{numeroCuenta}) }
+	</select>
+	<select id="obtenerUnidadEspecializada" statementType="CALLABLE"
+		parameterType="java.lang.Integer" resultType="java.lang.String">
+		set nocount on { call obten_unidad_especializada (1,#{1} , '') }
+	</select>
+	<select id="obtenerGrupoEstadoDeCuenta" parameterType="java.lang.String"
+		resultMap="creditoGrupoId">
+		SELECT ccf.contrato_LD as contrato_LD, cg.contrato as contrato, cg.asesor as
+		asesor, cg.ciclo_grupo as ciclo_grupo,
+		rcf.clave_finsol as cliente, c.producto as producto, p.descripcion as descripcion,
+		c.sucursal as sucursal,
+		s.nombre as nombre_sucursal, pe.nombre as nombre_grupo
+		FROM contratos c
+		INNER JOIN contrato_grupo cg on cg.contrato = c.contrato
+		INNER JOIN contrato_clave_finsol ccf on ccf.contrato = c.contrato
+		INNER JOIN personas pe on pe.persona = c.cliente
+		INNER JOIN productos p on p.producto = c.producto
+		INNER JOIN sucursales s on s.sucursal = c.sucursal
+		INNER JOIN relacion_clave_finsol rcf ON rcf.persona = c.cliente
+		WHERE c.contrato = #{numeroCuenta}
+	</select>
+
+	<select id="obtenerChequesDevueltos" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT count( integrante )
+		FROM integrante_grupo
+		WHERE contrato = #{1}
+		AND status != 'A'
+	</select>
+
+	<select id="obtenerDepositoGarantia" parameterType="java.util.HashMap"
+		resultType="java.lang.Double">
+		SELECT saldo_garantia FROM contrato_deposito_garantia
+		WHERE contrato =  #{contrato}
+		AND status =	'A'
+	</select>
+
+	<select id="obtenerContratoSinDevoluciones" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+		SELECT monto, no_pagos as noPagos, frecuencia_pago as
+		frecuencia, tasa, fecha_reestru as fecha
+		FROM contratos_movimientos
+		WHERE contrato = #{1}
+		AND tipo_movimiento =
+		'DEVC'
+		ORDER BY fecha_reestru asc
+	</select>
+
+	<!-- ************************************************************************************** -->
+	<!-- ******************************* Reportes contables *********************************** -->
+	<!-- ************************************************************************************** -->
+
+	<select id="obtenerMontoCastigoCarteraVencida" parameterType="java.util.HashMap"
+		resultType="java.math.BigDecimal">
+		SELECT SUM(a.capital_insoluto) + SUM(devengado_por_pagar)
+		FROM transferencias_prop a
+		LEFT OUTER JOIN saldos_hist b
+		ON a.contrato = b.contrato AND b.mes = #{fechaMes,
+		jdbcType=NUMERIC}/*yyyyMM*/
+		WHERE SUBSTRING( CONVERT(VARCHAR,a.fecha,112), 1, 6 ) = #{fechaAnioMes,
+		jdbcType=VARCHAR}/*yyyyMM*/
+		AND a.propietario_ant = '000002011'
+	</select>
+
+	<select id="obtenerMontoVentaCarteraVencida" parameterType="java.util.HashMap"
+		resultType="java.math.BigDecimal">
+		SELECT isnull(sum(monto_concepto+iva_concepto) ,0)
+		FROM movimientos
+		WHERE codigo IN ('CSVA','PGVA','')
+		AND SUBSTRING(
+		CONVERT(VARCHAR,fecha_contable,112), 1, 6 ) = #{fechaAnioMes,
+		jdbcType=VARCHAR}/*yyyyMM*/
+		AND propietario = '000002011'
+	</select>
+
+	<select id="obtenerValorHistorico" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.lang.Double">
+		set nocount on {
+		call ver_valor_hist 1, 0, #{codigo, jdbcType=VARCHAR}, #{fecha,
+		jdbcType=VARCHAR}/*yyyyMMdd*/
+		}
+	</select>
+
+	<select id="obtenerPersonasBloqueadas" parameterType="java.util.HashMap"
+			resultType="utilitario.mensajes.persona.PersonaOV">
+		SELECT p.persona as numeroPersona,
+				p.nombre  as nombre,
+				p.apellido_pat as apellidoPaterno,
+				p.apellido_mat as apellidoMaterno,
+				pc.codigo_bloqueo,
+				pc.fecha_bloqueo,
+				CASE
+					WHEN pc.codigo_bloqueo = null THEN ''
+					WHEN pc.codigo_bloqueo IS NOT NULL THEN c.descripcion
+				END AS bloqueo
+		FROM personas p
+		INNER JOIN persona_complemento pc ON p.persona = pc.persona
+		INNER JOIN codigos c ON c.codigo = pc.codigo_bloqueo
+		WHERE
+		pc.fecha_bloqueo BETWEEN #{fechaInicio} AND #{fechaFin}
+		AND pc.codigo_bloqueo != NULL ORDER BY pc.fecha_bloqueo
+	</select>
+
+	<select id="obtenerReporteExcepcionesBuzon" parameterType="java.util.HashMap"
+			resultType="utilitario.mensajes.reportes.garantias.ReporteExcepcionGarantiaOV">
+		SELECT	r.region,
+				convert(VARCHAR(200),r.nombre) AS nombreRegion,
+				s.sucursal,
+				convert(VARCHAR(200),s.nombre) AS nombreSucursal,
+				teg.solicitud,
+				convert(VARCHAR(200),sf.contrato) AS contratoNuevo,
+				convert(VARCHAR(200),sf.contrato_ant) AS contratoRenovacion,
+				sf.ciclo,
+				convert(VARCHAR(200),prod.descripcion) AS producto,
+				bt.fecha_alta AS fechaAltaExcepcion,
+				convert(VARCHAR(200),isnull(c.descripcion, ' ')) AS estatusExcepcion,
+				convert(VARCHAR(200),isnull(teg.observaciones, ' ')) AS observaciones,
+				p.nombre AS nombreGrupo
+		FROM tareas_excepcion_garantia teg
+		INNER JOIN buzon_tareas bt ON bt.id_tarea = teg.id_tarea
+		INNER JOIN solicitudes_finsol sf ON sf.solicitud = teg.solicitud
+		INNER JOIN sucursales s ON s.sucursal = bt.sucursal
+		INNER JOIN regiones r ON r.region = s.region
+		INNER JOIN productos prod ON prod.producto = sf.codigo_producto
+		LEFT JOIN codigos c ON c.codigo = teg.codigo_estatus_autorizacion
+		INNER JOIN personas p ON p.persona = sf.cliente
+		WHERE bt.tipo_tarea = 'TOEG'
+		<if test="fechaAltaInicio != null">
+			AND convert(DATETIME,convert(VARCHAR(30),bt.fecha_alta,103),103) <![CDATA[>]]> = #{fechaAltaInicio}
+		</if>
+		<if test="fechaAltaFin != null">
+			AND convert(DATETIME,convert(VARCHAR(30),bt.fecha_alta,103),103) <![CDATA[<]]> = #{fechaAltaFin}
+		</if>
+		<if test="region != null">
+			AND s.region = #{region}
+		</if>
+		<if test="division != null">
+			AND s.region in (SELECT region FROM regiones WHERE division = #{division})
+		</if>
+		<if test="estatusExcepcion != null">
+			AND teg.codigo_estatus_autorizacion = #{estatusExcepcion}
+		</if>
+	</select>
+
+	<select id="obtenerReporteSolicitudesGarantia" parameterType="java.util.HashMap"
+			resultType="utilitario.mensajes.reportes.garantias.ReporteSolicitudesGarantiaOV">
+		SELECT 	contrato = convert(VARCHAR(20),c.contrato),
+				grupo = p.persona,
+				nombreGrupo = convert(VARCHAR(200),p.nombre),
+				ciclo = cg.ciclo_grupo,
+				s.sucursal,
+				nombreSucursal = convert(VARCHAR(200),s.nombre),
+				r.region,
+				nombreRegion = convert(VARCHAR(200),r.nombre),
+				d.division,
+				nombreDivision = d.nombre,
+				garantiaRequeridaPct = isnull(valor,'0'),
+				garantiaRequeridaMonto = c.monto_ahorro,
+				garantiaDeposito = isnull((	SELECT sum(cm.importe)
+											FROM contrato_movimientos_dg cm
+											WHERE cm.contrato = c.contrato AND cm.codigo  IN
+											<if test="listaCodDepositosGarantia != null">
+												<foreach item="item" index="index" collection="listaCodDepositosGarantia" open="(" separator="," close=")">
+													#{item, jdbcType=VARCHAR}
+										    	</foreach>
+											</if>
+											AND cm.status = 'A'),0),
+				garantiaTraspaso = isnull((	SELECT sum(cm.importe)
+											FROM contrato_movimientos_dg cm
+											WHERE cm.contrato = c.contrato
+											AND cm.codigo IN
+											<if test="listaCodTraspasosDepositosGarantia != null">
+												<foreach item="item" index="index" collection="listaCodTraspasosDepositosGarantia" open="(" separator="," close=")">
+													#{item, jdbcType=VARCHAR}
+										    	</foreach>
+											</if>
+											AND cm.status = 'A'),0),
+				garantiaDiferencia = 	c.monto_ahorro -
+										(isnull((	SELECT sum(cm.importe)
+													FROM contrato_movimientos_dg cm
+													WHERE cm.contrato = c.contrato
+													AND cm.codigo IN
+													<if test="listaCodDepositosGarantia != null">
+														<foreach item="item" index="index" collection="listaCodDepositosGarantia" open="(" separator="," close=")">
+															#{item, jdbcType=VARCHAR}
+											    		</foreach>
+													</if>
+ 													AND cm.status = 'A'),0) +
+										isnull((	SELECT sum(cm.importe)
+													FROM contrato_movimientos_dg cm
+													WHERE cm.contrato = c.contrato
+													AND cm.codigo IN
+													<if test="listaCodTraspasosDepositosGarantia != null">
+														<foreach item="item" index="index" collection="listaCodTraspasosDepositosGarantia" open="(" separator="," close=")">
+															#{item, jdbcType=VARCHAR}
+												    	</foreach>
+													</if>
+													AND cm.status = 'A'),0)),
+				garantiaDevoluciones = isnull((	SELECT sum(cm.importe)
+												FROM contrato_movimientos_dg cm
+												WHERE cm.contrato = c.contrato
+												AND cm.codigo IN
+												<if test="listaCodDevolucionesGarantia != null">
+													<foreach item="item" index="index" collection="listaCodDevolucionesGarantia" open="(" separator="," close=")">
+														#{item, jdbcType=VARCHAR}
+											    	</foreach>
+												</if>
+												AND cm.status = 'A'),0),
+				garantiaTotal = 	c.monto_ahorro -
+									(isnull((	SELECT sum(cm.importe)
+												FROM contrato_movimientos_dg cm
+												WHERE cm.contrato = c.contrato
+												AND cm.codigo IN
+												<if test="listaCodDepositosGarantia != null">
+													<foreach item="item" index="index" collection="listaCodDepositosGarantia" open="(" separator="," close=")">
+														#{item, jdbcType=VARCHAR}
+											    	</foreach>
+												</if>
+												AND cm.status = 'A'),0) +
+									isnull((	SELECT sum(cm.importe)
+												FROM contrato_movimientos_dg cm
+												WHERE cm.contrato = c.contrato
+												AND cm.codigo IN
+												<if test="listaCodTraspasosDepositosGarantia != null">
+													<foreach item="item" index="index" collection="listaCodTraspasosDepositosGarantia" open="(" separator="," close=")">
+														#{item, jdbcType=VARCHAR}
+											    	</foreach>
+												</if>
+												AND cm.status = 'A'),0) +
+									isnull((	SELECT sum(cm.importe)
+												FROM contrato_movimientos_dg cm
+												WHERE cm.contrato = c.contrato
+												AND cm.codigo IN
+												<if test="listaCodDevolucionesGarantia != null">
+													<foreach item="item" index="index" collection="listaCodDevolucionesGarantia" open="(" separator="," close=")">
+														#{item, jdbcType=VARCHAR}
+											    	</foreach>
+												</if>
+												AND cm.status = 'A'),0)),
+		  		autorizacionExcepcion = pc.nombre + ' ' + isnull(pc.apellido_pat,'') + ' '  + isnull(pc.apellido_mat,''),
+				fechaDesembolsoGarantia = c.fecha_disposicion,
+				fechaDeposito = isnull((	SELECT max(fecha_valor)
+											FROM contrato_movimientos_dg cm
+											WHERE cm.contrato = c.contrato AND cm.codigo IN
+											<if test="listaCodDepositosGarantia != null">
+												<foreach item="item" index="index" collection="listaCodDepositosGarantia" open="(" separator="," close=")">
+													#{item, jdbcType=VARCHAR}
+										    	</foreach>
+											</if>
+											AND cm.status = 'A'), ' '),
+				fechaTraspaso = isnull((	SELECT max(fecha_hora)
+											FROM contrato_movimientos_dg cm
+											WHERE cm.contrato = c.contrato
+											AND cm.codigo IN
+											<if test="listaCodTraspasosDepositosGarantia != null">
+												<foreach item="item" index="index" collection="listaCodTraspasosDepositosGarantia" open="(" separator="," close=")">
+													#{item, jdbcType=VARCHAR}
+										    	</foreach>
+											</if>
+											AND cm.status = 'A'), ' '),
+				banco = isnull(CASE
+			            	WHEN cdg.medio_pago = 'GBMX' THEN 'BANAMEX'
+				            WHEN cdg.medio_pago = 'GBCM' THEN 'BANCOMER'
+			             	WHEN cdg.medio_pago = 'GHSB' THEN 'HSBC'
+			             	ELSE cdg.medio_pago
+			            END,''),
+			    diasPago =  CASE
+			    				WHEN (	SELECT count(fecha_hora)
+			    						FROM contrato_movimientos_dg cm
+			    						WHERE cm.contrato = c.contrato
+			    						AND cm.codigo  IN
+										<if test="listaCodDepositosGarantia != null">
+											<foreach item="item" index="index" collection="listaCodDepositosGarantia" open="(" separator="," close=")">
+												#{item, jdbcType=VARCHAR}
+									    	</foreach>
+										</if>
+			    						AND cm.status = 'A') > 0
+			    					THEN abs(datediff(day, c.fecha_disposicion, (	SELECT max(fecha_hora)
+			    																	FROM contrato_movimientos_dg cm
+			    																	WHERE cm.contrato = c.contrato
+			    																	AND cm.codigo IN
+																					<if test="listaCodDepositosGarantia != null">
+																						<foreach item="item" index="index" collection="listaCodDepositosGarantia" open="(" separator="," close=")">
+																							#{item, jdbcType=VARCHAR}
+																				    	</foreach>
+																					</if>
+			    																	AND cm.status = 'A')))
+			    				ELSE abs(datediff(day, c.fecha_disposicion, #{fechaContable}))
+			    			END,
+	    estatus = isnull(CASE
+                         WHEN c.status = 'D' THEN 'Dispuesto'
+                         WHEN c.status = 'N' THEN 'Nuevo'
+                         WHEN c.status = 'P' THEN 'Liquidado'
+                         WHEN c.status = 'V' THEN 'Vendido'
+                         WHEN c.status = 'X' THEN 'Cancelado'
+                         WHEN c.status = 'C' THEN 'Quebranto'
+                         ELSE c.status END,'')
+		FROM contratos c
+		INNER JOIN contrato_grupo cg ON cg.contrato = c.contrato
+		LEFT JOIN condiciones_contrato cc ON cc.clave_condicion = 'PCT_DEP_GARANTIA' AND cc.contrato = c.contrato
+		LEFT JOIN contrato_deposito_garantia cdg ON cdg.contrato = c.contrato
+		INNER JOIN personas p ON p.persona = c.cliente
+		INNER JOIN sucursales s ON s.sucursal = c.sucursal
+		INNER JOIN regiones r ON r.region = s.region
+		INNER JOIN divisiones d ON d.division = r.division
+		LEFT JOIN tareas_excepcion_garantia tegc ON tegc.solicitud = c.solicitud
+		LEFT JOIN personas pc ON pc.persona = tegc.usuario_autorizacion AND tegc.codigo_estatus_autorizacion = 'APRO'
+		WHERE (c.producto IN
+		<if test="listaCodTiposProducto != null">
+			<foreach item="item" index="index" collection="listaCodTiposProducto" open="(" separator="," close=")">
+	        	 #{item, jdbcType=VARCHAR}
+	    	</foreach>
+		</if>
+		OR c.solicitud IN (SELECT teg.solicitud FROM tareas_excepcion_garantia teg))
+
+		<if test="fechaInicial != null and contrato == null">
+			AND convert(DATETIME,convert(VARCHAR(30), c.fecha_disposicion,103),103) <![CDATA[>]]> = #{fechaInicial}
+		</if>
+
+		<if test="fechaFinal != null and contrato == null" >
+			AND convert(DATETIME,convert(VARCHAR(30), c.fecha_disposicion,103),103) <![CDATA[<]]> = #{fechaFinal}
+		</if>
+
+		<if test="contrato != null">
+			AND c.contrato = #{contrato}
+		</if>
+
+		<if test="region != null">
+			AND s.region = #{region}
+		</if>
+
+		<if test="division != null">
+			AND s.region in (SELECT region FROM regiones WHERE division = #{division})
+		</if>
+	</select>
+
+	<select id="reporteTasas" parameterType="java.util.HashMap"
+			resultType="utilitario.mensajes.reportes.tasas.ReporteTasasOV">
+
+			SELECT
+			   round(((c.tasa)*1.16),2) AS tasaActual,
+			   round(cm.tasa,2) AS tasaAnterior,
+			   round((c.tasa * 12 ) * 1.16,2) AS tasaAnual,
+		       round((cm.tasa * 12 ) * 1.16,2) AS tasaAnteriorAnual,
+		       ccf.contrato_LD AS contratoLD,
+		       pg.nombre AS grupo,
+		       s.sucursal AS numSucursal,
+		       s.nombre AS sucursal,
+		       d.nombre AS division,
+		       r.nombre AS zona,
+		       Convert(CHAR(20), cm.fecha_reestru, 103) AS fechaReestructura,
+		       cm.contrato AS contrato,
+		       cm.cliente AS cliente,
+		       Convert(CHAR(20), cm.fecha_contrato, 103) AS fechaContrato,
+		       cm.frecuencia_pago AS frecuenciaPago,
+		       p.descripcion AS producto,
+		       cg.ciclo_grupo AS ciclo,
+		       cm.usuario_reestru AS usuarioReestructura
+					FROM contratos_movimientos cm
+					INNER JOIN contratos c ON cm.contrato = c.contrato
+					INNER JOIN contrato_clave_finsol ccf ON ccf.contrato = cm.contrato
+					INNER JOIN sucursales s ON s.sucursal = c.sucursal
+					INNER JOIN personas pg ON pg.persona = c.cliente
+					INNER JOIN regiones r ON r.region = s.region
+					INNER JOIN divisiones d ON d.division = r.division
+					INNER JOIN contrato_grupo cg ON cg.contrato = c.contrato
+					INNER JOIN productos p ON c.producto = p.producto
+					WHERE cm.tipo_movimiento = #{tipoMovimiento}
+					AND cm.fecha_reestru BETWEEN #{fechaInicio} AND #{fechaFin}
+					ORDER BY  cm.fecha_reestru
+	</select>
+
+</mapper>

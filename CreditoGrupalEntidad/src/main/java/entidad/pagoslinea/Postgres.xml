@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="creditogrupal.entity.reportes.ibatis">
+	<select id="existeContratoPostgres" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT count(*) AS existe
+		FROM fpl_contratos
+		WHERE contrato =  #{contrato}
+		AND status = 'A'
+	</select>
+	<insert id="insertaContratoPostgres" parameterType="utilitario.mensajes.operacion.ContratoPagosLineaOV">
+		INSERT INTO fpl_contratos
+		(
+			contrato, contrato_ld, nombre_grupo, monto_corriente, monto_total, parcialidad,
+			no_pagos, no_pago, fecha_prox_pago, fecha_alta, status, estatus, capital_insoluto, saldo_liquidar,
+			monto_pago_atrasado
+		)
+        VALUES
+        (
+			#{contrato}, #{contratoLd}, #{nombreGrupo}, #{montoCorriente}, #{montoTotal}, #{parcialidad},
+			#{noPagos}, #{noPago}, #{fechaProxPago}, now(), 'A', #{estatus}, #{capitalInsoluto}, #{saldoLiquidar},
+			#{montoPagoAtrasado}
+		)
+	</insert>
+	<update id="actualizaContratoPostgres" parameterType="utilitario.mensajes.operacion.ContratoPagosLineaOV">
+		UPDATE fpl_contratos
+		SET
+		monto_corriente = #{montoCorriente},
+		monto_total =  #{montoTotal},
+		parcialidad =  #{parcialidad},
+		no_pagos = #{noPagos},
+		no_pago = #{noPago},
+		fecha_prox_pago =  #{fechaProxPago},
+		estatus = #{estatus},
+		capital_insoluto = #{capitalInsoluto},
+		saldo_liquidar = #{saldoLiquidar},
+		monto_pago_atrasado = #{montoPagoAtrasado},
+		fecha_ult_mod = now()
+		WHERE
+		contrato = #{contrato}
+	</update>
+</mapper>

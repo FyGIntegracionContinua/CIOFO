@@ -1,0 +1,849 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.originacion.tx">
+
+	<resultMap id="userReferencia" type="utilitario.mensajes.persona.ReferenciaOV" >
+		<result property="nombre" column="nombre" />
+		<result property="apellidoPaterno" column="apellidoPaterno" />
+		<result property="apellidoMaterno" column="apellidoMaterno" />
+		<result property="parentesco" column="parentesco" />
+
+		<association property="domicilio" javaType="utilitario.mensajes.persona.DomicilioOV">
+			<result property="calle" column="calle" />
+			<result property="numeroExterior" column="numeroExterior" />
+			<result property="numeroInterior" column="numeroInterior" />
+			<result property="colonia" column="colonia" />
+			<result property="estado" column="estado" />
+			<result property="municipio" column="municipio" />
+			<result property="cp" column="cp" />
+			<result property="diasLocaliza" column="diasLocaliza" />
+			<result property="horaLocalizaInicial" column="horaLocalizaInicial" />
+		</association>
+	</resultMap>
+
+	<select id="buscarDisponibilidad" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.persona.PersonaOV">
+		SELECT persona AS numeroPersona ,
+		nombre,
+		apellido_pat AS apellidoPaterno,
+		isnull(apellido_mat, ' ') AS apellidoMaterno,
+		fecha_nacimiento AS fechaNacimiento,
+		rfc,
+		prospecto
+		FROM personas
+		WHERE 1 = 1
+			<!-- <if test="nombre != null"> AND str_replace(nombre,' ',null) = str_replace(#{nombre},'
+				',null)</if> <if test="apellidoPaterno != null">AND str_replace(apellido_pat,'
+				',null) = str_replace(#{apellidoPaterno},' ',null)</if> <if test="apellidoMaterno
+				!= null">AND str_replace(apellido_mat,' ',null) = str_replace(#{apellidoMaterno},'
+				',null)</if> -->
+			<if test="nombre != null"> AND nombre = #{nombre}</if>
+			<if test="apellidoPaterno != null">AND apellido_pat = #{apellidoPaterno}</if>
+			<if test="apellidoMaterno != null">AND apellido_mat = #{apellidoMaterno}</if>
+			<if test="fechaNacimiento != null">AND fecha_nacimiento = #{fechaNacimiento}</if>
+			<if test="rfc != null">AND rfc = #{rfc}</if>
+
+	</select>
+
+	<select id="consultarDatosPersona" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.persona.PersonaOV">
+
+		SELECT p.persona AS numeroPersona,
+		p.nombre,
+		p.apellido_pat AS apellidoPaterno,
+		isnull(p.apellido_mat, ' ') AS apellidoMaterno,
+		p.rfc,
+		p.no_curp AS curp,
+		p.tipo_identificacion AS tipoIdentificacion,
+		p.numero_identificacion AS numeroIdentificacion,
+		p.fecha_nacimiento AS fechaNacimiento,
+		p.sexo,
+		p.entidad_lugar_nac AS entidadLugarNacimiento,
+		p.nacionalidad,
+		p.edo_civil AS estadoCivil,
+		p.grado_estudios AS nivelEstudios,
+		p.no_dependientes AS numeroDependientes,
+		p.funcionario_publico AS funcionarioPublico,
+		p.relacion_funcionario AS relacionFuncionario,
+		p.nombre_conyuge AS nombreConyugue,
+		p.apellido_pat_conyuge AS apellidoPaternoConyugue,
+		p.apellido_mat_conyuge AS apellidoMaternoConyugue,
+		p.personalidad AS personalidad,
+		p.fecha_alta AS fechaAlta,
+		p.calificacion ,
+		p.operador ,
+		p.fecha_ult_mod AS fechaUltimaModificacion,
+		p.calificacion_buro AS calificacionBuro,
+		p.nss,
+		p.vivo,
+		p.ciclo,
+		p.origen,
+		p.prospecto,
+		pc.apodo AS sobrenombre,
+		pc.pais_nacimiento AS paisNacimiento,
+		pc.ocupacion,
+		pc.posicion_hogar AS posicionHogar,
+		CASE
+		WHEN pc.experiencia_credito_grupal = 'S'
+		OR pc.experiencia_credito_grupal = '1' THEN '1'
+		ELSE '0'
+		END AS experienciaCreditoGrupal,
+		pc.ocupacion_pareja AS ocupacionPareja,
+		pc.direccion_ocupacion_pareja AS lugarTrabajoPareja,
+		pc.codigo_bloqueo AS bloqueo,
+		pc.fecha_bloqueo AS fechaBloqueo,
+		pc.asesor AS asesorCredito,
+		pc.sucursal,
+		ISNULL(pc.monto_solicitado, 0.0) AS montoSolicitado,
+		ISNULL(pc.num_hijos, 0) AS numHijos,
+		ISNULL(pc.no_firma_electronica, '') AS noFirmaElectronica,
+		ISNULL(pc.destino_credito, '') AS destinoCredito
+		FROM personas p
+		LEFT JOIN persona_complemento pc on p.persona =
+		pc.persona
+		where p.persona = #{persona}
+		AND p.personalidad = 'F'
+
+	</select>
+
+	<select id="consultarDatosExtraPersona" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT p.pais ,
+		p.entidad ,
+		p.municipio ,
+		p.ciudad ,
+		p.colonia ,
+		p.cp ,
+		p.calle ,
+		p.entre_calles ,
+		p.otras_indicaciones ,
+		p.fecha_domicilio ,
+		p.dias_emp ,
+		pc.horario_loc_dom ,
+		p.tipo_vivienda ,
+		p.fecha_ult_mod_dom ,
+		p.ingreso_cp ,
+		pc.inicia_negocio ,
+		p.nombre_emp ,
+		pc.tipo_actividad ,
+		p.tipo_establecimiento ,
+		p.actividad_emp ,
+		pc.num_empleados,
+		pc.exp_rubro,
+		pc.exp_negocio,
+		pc.monto_ventas,
+		pc.ganancia_neta,
+		pc.otros_ingresos,
+		pc.ganancia_act_sec,
+		pc.gastos_familiares,
+		pc.monto_superavit,
+		pc.monto_inventario,
+		pc.monto_mobiliario_equipo,
+		p.entidad_emp ,
+		p.municipio_emp ,
+		p.ciudad_emp ,
+		p.colonia_emp ,
+		p.cp_emp ,
+		p.calle_emp ,
+		p.entre_calle_emp ,
+		p.correo,
+		rcf.clave_finsol,
+		rcf.clave_cu
+		FROM personas p
+		INNER JOIN relacion_clave_finsol rcf on rcf.persona = p.persona
+		LEFT JOIN persona_complemento pc on p.persona = pc.persona
+		where p.persona = #{persona}
+	</select>
+
+	<select id="consultarTelefonosPersona" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.persona.TelefonoOV">
+		SELECT persona,
+		consecutivo,
+		tipo_telefono AS tipoTelefono,
+		status,
+		lada,
+		telefono,
+		codigo_resolucion AS codigoResolucion,
+		fecha_alta AS fechaAlta,
+		usuario_alta AS usuarioAlta,
+		fecha_ult_mod AS fechaUltimaModificacion,
+		usuario_mod AS usuarioModificacion,
+		fecha_ult_verif AS fechaUltimaVerificacion,
+		lugar,
+		origen,
+		fecha_status AS fechaStatus,
+		fecha_contacto AS fechaContacto,
+		id_relacion AS idRelacion
+		FROM persona_telefono
+		where persona = #{persona}
+
+		<!-- AND status IN ('A','V','H') -->
+
+		<if test="tipoTelefono != null">
+
+			AND tipo_telefono in
+			<foreach collection="tipoTelefono" item="item" open="("
+				separator="," close=")"> #{item} </foreach>
+
+		</if>
+		order by tipo_telefono, consecutivo
+
+	</select>
+
+	<select id="consultarReferenciasPersona" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+
+		SELECT pr.persona,
+		pr.id_relacion AS idRelacion,
+		pr.nombre,
+		pr.apellido_pat AS apellidoPaterno,
+		pr.apellido_mat AS apellidoMaterno,
+		pr.codigo_relacion AS relacion,
+
+		pd.consecutivo AS consecutivoDomicilio,
+		pd.tipo_domicilio,
+		pd.calle ,
+		pd.no_exterior ,
+		pd.no_interior ,
+		pd.colonia,
+		pd.codigo_estado,
+		pd.municipio_delegacion,
+		pd.cp,
+		pd.horario_localizacion1,
+		pd.dias_localizacion,
+		pd.ciudad,
+		pd.tipo_vivienda,
+
+		pt.consecutivo AS consecutivoTelefono,
+		pt.tipo_telefono AS tipoTelefono,
+		pt.telefono,
+		pt.status AS statusTelefono,
+		pt.tipo_plan
+
+		FROM persona_relaciones pr
+		LEFT JOIN persona_telefono pt ON pt.id_relacion = pr.id_relacion AND
+		pr.persona = pt.persona
+		LEFT JOIN persona_domicilios pd ON pr.id_relacion = pd.id_relacion AND
+		pd.persona = pr.persona
+		where pr.persona = #{persona}
+
+		<if test="tipoTelefono != null">
+			AND (pt.tipo_telefono IS NULL OR pt.tipo_telefono in
+			<foreach collection="tipoTelefono" item="item" open="("
+				separator="," close=")"> #{item} </foreach>
+			)
+		</if>
+		<!-- AND ( pt.status IS NULL OR pt.status IN ('A','V','H','I') ) -->
+		ORDER BY pt.id_relacion, pt.tipo_telefono, pt.consecutivo
+
+	</select>
+
+
+	<select id="consultaDatosGeneralesPersona" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+
+		SELECT p.persona,
+		p.nombre,
+		p.apellido_pat AS apellidoPaterno,
+		p.apellido_mat AS apellidoMaterno,
+		p.rfc,
+		p.fecha_nacimiento AS fechaNacimiento,
+		p.sexo,
+		p.pais ,
+		p.entidad ,
+		p.municipio ,
+		p.ciudad ,
+		p.colonia ,
+		p.cp ,
+		p.calle ,
+		p.entre_calles,
+		p.edo_civil as estadoCivil,
+		e.estado
+		FROM personas p
+		INNER JOIN relacion_clave_finsol rcf ON p.persona =
+		rcf.persona
+		INNER JOIN estados e ON p.entidad = e.codigo_financiera
+		<where>
+			<if test="persona != null">AND rcf.persona = #{persona}</if>
+			<if test="clave_finsol != null">AND rcf.clave_finsol = #{clave_finsol}</if>
+			<if test="clave_cu != null">AND rcf.clave_cu = #{clave_cu}</if>
+			<if test="rfc != null">AND p.rfc = #{rfc}</if>
+		</where>
+
+	</select>
+
+
+	<select id="consultaDatosGeneralesPersonaNuevoModelo"
+		parameterType="java.util.HashMap" resultType="java.util.HashMap">
+
+
+
+		SELECT p.persona,
+		p.nombre,
+		p.apellido_pat AS apellidoPaterno,
+		p.apellido_mat AS apellidoMaterno,
+		p.rfc,
+		p.fecha_nacimiento AS fechaNacimiento,
+		p.sexo,
+		p.pais,
+		pd.codigo_estado AS entidad ,
+		pd.municipio_delegacion AS municipio ,
+		pd.ciudad ,
+		pd.colonia ,
+		pd.cp ,
+		pd.calle ,
+		pd.entre_calles,
+		pd.no_exterior,
+		pd.no_interior,
+		p.edo_civil as estadoCivil,
+		e.estado
+		FROM personas p
+		INNER JOIN relacion_clave_finsol rcf ON p.persona =
+		rcf.persona
+		INNER JOIN estados e ON p.entidad = e.codigo_financiera
+		INNER JOIN persona_domicilios pd ON pd.persona = rcf.persona
+		<where>
+			<if test="persona != null">AND rcf.persona = #{persona}</if>
+			<if test="clave_finsol != null">AND rcf.clave_finsol = #{clave_finsol}</if>
+			<if test="clave_cu != null">AND rcf.clave_cu = #{clave_cu}</if>
+			<if test="rfc != null">AND p.rfc = #{rfc}</if>
+		</where>
+		AND pd.tipo_domicilio = 'DIRE'
+
+
+	</select>
+
+	<select id="consultarRelacion" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.persona.PersonaRelacion">
+
+		SELECT top 1
+		id_relacion AS idRelacion,
+		persona,
+		nombre,
+		apellido_pat AS apellidoPaterno,
+		apellido_mat AS apellidoMaterno,
+		codigo_relacion AS codigoRelacion
+		FROM persona_relaciones pr
+		WHERE pr.persona = #{persona}
+		<if test="codigoRelacion != null">
+			AND pr.codigo_relacion = #{codigoRelacion}
+		</if>
+
+	</select>
+
+
+	<select id="consultaDomicilio" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.persona.DomicilioOV">
+
+		SELECT TOP 1 persona AS numeroPersona,
+		tipo_domicilio AS tipoDomicilio,
+		consecutivo,
+		status,
+		'MX' AS pais,
+		codigo_estado AS codigoEstado,
+		municipio_delegacion AS municipio,
+		ciudad,
+		colonia,
+		cp,
+		calle,
+		entre_calles AS entreCalles,
+		fecha_antiguedad_domiciliio AS fechaDomicilio,
+		dias_localizacion AS diasLocaliza,
+		horario_localizacion1 AS horaLocalizaInicial,
+		horario_localizacion1 AS horaLocalizaFinal,
+		tipo_vivienda AS tipoVivienda,
+		no_exterior AS numeroExterior,
+		no_interior AS numeroInterior,
+		origen,
+		id_relacion AS idRelacion
+		FROM persona_domicilios
+		WHERE persona = #{persona}
+		<if test="tipo_domicilio != null">
+			AND tipo_domicilio = #{tipo_domicilio}
+		</if>
+		AND status != 'I'
+		ORDER BY consecutivo desc
+
+
+	</select>
+
+
+
+	<select id="existePersonaDomicilio" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+
+		SELECT count(*)
+		FROM persona_domicilios
+		WHERE persona = #{persona}
+		<if test="tipo_domicilio != null">
+			AND tipo_domicilio = #{tipo_domicilio}
+		</if>
+
+		<if test="id_relacion != null">
+			AND id_relacion = #{id_relacion}
+		</if>
+
+		<!-- AND status != 'I' ORDER BY consecutivo -->
+
+
+	</select>
+
+	<select id="existeTelefonoIntegrante" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+
+		SELECT count(*)
+		FROM persona_telefono
+		WHERE persona = #{integrante}
+
+		<if test="tipo != null">
+			AND tipo_telefono = #{tipo}
+		</if>
+
+		<if test="telefono != null">
+			AND telefono = #{telefono}
+		</if>
+
+		AND status != 'I'
+
+	</select>
+
+	<select id="existePersonaRelacion" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+
+		SELECT count(*)
+		FROM persona_relaciones
+		WHERE persona = #{persona}
+
+		<if test="idRelacion != null">
+			AND id_relacion = #{idRelacion}
+		</if>
+
+
+	</select>
+
+
+	<select id="existePersonaComplemento" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+
+		SELECT count(*)
+		FROM persona_complemento
+		WHERE persona = #{persona}
+
+	</select>
+
+
+	<select id="obtenerValidarDatosPersona" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.persona.ValidaPersonaOV">
+
+	SELECT p.persona AS numeroPersona,
+		p.prospecto AS tipoCaptura,
+		p.ingreso_cp AS montoPagoSemanal,
+		p.nombre AS nombre,
+		p.apellido_pat AS apellidoPaterno,
+		p.apellido_mat AS apellidoMaterno,
+		pc.apodo AS sobrenombre,
+		p.fecha_nacimiento AS fechaNacimiento,
+		p.no_curp AS curp,
+		p.rfc AS rfc,
+		p.tipo_identificacion AS tipoIdentificacion,
+		p.numero_identificacion AS numeroIdentificacion,
+		p.sexo AS sexo,
+		pc.pais_nacimiento AS paisNacimiento,
+		p.entidad_lugar_nac AS entidadLugarNacimiento,
+		--p.nacionalidad AS nacionalidad,
+		isnull(pc.pais_nacimiento,p.nacionalidad) AS nacionalidad,
+		p.edo_civil AS estadoCivil,
+		pc.ocupacion AS ocupacion,
+		pc.posicion_hogar AS posicionHogar,
+		p.no_dependientes AS numeroDependientes,
+		p.correo AS correo,
+
+		--2 seccion dastos cliente
+		pc.experiencia_credito_grupal AS experienciaCreditoGrupal,
+		p.funcionario_publico AS funcionarioPublico,
+		p.relacion_funcionario AS relacionFuncionarioPublico,
+		p.tipo_vivienda AS tipoVivienda,
+
+		--info conyuge
+		pr.apellido_pat AS apPatConyuge,
+		pr.apellido_mat AS apMatConyuge,
+		pr.nombre AS nombreConyuge,
+
+		--info comp datos negocio
+		pc.inicia_negocio AS iniciaNegocio,
+		pc.tipo_actividad AS tipoActividad,
+		p.tipo_establecimiento AS tipoEstablecimiento,
+		p.actividad_emp AS actividadEmpresarial,
+		isnull(pc.num_empleados,0) AS numEmpleados,
+		pc.exp_rubro AS expRubro,
+		pc.exp_negocio AS expNegocio,
+
+		--Datos socioeconomicos
+		pc.monto_ventas AS montoVentas,
+		pc.ganancia_neta AS gananciaNeta,
+		pc.otros_ingresos AS otrosIngresos,
+		pc.ganancia_act_sec AS gananciaActSec,
+		pc.gastos_familiares AS gastosFamiliares
+
+		FROM personas p
+		LEFT JOIN persona_complemento pc ON p.persona = pc.persona
+		LEFT JOIN persona_relaciones pr ON pr.persona = p.persona AND codigo_relacion = '08'
+			AND id_relacion =  ( SELECT max(id_relacion) FROM persona_relaciones WHERE persona = p.persona AND codigo_relacion = '08')
+		where p.persona = #{persona}
+
+	</select>
+
+	<select id="validarTelefonoPersona" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+
+		select count(*) from persona_telefono where persona = #{persona}
+		and tipo_telefono in ('DIRE','CELU','RECA') and status != 'I'
+
+	</select>
+
+
+
+	<select id="obtenerIdRelacionValidarPersona" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.persona.ValidaIdReferenciasOV">
+
+			select id_relacion as idRelacion,
+			count(id_relacion) AS countIdRelacion
+			from persona_telefono
+			where persona = #{persona} and tipo_telefono in ('REFE') and status != 'I'
+			AND id_relacion IS NOT null
+			GROUP  BY id_relacion
+
+	</select>
+
+	<select id="obtenerDatosRelacionValidarPersona" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.persona.RelacionPersonaOV">
+
+		SELECT nombre AS nombre,
+			apellido_pat AS apellidoPaterno,
+			codigo_relacion AS claveParentesco
+		FROM persona_relaciones
+		WHERE persona = #{persona} AND id_relacion = #{idRelacion}
+
+	</select>
+
+
+	<select id="validarTelefonoRelacionPersona" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+
+		SELECT count(*) FROM persona_telefono
+		WHERE persona = #{persona} AND id_relacion = #{idRelacion}
+
+	</select>
+
+	<select id="validarDomicilioRelacionPersona" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+
+		SELECT count(*) FROM persona_domicilios
+		WHERE persona = #{persona} AND id_relacion = #{idRelacion}
+
+	</select>
+
+	<select id="validarTelefonoNegocioPersona" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+
+		select count(*) from persona_telefono where persona = #{persona}
+		and tipo_telefono in ('EMPL') and status != 'I'
+
+	</select>
+
+
+	<select id="obtenerDomicilioReferenciaPersona" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.persona.DomicilioOV">
+		SELECT top 1 calle, no_exterior as numeroExterior,
+			no_interior as numeroInterior, cp,
+			colonia, dias_localizacion as diasLocaliza,
+			horario_localizacion1 as horaLocalizaInicial,
+			entre_calles AS entreCalles,
+			tipo_vivienda AS tipoVivienda
+		FROM persona_domicilios WHERE persona = #{persona} AND id_relacion = #{idRelacion}
+	</select>
+
+	<select id="validarDomicilioNegocioPersona" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		select count(*) from persona_domicilios where persona = #{persona}
+		and tipo_domicilio = 'EMPL'
+	</select>
+
+	<select id="consultarPermisoTemporal" parameterType="utilitario.mensajes.persona.PerfilTemporal"
+		resultType="utilitario.mensajes.persona.PerfilTemporal">
+		select cve_usuario AS claveUsuario,
+			   id_perfil AS idPerfil,
+			   id_perfil_temporal AS idPerfilTemporal,
+			   usuario_modifico AS usuario,
+			   cve_sucursal AS idSucursal,
+			   vigencia AS vigencia,
+			   fecha_ultima_modificacion AS fechaInicioPermiso,
+			   estatus AS estatus,
+			   s.nombre AS nombreSucursal
+		from generic_perfil_temporal gpt
+		INNER JOIN sucursales s ON s.sucursal = gpt.cve_sucursal
+		where estatus = #{estatus}
+		and vigencia >= getdate()
+		and cve_usuario = #{claveUsuario}
+	</select>
+
+	<select id="consultarDatosPersonaSimplificacion" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.persona.PersonaSimplificacionOV">
+
+		SELECT p.persona AS numeroPersona,
+		p.nombre,
+		p.apellido_pat AS apellidoPaterno,
+		isnull(p.apellido_mat, ' ') AS apellidoMaterno,
+		isnull(pc.monto_solicitado, 0) AS montoSolicitado,
+		isnull(pc.destino_credito, ' ') AS destinoCredito,
+		isnull(pc.num_hijos, 0) AS numeroHijos,
+		isnull(pc.no_firma_electronica, ' ') AS firmaElectronica,
+		p.rfc,
+		p.no_curp AS curp,
+		CASE
+			WHEN p.tipo_identificacion = 'IFE' THEN p.numero_identificacion
+			ELSE ' '
+		END AS numeroIdentificacion,
+		convert(VARCHAR(10), p.fecha_nacimiento, 105) AS fechaNacimiento,
+		CASE
+			WHEN p.sexo = 'F' THEN 'FEMENINO'
+			WHEN p.sexo = 'M' THEN 'MASCULINO'
+			ELSE
+				' '
+		END AS sexo,
+		isnull(est.estado, ' ') AS entidadLugarNacimiento,
+		CASE
+			WHEN p.nacionalidad = 'M' THEN 'MEXICANA'
+			ELSE isnull(p.nacionalidad, ' ')
+		END AS nacionalidad,
+		CASE
+			WHEN p.edo_civil = 'S' THEN 'SOLTERO'
+			WHEN p.edo_civil = 'U' THEN 'UNION LIBRE'
+			WHEN p.edo_civil = 'C' THEN 'CASADO'
+			WHEN p.edo_civil = 'V' THEN 'VIUDO'
+			WHEN p.edo_civil = 'D' THEN 'DIVORCIADO'
+			ELSE ' '
+		END AS estadoCivil,
+		--p.grado_estudios AS nivelEstudios,
+		p.no_dependientes AS numeroDependientes,
+		p.funcionario_publico AS funcionarioPublico,
+		p.relacion_funcionario AS relacionFuncionario,
+		p.nombre_conyuge AS nombreConyugue,
+		p.apellido_pat_conyuge AS apellidoPaternoConyugue,
+		p.apellido_mat_conyuge AS apellidoMaternoConyugue,
+		p.ciclo,
+		pc.apodo AS sobrenombre,
+		CASE
+			WHEN pc.pais_nacimiento = 'MX' THEN 'MEXICO'
+			WHEN pc.pais_nacimiento = 'GU' THEN 'GUATEMALA'
+			WHEN pc.pais_nacimiento = 'US' THEN 'ESTADOS UNIDOS'
+			WHEN pc.pais_nacimiento = 'PE' THEN 'PERU'
+			WHEN pc.pais_nacimiento = 'BE' THEN 'BELICE'
+			ELSE ' '
+		END AS paisNacimiento,
+
+		pc.ocupacion,
+		isnull(cpos.descripcion, ' ') AS posicionHogar,
+		CASE
+			WHEN pc.experiencia_credito_grupal = 'S'
+			OR pc.experiencia_credito_grupal = '1' THEN '1'
+			ELSE '0'
+		END AS experienciaCreditoGrupal,
+		pc.ocupacion_pareja AS ocupacionPareja,
+		pc.direccion_ocupacion_pareja AS lugarTrabajoPareja
+		FROM personas p
+		LEFT JOIN persona_complemento pc on p.persona =	pc.persona
+		LEFT JOIN estados est ON est.codigo_financiera = p.entidad_lugar_nac
+		LEFT JOIN codigos cpos ON cpos.tipo_codigo = 'POSH' AND cpos.codigo = pc.posicion_hogar
+		where p.persona = #{persona}
+		AND p.personalidad = 'F'
+
+	</select>
+
+	<select id="consultaDomicilioSimplificacion" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.persona.DomicilioOV">
+
+			SELECT
+			TOP 1 persona AS numeroPersona,
+			pd.tipo_domicilio AS tipoDomicilio,
+			consecutivo,
+			pd.status,
+			'MX' AS pais,
+			isnull(est.estado, ' ') AS codigoEstado,
+			municipio_delegacion AS municipio,
+			ciudad,
+			colonia,
+			cp,
+			calle,
+			entre_calles AS entreCalles,
+			fecha_antiguedad_domiciliio AS fechaDomicilio,
+			dias_localizacion AS diasLocaliza,
+			horario_localizacion1 AS horaLocalizaInicial,
+			horario_localizacion1 AS horaLocalizaFinal,
+			upper(isnull(tv.descripcion, ' ')) AS tipoVivienda,
+			no_exterior AS numeroExterior,
+			no_interior AS numeroInterior,
+			origen,
+			id_relacion AS idRelacion,
+			isnull(datediff(year,fecha_antiguedad_domiciliio, getdate()), 0) AS aniosDomicilio
+		FROM persona_domicilios pd
+		LEFT JOIN estados est ON est.codigo_financiera = codigo_estado
+		LEFT JOIN codigos tv ON tv.tipo_codigo = 'VIVI' AND tv.codigo = tipo_vivienda
+		WHERE persona =  #{persona}
+		<if test="tipo_domicilio != null">
+			AND pd.tipo_domicilio = #{tipo_domicilio}
+		</if>
+		AND pd.status != 'I'
+		ORDER BY consecutivo DESC
+
+	</select>
+
+	<select id="consultarDatosExtraPersonaSimplificacion" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT p.pais ,
+		p.entidad ,
+		p.municipio ,
+		p.ciudad ,
+		p.colonia ,
+		p.cp ,
+		p.calle ,
+		p.entre_calles ,
+		p.otras_indicaciones ,
+		p.fecha_domicilio ,
+		p.dias_emp ,
+		pc.horario_loc_dom ,
+		p.tipo_vivienda ,
+		p.fecha_ult_mod_dom ,
+		p.ingreso_cp ,
+		pc.inicia_negocio ,
+		p.nombre_emp ,
+		isnull(cta.descripcion, ' ') AS tipo_actividad ,
+		isnull(ctn.descripcion, ' ') AS tipo_establecimiento ,
+		p.actividad_emp ,
+		pc.num_empleados,
+		pc.exp_rubro,
+		pc.exp_negocio,
+		pc.monto_ventas,
+		pc.ganancia_neta,
+		pc.otros_ingresos,
+		pc.ganancia_act_sec,
+		pc.gastos_familiares,
+		pc.monto_superavit,
+		pc.monto_inventario,
+		pc.monto_mobiliario_equipo,
+		isnull(pc.direccion_ocupacion_pareja,' ') AS direccion_ocupacion_pareja,
+		p.entidad_emp ,
+		p.municipio_emp ,
+		p.ciudad_emp ,
+		p.colonia_emp ,
+		p.cp_emp ,
+		p.calle_emp ,
+		p.entre_calle_emp ,
+		p.correo,
+		rcf.clave_finsol,
+		rcf.clave_cu
+		FROM personas p
+		INNER JOIN relacion_clave_finsol rcf on rcf.persona = p.persona
+		LEFT JOIN persona_complemento pc on p.persona = pc.persona
+		LEFT JOIN codigos cta ON cta.tipo_codigo = 'TIPA' AND cta.codigo = pc.tipo_actividad
+		LEFT JOIN codigos ctn ON ctn.tipo_codigo = 'TIPN' AND ctn.codigo = p.tipo_establecimiento
+		where p.persona = #{persona}
+	</select>
+
+	<select id="consultarTelefonosPersonaSimplificacion" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT TOP 1
+			telefono,
+			nombre + ' ' + apellido_pat + ' ' + apellido_mat AS nombreCompleto
+		FROM persona_telefono
+		WHERE 1 = 1
+		AND persona = #{persona}
+		AND tipo_telefono =  #{tipo_telefono}
+		AND status != 'I'
+		ORDER BY consecutivo DESC
+	</select>
+
+	<select id="consultarInfoConyugeSimplificacion" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT
+			pr.nombre,
+			pr.apellido_pat,
+			pr.apellido_mat,
+			isnull(ptc.telefono, ' ') AS telefono_celu,
+			isnull(ptd.telefono, ' ') AS telefono_dire
+		FROM persona_relaciones pr
+		LEFT JOIN persona_telefono ptc ON ptc.id_relacion = pr.id_relacion AND ptc.tipo_telefono = #{celular} AND ptc.status != 'I'
+			AND ptc.consecutivo = (SELECT MAX(consecutivo) FROM persona_telefono
+			WHERE persona = #{persona} AND tipo_telefono = #{celular} AND status != 'I')
+		LEFT JOIN persona_telefono ptd ON ptd.id_relacion = pr.id_relacion AND ptd.tipo_telefono = #{directo} AND ptd.status != 'I'
+			AND ptd.consecutivo = (SELECT MAX(consecutivo) FROM persona_telefono
+			WHERE persona = #{persona} AND tipo_telefono = #{directo} AND status != 'I')
+		WHERE pr.persona =  #{persona}
+		AND pr.codigo_relacion =  #{relacion}
+		AND pr.id_relacion = (SELECT max(id_relacion) FROM persona_relaciones
+								WHERE persona =  #{persona}
+								AND codigo_relacion =  #{relacion})
+	</select>
+
+	<select id="consultarRelacionesSimplificacion" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT TOP 2 id_relacion
+		FROM persona_telefono
+		WHERE persona = #{persona}
+		AND tipo_telefono = #{referencia}
+		AND id_relacion IS NOT NULL
+		AND status != 'I'
+		GROUP BY id_relacion
+		ORDER BY id_relacion desc
+	</select>
+
+	<select id="consultarReferenciaSimplificacion" parameterType="java.util.HashMap"
+		resultMap="userReferencia">
+
+		SELECT TOP 1
+			pr.nombre AS nombre,
+			pr.apellido_pat AS apellidoPaterno,
+			pr.apellido_mat AS apellidoMaterno,
+			isnull(crel.descripcion, ' ') AS parentesco,
+			pd.calle AS calle,
+			pd.no_exterior AS numeroExterior,
+			pd.no_interior AS numeroInterior,
+			pd.colonia AS colonia,
+			isnull(e.estado, ' ') AS estado,
+			pd.municipio_delegacion AS municipio,
+			pd.cp AS cp,
+			pd.dias_localizacion AS diasLocaliza,
+			pd.horario_localizacion1 AS horaLocalizaInicial,
+			pd.*
+		FROM persona_relaciones pr
+		LEFT JOIN persona_domicilios pd ON pd.persona = pr.persona AND pd.id_relacion = pr.id_relacion
+		LEFT JOIN codigos crel ON crel.tipo_codigo = 'RELA' AND crel.codigo = pr.codigo_relacion
+		LEFT JOIN estados e ON e.codigo_financiera = pd.codigo_estado
+		WHERE pr.persona = #{persona}
+		AND pr.id_relacion = #{idRelacion}
+		AND isnull(pd.status,'') != 'I'
+
+	</select>
+
+	<select id="consultarTelefonoReferenciaSimplificacion" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT TOP 1
+		telefono
+		FROM persona_telefono
+		WHERE persona = #{persona}
+		AND id_relacion = #{idRelacion}
+		AND status != 'I'
+		<choose>
+			<when  test="tipo_plan == 'FIJO'">
+				AND tipo_plan LIKE 'F%'
+			</when>
+			<otherwise>
+		      	AND (tipo_plan IS NULL OR tipo_plan NOT LIKE 'F%')
+		    </otherwise>
+		</choose>
+		ORDER BY consecutivo DESC
+	</select>
+</mapper>

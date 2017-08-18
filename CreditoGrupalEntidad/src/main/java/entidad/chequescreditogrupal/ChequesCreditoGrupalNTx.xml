@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+<mapper namespace="entidad.chequescreditogrupal.ChequesCreditoGrupalNTx">
+	<select id="consultaGetUniversoPrimerPago" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.chequescreditogrupal.ChequesPrimerPago">
+
+		SELECT substring(Convert(VARCHAR, sucu.sucursal), 3,3) AS noSucursal,
+		sucu.nombre AS nombreSucursal,
+		cvef.contrato_LD AS contrato,
+		cvrf.clave_finsol AS cliente,
+		mov.cg_nombre_nom AS beneficiario,
+		mov.nn_folio AS folioCheque,
+		mov.nn_cheque AS numeroCheque,
+		mov.nn_monto_chq AS monto,
+		e.cd_status AS estatus,
+		b.cd_corta AS banco,
+		isnull( Convert(nvarchar,cont.fecha_disposicion,103), '') AS fechaDesembolso,
+		isnull( Convert(nvarchar,mov.dt_imprime,103), '') AS
+		fechaImpresionCheque,
+		isnull( Convert(nvarchar,mov.dt_cobro,103), '') AS fechaCobro,
+		isnull( Convert(nvarchar,amor.fecha_pago,103), '') AS fechaPrimerPago,
+		isnull( Convert(nvarchar,dateadd(dd, -1, amor.fecha_pago),103), '') AS
+		fechaMaximaCobro,
+		'SEMANAL' as periodicidad
+		FROM
+		credprod_finsol..amortizacion amor,
+		credprod_finsol..contratos cont,
+		credprod_finsol..sucursales sucu,
+		credprod_finsol..integrante_grupo inte,
+		credprod_finsol..contrato_clave_finsol cvef,
+		credprod_finsol..relacion_clave_finsol cvrf,
+
+		<choose>
+			<when test="dbEntorno == 'DESARROLLO'">
+				D_Independencia..chq_movimiento mov,
+				D_Independencia..chqcat_status e,
+				D_Independencia..chqcat_banco b,
+				D_Independencia..chqcat_cuenta_chq c
+			</when>
+			<otherwise>
+				P_Independencia..chq_movimiento mov,
+				P_Independencia..chqcat_status e,
+				P_Independencia..chqcat_banco b,
+				P_Independencia..chqcat_cuenta_chq c
+			</otherwise>
+		</choose>
+
+		WHERE amor.no_pago = 1
+		AND amor.fecha_pago = <![CDATA[ #{fechaProcesoSemanal} ]]>
+		AND cont.contrato = amor.contrato
+		AND cont.frecuencia_pago = 'S'
+		AND sucu.sucursal = cont.sucursal
+		AND inte.contrato = cont.contrato
+		AND cvef.contrato = cont.contrato
+		AND mov.nn_folio = inte.folio_cheque
+		AND e.sc_status = mov.sc_status
+		AND c.sc_cuenta = mov.sc_cuenta
+		AND b.cc_banco = c.cc_banco
+		AND cvrf.persona = inte.integrante
+		UNION
+		SELECT substring(Convert(VARCHAR, sucu.sucursal), 3,3) AS noSucursal,
+		sucu.nombre AS nombreSucursal,
+		cvef.contrato_LD AS contrato,
+		cvrf.clave_finsol AS cliente,
+		mov.cg_nombre_nom AS beneficiario,
+		mov.nn_folio AS folioCheque,
+		mov.nn_cheque AS numeroCheque,
+		mov.nn_monto_chq AS monto,
+		e.cd_status AS estatus,
+		b.cd_corta AS banco,
+		isnull( Convert(nvarchar,cont.fecha_disposicion,103), '') AS fechaDesembolso,
+		isnull( Convert(nvarchar,mov.dt_imprime,103), '') AS
+		fechaImpresionCheque,
+		isnull( Convert(nvarchar,mov.dt_cobro,103), '') AS fechaCobro,
+		isnull( Convert(nvarchar,amor.fecha_pago,103), '') AS fechaPrimerPago,
+		isnull( Convert(nvarchar,dateadd(dd, -1, amor.fecha_pago),103), '') AS
+		fechaMaximaCobro,
+		'CATORCENAL' as periodicidad
+		FROM credprod_finsol..amortizacion amor,
+		credprod_finsol..contratos cont,
+		credprod_finsol..sucursales sucu,
+		credprod_finsol..integrante_grupo inte,
+		credprod_finsol..contrato_clave_finsol cvef,
+		credprod_finsol..relacion_clave_finsol cvrf,
+
+		<choose>
+			<when test="dbEntorno == 'DESARROLLO'">
+				D_Independencia..chq_movimiento mov,
+				D_Independencia..chqcat_status e,
+				D_Independencia..chqcat_banco b,
+				D_Independencia..chqcat_cuenta_chq c
+			</when>
+			<otherwise>
+				P_Independencia..chq_movimiento mov,
+				P_Independencia..chqcat_status e,
+				P_Independencia..chqcat_banco b,
+				P_Independencia..chqcat_cuenta_chq c
+			</otherwise>
+		</choose>
+
+		WHERE amor.no_pago = 1
+		AND amor.fecha_pago = <![CDATA[ #{fechaProcesoCatorcenal} ]]>
+		AND cont.contrato = amor.contrato
+		AND cont.frecuencia_pago = 'C'
+		AND sucu.sucursal = cont.sucursal
+		AND inte.contrato = cont.contrato
+		AND cvef.contrato = cont.contrato
+		AND mov.nn_folio = inte.folio_cheque
+		AND e.sc_status = mov.sc_status
+		AND c.sc_cuenta = mov.sc_cuenta
+		AND b.cc_banco = c.cc_banco
+		AND cvrf.persona = inte.integrante
+
+	</select>
+
+	<select id="consultaProc_get_folios" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.chequescreditogrupal.ChequesFolio">
+
+		SELECT inte.folio_cheque AS folio,
+		--right('000000000'+convert(varchar(9), rcvf.clave_finsol),9) AS clientID,
+		rcvf.clave_finsol AS clientID,
+		inte.cheque,
+		inte.integrante
+		FROM integrante_grupo inte, contrato_clave_finsol cvef,
+		relacion_clave_finsol rcvf
+		WHERE cvef.contrato = inte.contrato
+		AND inte.integrante = rcvf.persona
+		AND inte.status = 'A'
+		AND cvef.contrato_LD = #{contrato}
+
+	</select>
+
+
+	<select id="consultaProc_get_folios_imp" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.chequescreditogrupal.FolioImp">
+
+		SELECT
+		inte.folio_cheque AS folio,
+		right('000000000'+convert(varchar(9),
+		rcvf.clave_finsol),9) AS clienteId,
+		1 AS status,
+		inte.cheque,
+		inte.integrante
+		FROM
+		integrante_grupo inte,
+		contrato_clave_finsol cvef,
+		relacion_clave_finsol rcvf
+		WHERE
+		cvef.contrato = inte.contrato
+		AND inte.integrante = rcvf.persona
+		AND inte.status = 'A'
+		AND cvef.contrato_LD = #{1}
+
+	</select>
+
+
+	<select id="consultaGetvaleRenovado" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.chequescreditogrupal.ValeRenovado">
+
+		SELECT
+		rcvf.clave_finsol AS customerId,
+		vale.monto AS amount,
+		vale.vale_credito AS noValeCredito
+		FROM
+		folios_notas_detalle vale,
+		relacion_clave_finsol rcvf,
+		contrato_clave_finsol ccvf,
+		integrante_grupo inte
+		WHERE vale.integrante = inte.integrante
+		AND vale.contrato = inte.contrato
+		AND rcvf.persona = inte.integrante
+		AND inte.contrato = ccvf.contrato
+		AND ccvf.contrato_LD = #{1}
+
+	</select>
+
+
+	<select id="consultaprocGetUniversoPrimerPago" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.chequescreditogrupal.ChequesOV">
+
+		SELECT
+		ccvf.contrato_LD AS contractNo,
+		(CASE WHEN cont.frecuencia_pago = 'S' THEN  'W' ELSE 'F' END) AS regularityId,
+		suc.nombre AS branchName,
+		isnull( Convert(nvarchar,cont.fecha_disposicion,103), '') AS valueDate
+		FROM contratos cont
+		INNER JOIN contrato_clave_finsol ccvf ON ccvf.contrato = cont.contrato
+		INNER JOIN sucursales suc on suc.sucursal = cont.sucursal
+		INNER JOIN amortizacion amor ON amor.contrato = cont.contrato
+		AND amor.no_pago = 1 AND amor.fecha_pago =  <![CDATA[ #{fechaProcesoSemanal} ]]>
+		WHERE cont.frecuencia_pago = 'S'
+		union
+		SELECT ccvf.contrato_LD AS contractNo,
+		(CASE WHEN cont.frecuencia_pago = 'S' THEN  'W' ELSE 'F' END) AS regularityId,
+		suc.nombre AS branchName,
+		isnull( Convert(nvarchar,cont.fecha_disposicion,103), '') AS valueDate
+		FROM contratos cont
+		INNER JOIN contrato_clave_finsol ccvf ON ccvf.contrato = cont.contrato
+		INNER JOIN sucursales suc on suc.sucursal = cont.sucursal
+		INNER JOIN amortizacion amor ON amor.contrato = cont.contrato AND amor.no_pago = 1
+		AND amor.fecha_pago = <![CDATA[ #{fechaProcesoCatorcenal} ]]>
+		WHERE cont.frecuencia_pago = 'C'
+
+	</select>
+
+	<select id="consultaChequesDesembolsados" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.chequescreditogrupal.ChequesDesembolsados">
+		
+		select
+		c.contrato AS contratoLd,
+		ccf.contrato_LD AS contrato,
+		c.producto AS codigoProducto,
+		p.descripcion AS nombreProducto,
+		c.sucursal AS noSucursal,
+		s.nombre AS	nombreSucursal,
+		rcfg.clave_finsol AS	codigoGrupo,
+		grup.nombre AS nombreGrupo,
+		ccf.contrato_LD AS cuentaGrupo,
+		'MXN160400' +	substring(convert(VARCHAR, c.sucursal), 3, 3) as cuentaSucursal,
+		'' AS codigoAsesor,
+		ase.nombre +' '+ ase.apellido_pat +' '+ ase.apellido_mat AS nombreAsesor,
+		convert(CHAR( 20 ),c.fecha_disposicion, 105) AS fechaDesembolso,
+		convert(CHAR( 20 ),c.fecha_esp_liq, 105) AS fechaVencimiento,
+		ccs.cd_status AS estatus,
+		isnull(convert(CHAR( 20 ),chq.dt_cobro, 105), ' ') AS fechaCobro,
+		(SELECT count(1) FROM integrante_grupo WHERE contrato =	c.contrato ) AS	miembros,
+		convert(DECIMAL(18,2), c.efectivo) AS montoAprobado,
+		ig.integrante	AS codigoCliente,
+		cte.nombre + ' ' + cte.apellido_pat + ' ' +	cte.apellido_mat AS nombreCliente,
+		convert(DECIMAL(18,2), chq.nn_monto_chq) AS monto,
+		convert(DECIMAL(18,2), isnull(c.monto_liq_ctrant, 0)) AS montoFinanciado,		
+		ig.cheque AS numeroCheque,
+		'SISTEMA' AS usuario,
+		ig.folio_cheque AS folio,
+		bco.cc_banco AS claveBanco,
+		bco.cg_larga AS banco
+		from contratos c
+		INNER JOIN contrato_clave_finsol ccf ON c.contrato = ccf.contrato
+		INNER JOIN productos p ON p.producto = c.producto
+		INNER JOIN sucursales s ON s.sucursal = c.sucursal
+		INNER JOIN relacion_clave_finsol rcfg ON rcfg.persona = c.cliente
+		INNER JOIN integrante_grupo ig ON ig.contrato = c.contrato
+		INNER JOIN personas cte ON cte.persona = ig.integrante
+		INNER JOIN personas grup ON	grup.persona = c.cliente
+		INNER JOIN personas ase ON ase.persona = c.vendedor
+		<choose>
+			<when test="dbEntorno == 'DESARROLLO'">
+			   	inner JOIN D_Independencia..chq_movimiento chq ON	chq.nn_folio =	ig.folio_cheque
+				INNER JOIN D_Independencia..chqcat_cuenta_chq cta ON cta.sc_cuenta = chq.sc_cuenta
+				INNER JOIN D_Independencia..chqcat_banco bco ON bco.cc_banco =	cta.cc_banco
+				INNER JOIN D_Independencia..chqcat_status ccs ON ccs.sc_status =	chq.sc_status
+			</when>
+			<otherwise>
+				inner JOIN P_Independencia..chq_movimiento chq ON	chq.nn_folio =	ig.folio_cheque
+				INNER JOIN P_Independencia..chqcat_cuenta_chq cta ON cta.sc_cuenta = chq.sc_cuenta
+				INNER JOIN P_Independencia..chqcat_banco bco ON bco.cc_banco =	cta.cc_banco
+				INNER JOIN P_Independencia..chqcat_status ccs ON ccs.sc_status =	chq.sc_status
+			</otherwise>
+		</choose>
+		where c.fecha_disposicion &gt;= #{fechaInicial}
+		and c.fecha_disposicion &lt;  #{fechaFinal}
+		ORDER BY 1
+
+	</select>
+
+</mapper>

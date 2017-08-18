@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.seguros.SegurosTx">
+
+	<insert id="insertaSeguros" parameterType="java.util.HashMap">
+
+		INSERT INTO personas_seguros_beneficiarios
+		(
+		persona,
+		nombre,
+		apellido_pat,
+		apellido_mat,
+		parentesco,
+		porcentaje
+		)
+		VALUES
+		(
+		#{persona}, #{nombre}, #{apellidoPat},
+		#{apellidoMat}, #{parentesco}, #{porcentaje}
+		)
+	</insert>
+
+	<delete id="borraSegurosPersona" parameterType="java.lang.String">
+		DELETE personas_seguros_beneficiarios WHERE persona = #{persona}
+	</delete>
+
+</mapper>

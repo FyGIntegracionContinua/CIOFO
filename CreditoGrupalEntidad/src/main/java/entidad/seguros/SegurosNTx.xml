@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.seguros.SegurosNTx">
+
+	<select id="consultaNombrePersona" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.seguros.BeneficiarioOV">
+		SELECT nombre, apellido_pat AS apellidoPat, apellido_mat AS
+		apellidoMat FROM personas WHERE persona = #{persona}
+	</select>
+
+	<select id="consultaBeneficiariosPersona" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.seguros.BeneficiarioOV">
+		SELECT nombre, apellido_pat AS apellidoPat, apellido_mat AS
+		apellidoMat, parentesco, porcentaje FROM
+		dbo.personas_seguros_beneficiarios WHERE persona = #{persona}
+	</select>
+
+</mapper>

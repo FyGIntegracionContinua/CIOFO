@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.comun.ntx">
+	<resultMap id="calculaAmortizacion" type="calculaAmortizacion">
+		<result property="tipoAmort" column="tipo" />
+		<result property="integrante" column="integrante" />
+		<result property="noPago" column="no_pago" />
+		<result property="fechaPago" column="fecha_pago" />
+		<result property="montoPago" column="monto_pago" />
+		<result property="montoPagoRed" column="monto_pago_red" />
+		<result property="abonoCapital" column="abono_capital" />
+		<result property="interesPeriodo" column="interes_periodo" />
+		<result property="saldoCapital" column="saldo_capital" />
+	</resultMap>
+
+	<resultMap id="resultadoAperturaCaja" type="resultado">
+		<result property="codigoRetorno" column="codigo_retorno" />
+		<result property="mensaje" column="mensaje" />
+	</resultMap>
+
+	<resultMap id="calculaAmortizacionActual" type="calculaAmortizacionActual">
+		<result property="noPago"  column="no_pago" />
+		<result property="fechaPago"  column="fecha_pago" />
+		<result property="abonoCapital"  column="abono_capital" />
+		<result property="primaSeguro"  column="prima_seguro" />
+		<result property="comisiones"  column="comisiones" />
+		<result property="interesPeriodo"  column="interes_periodo" />
+		<result property="ivaInteresPeriodo"  column="iva_interes_periodo" />
+		<result property="moratorios"  column="moratorios" />
+		<result property="ivaMoratorios"  column="iva_moratorios" />
+		<result property="gastosCobranza"  column="gastos_cobranza" />
+		<result property="ivaGastosCobranza"  column="iva_gastos_cobranza" />
+		<result property="montoPago"  column="monto_pago" />
+		<result property="saldoCapital"  column="saldo_capital" />
+	</resultMap>
+	<select id="obtenerClaveEntidad" parameterType="String"
+		resultType="String">
+		SELECT codigo_financiera FROM estados WHERE estado LIKE '%'+ #{entidad} +
+		'%'
+	</select>
+
+	<select id="comprobarSucursalContrato" parameterType="java.util.HashMap"
+		resultType="String">
+		SELECT c.contrato FROM contratos c
+		JOIN contrato_clave_finsol ccf on ccf.contrato=c.contrato
+		WHERE (c.contrato=#{contrato} or ccf.contrato_LD=#{contrato} ) and
+		c.sucursal=#{sucursal}
+	</select>
+
+	<select id="ObtenerContratoPorSolicitud" parameterType="java.util.HashMap"
+		resultType="String">
+		SELECT TOP 1 contrato FROM contratos
+			WHERE solicitud = #{solicitud}
+			ORDER BY fecha_contrato
+	</select>
+
+	<select id="verValorHistorico" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="Integer">
+		set nocount on {
+		call ver_valor_hist /*@p_display*/1,/*@p_sucursal*/ #{sucursal},
+		/*@p_codigo*/#{codigo}, /*@p_fecha*/#{fecha}
+		}
+	</select>
+
+	<select id="verificaDiaNoHabDom" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="Integer">
+		set nocount on {
+		call verifica_dia_nohab_dom /*@p_fecha*/#{fecha}, /*@p_sucursal */
+		#{sucursal}
+		}
+	</select>
+
+	<select id="validaControlServicio" parameterType="java.util.HashMap" resultType="Integer">
+		SELECT count(*) FROM control_servicio
+		WHERE cve_servicio = #{cve_servicio}
+		AND id_proceso_servicio = #{id_proceso_servicio}
+		AND fecha_operacion = #{fecha_operacion}
+	</select>
+
+	<select id="obtenerFechaContable" statementType="CALLABLE"
+		parameterType="java.util.Date" resultType="java.util.HashMap">
+		{ call spObtenFechaContable ( 1, #{1}, 0 ) }
+	</select>
+
+	<select id="obtenerFechaContablePorSucursal" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		{ call spObtenFechaContable ( 1, #{fecha}, #{sucursal} ) }
+	</select>
+
+	<select id="obtenerRelacionContrato" parameterType="String"
+		resultType="String">
+
+		<!-- SELECT contrato FROM contrato_clave_finsol WHERE contrato_LD=#{1}
+			OR contrato = #{1} -->
+
+		SELECT contrato FROM contrato_clave_finsol WHERE contrato_LD= #{1}
+		UNION
+		SELECT contrato FROM contrato_clave_finsol WHERE contrato = #{1}
+
+	</select>
+
+	<select id="obtenerRelacionContratoLD" parameterType="String"
+		resultType="String">
+
+		<!-- SELECT contrato FROM contrato_clave_finsol WHERE contrato_LD=#{1}
+			OR contrato = #{1} -->
+
+		SELECT contrato_LD FROM contrato_clave_finsol WHERE contrato_LD= #{1}
+		UNION
+		SELECT contrato_LD FROM contrato_clave_finsol WHERE contrato = #{1}
+
+	</select>
+
+	<select id="obtenerAmortizacionGrupal" statementType="CALLABLE"
+		parameterType="java.lang.String" resultMap="calculaAmortizacion">
+		set nocount on { call grupal_gen_amortizacion (#{contrato}, 0) }
+
+	</select>
+
+	<select id="obtenerAmortizacionGrupalActual" statementType="CALLABLE"
+		parameterType="java.lang.String" resultMap="calculaAmortizacionActual">
+		set nocount on { call sp_edocta_amortizacion ('', #{contrato}) }
+	</select>
+
+	<select id="obtenerAmortizacionIndividual" statementType="CALLABLE"
+		parameterType="java.lang.String" resultMap="calculaAmortizacion">
+		set nocount on { call grupal_gen_amortizacion (#{numeroCuenta}), 1 }
+	</select>
+
+	<select id="calculaMontoPago" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="Double">
+		set nocount on {call calcula_monto_pago( /*@p_display*/1, /*@p_sucursal*/
+		#{sucursal}, /*@p_monto*/ #{monto},
+		/*@p_tasa*/ #{tasa}, /*@p_no_pagos*/#{no_pagos},
+		/*@p_frecuencia_pago*/#{frecuencia_pago},
+		/*@p_monto_pago*/null, /*@p_tipo_calculo*/#{tipoCalculo},
+		/*@p_fecha_inicial*/#{fechaInicial},
+		/*@p_fecha_final*/#{fechaFinal}, /*producto*/#{producto})}
+	</select>
+
+	<select id="obtenerIdTransaccion" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		set nocount on {
+		call sp_idx_trx_caja(1, #{sucursal}, 0, #{fechaContable} )
+		}
+	</select>
+
+	<select id="obtenerDatosGeneralesContrato" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+		SELECT  c.fecha_prim_venc, c.sucursal, c.monto, c.tasa, c.no_pagos,
+			c.frecuencia_pago, c.monto_pago, producto,
+			c.propietario, c.status, c.fecha_esp_liq, c.fecha_disposicion, c.contrato, c.fecha_contrato,
+			c.fecha_ancla_pago,
+			c.interes_total, c.iva_interes_total, c.vendedor, c.saldo_capital,
+			ISNULL(c.monto_liq_ctrant,0) as monto_liq_ctrant,
+			ISNULL(cdg.saldo_garantia, 0) AS saldoGarantiaContrato, c.solicitud
+		FROM contratos c
+			LEFT JOIN contrato_deposito_garantia cdg ON c.contrato = cdg.contrato
+		WHERE c.contrato = #{1}
+	</select>
+
+	<select id="obtenerDatosGeneralesContratoSimple" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+		SELECT  c.fecha_prim_venc, c.sucursal, c.monto, c.tasa, c.no_pagos,
+			c.frecuencia_pago, c.monto_pago, producto,
+			c.propietario, c.status, c.fecha_esp_liq, c.fecha_disposicion, c.contrato, c.fecha_contrato,
+			c.fecha_ancla_pago,
+			c.interes_total, c.iva_interes_total, c.vendedor, c.saldo_capital,
+			ISNULL(c.monto_liq_ctrant,0) as monto_liq_ctrant
+		FROM contratos c
+		WHERE c.contrato = #{1}
+	</select>
+
+	<select id="obtenerTasaMoratoria" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		set nocount on {
+		call sp_obtener_valor_condiciones 1,
+		#{contrato},'','','TASA_MORATORIA','',0,'',''
+		}
+	</select>
+
+	<select id="obtenerTasaOrdinaria" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		set nocount on {
+		call sp_obtener_valor_condiciones 1,
+		#{contrato},'','','TASA_ORDINARIA','',0,'',''
+		}
+	</select>
+
+	<select id="obtenerTipoCalculoInteres" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		set nocount on {
+		call sp_obtener_valor_condiciones 1,
+		#{contrato},'','','CALC_INT_TOTAL','',0,'',''
+		}
+	</select>
+
+	<select id="obtenerValorTipoCalculoInteres" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.lang.String">
+		set nocount on {
+		call ver_valor_hist_datos 1, #{sucursal}, #{tipoCalculoInteres},
+		#{fechaContrato}, ''
+		}
+	</select>
+
+	<select id="obtenerTipoCalculoInteresProducto" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		set nocount on {
+		call sp_obtener_valor_cond_prod 1, #{producto}, 'CALC_INT_TOTAL', '', '',
+		''
+		}
+	</select>
+
+	<select id="aperturaCaja" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultMap="resultadoAperturaCaja">
+		{ call
+		caja_apertura_caja(1, 0 ,#{sucursal} , #{fechaContable} )}
+	</select>
+
+	<select id="calculaTasaPorFrecuencia" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.lang.Double">
+		set nocount on { call
+		calc_tasa_x_frecuencia(1, #{tasa}, #{frecuencia} , 0)}
+	</select>
+
+	<select id="amortizacionPagares" statementType="CALLABLE"
+		parameterType="java.lang.String" resultMap="calculaAmortizacion">
+		set nocount on { call
+		grupal_gen_amortizacion (#{1}, 1) }
+	</select>
+
+	<select id="obtenerContratoLD" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		select contrato_LD from contrato_clave_finsol where
+		contrato=#{1}
+	</select>
+
+	<select id="obtenerSucursales" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		select sucursales.sucursal from sucursales, contratos
+		where sucursales.sucursal = contratos.sucursal
+		AND contrato=#{1}
+	</select>
+
+	<select id="obtenerFechaActual" statementType="CALLABLE"
+		resultType="java.util.Date">
+		SELECT getdate()
+	</select>
+
+	<select id="obtenerEstatusContrato" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT status FROM contratos WHERE contrato = #{1}
+	</select>
+
+	<select id="obtenerContratoCliente" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT persona from relacion_clave_finsol WHERE	clave_finsol = #{1}
+		UNION
+		SELECT persona from relacion_clave_finsol WHERE	persona = #{1}
+		UNION
+		SELECT persona from relacion_clave_finsol WHERE	clave_cu = #{1}
+	</select>
+
+	<select id="obtenerDiasNoHabiles" parameterType="java.util.HashMap"
+		resultType="java.util.Date">
+		<![CDATA[ SELECT fecha FROM diasnohab WHERE calendario = #{sucursal} AND fecha >= #{fechaInicio} AND fecha <= #{fechaFin} ]]>
+	</select>
+
+	<select id="calcularInteresIvaTotal" parameterType="utilitario.mensajes.comun.InteresOV"
+		resultType="java.util.HashMap">
+		<![CDATA[
+			set nocount on {
+				call calcula_interes_total ( /*display*/1, /*producto*/#{producto}, /*monto_credito*/#{montoCredito}, /*tasa*/#{tasa},
+											 /*no_pagos*/#{noPagos}, /*frecuencia*/#{frecuenciaPago}, /*fecha_inicial*/#{fechaInicio},
+											 /*fecha_final*/#{fechaFinal}, /*sucursal*/#{sucursal}, /*monto_pago*/0,
+											 /*interes_total*/0, /*iva_interes_total*/0 )
+			}
+		]]>
+	</select>
+
+	<select id="existeCliente" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT 1 FROM relacion_clave_finsol	WHERE persona = #{clave}
+		UNION
+		SELECT 1 FROM relacion_clave_finsol	WHERE clave_finsol = #{clave}
+	</select>
+
+	<select id="obtenerPersona" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT	persona FROM relacion_clave_finsol	WHERE clave_finsol = #{1}
+		UNION
+		SELECT	persona FROM relacion_clave_finsol	WHERE clave_cu = #{1}
+	</select>
+
+	<select id="obtenerDatosContratoCAT" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.originacion.contrato.ContratoOV">
+		SELECT c.contrato, c.monto as monto_otorgado , c.frecuencia_pago as frecuencia
+		FROM contratos c
+		WHERE c.contrato = #{1}
+
+	</select>
+
+	<select id="obtenerDatosCheques" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.chequescreditogrupal.ChequeOV">
+		SELECT  nn_cheque AS numeroCheque,
+				nn_folio AS folioCheque,
+				nn_monto_chq AS montoCheque
+		FROM P_Independencia..chq_movimiento
+		WHERE nn_folio IN
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">#{item}
+		</foreach>
+	</select>
+
+</mapper>

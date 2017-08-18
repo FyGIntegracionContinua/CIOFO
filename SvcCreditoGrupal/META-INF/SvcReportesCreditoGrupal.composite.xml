@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+ 		name="SvcReportesCreditoGrupal"
+ 		targetNamespace="urn:independencia.creditogrupal.negocio">
+
+    <component name="ReportesCreditoGrupal">
+        <implementation.java class="negocio.reportes.ReportesCreditoGrupalImpl"/>
+        <service name="ReportesCreditoGrupal">
+            <binding.ws uri="/CIOF/SvcReportesCreditoGrupal"/>
+        </service>
+        <reference multiplicity="1..1" name="estadoCuenta" target="EstadoCuenta"/>
+        <reference multiplicity="1..1" name="amortizacion" target="Amortizacion"/>
+        <reference multiplicity="1..1" name="cierre" target="CierreDiario"/>
+        <reference multiplicity="1..1" name="contables" target="Contables"/>
+		<reference multiplicity="1..1" name="generales" target="Generales"/>
+		<reference multiplicity="1..1" name="transformador" target="Transformador"/>
+        <producer 					   name="reportesCierre" target="ReportesCierre"/>
+    </component>
+
+</composite>
+

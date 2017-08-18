@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+  "http://localhost:8080/config/ibatis-3-config.dtd">
+<configuration>
+
+	<properties resource="entidad/config.properties" />
+
+	<settings>
+	    <setting name="aggressiveLazyLoading" value="false"/>
+	    <setting name="defaultStatementTimeout" value="400"/>
+    </settings>
+
+	<typeAliases>
+		<typeAlias type="utilitario.mensajes.comun.ResultadoOV" alias="resultado" />
+		<typeAlias type="utilitario.mensajes.condonaciones.comun.CreditoSaldo" alias="creditoCondonacion" />
+		<typeAlias type="utilitario.mensajes.condonaciones.comun.TransCajaResult" alias="resultadoCaja" />
+		<typeAlias type="utilitario.mensajes.comun.AmortizacionOV" alias="calculaAmortizacion" />
+		<typeAlias type="utilitario.mensajes.comun.AmortizacionActualOV" alias="calculaAmortizacionActual" />
+		<typeAlias type="utilitario.mensajes.condonaciones.comun.SaldoVencidoResult" alias="saldoVencido" />
+		<typeAlias type="utilitario.mensajes.impresiondocs.comun.ContratoVO" alias="contratoVO" />
+		<typeAlias type="utilitario.mensajes.impresiondocs.comun.MiembroGrupoVO" alias="miembroGrupoVO" />
+		<typeAlias type="utilitario.mensajes.operacion.pagos.CalculaParcialidadOV" alias="calculaParcialidad" />
+		<typeAlias type="utilitario.mensajes.consultas.DatosCreditoOV" alias="datosCredito" />
+		<typeAlias type="utilitario.mensajes.condonaciones.comun.CreditoSaldo" alias="creditoSaldo" />
+		<typeAlias type="utilitario.mensajes.consultas.CreditosAsignadosOV" alias="CreditosAsignadosOV"/>
+		<typeAlias type="utilitario.mensajes.consultas.ConsolidadoCreditosAsignadosOV" alias="ConsolidadoCreditosAsignadosOV"/>
+		<typeAlias type="utilitario.mensajes.operacion.ActaRecaudacionOV" alias="actaRecaudacion" />
+		<typeAlias type="utilitario.mensajes.operacion.ActaRecaudacionParcialidadOV" alias="actaRecaudacionParcialidad" />
+		<typeAlias type="utilitario.mensajes.operacion.ActaRecaudacionClienteOV" alias="actaRecaudacionCliente" />
+
+	</typeAliases>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+
+ 				<!-- <property name="driver" value="com.sybase.jdbc4.jdbc.SybDriver"/> -->
+ 				<property name="driver" value="com.sybase.jdbc4.jdbc.SybDriver"/>
+				<property name="url" value="jdbc:sybase:Tds:${sybase.ip}:${sybase.puerto}/${sybase.instancia}"/>
+				<property name="username" value="${sybase.username}"/>
+				<property name="password" value="${sybase.password}"/>
+			    <property name="poolMaximumActiveConnections" value="250"/>
+	   			<property name="poolMaximumIdleConnections" value="250"/>
+	   			<property name="poolMaximumCheckoutTime" value="5000"/>
+	   			<property name="poolTimeToWait" value="3000000"/>
+	   			<property name="poolPingQuery"  value="select getdate()"/>
+	   			<property name="poolPingEnabled" value="true"/>
+	   			<property name="poolPingConnectionsNotUsedFor" value="1"/>
+	   			<property name="loginTimeout" value="1"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="entidad/originacion/OriginacionTx.xml"/>
+		<mapper resource="entidad/administracion/AdministracionTx.xml"/>
+		<mapper resource="entidad/comun/ComunTx.xml"/>
+		<mapper resource="entidad/comun/ComunNTx.xml"/>
+		<mapper resource="entidad/impresiondocs/ImpresionDocsNTx.xml"/>
+		<mapper resource="entidad/impresiondocs/ImpresionDocsTx.xml"/>
+		<mapper resource="entidad/operacion/OperacionTx.xml"/>
+		<mapper resource="entidad/consultas/ConsultasNTx.xml"/>
+		<mapper resource="entidad/persona/PersonaCredProdTx.xml"/>
+		<mapper resource="entidad/persona/PersonaCredProdNTx.xml"/>
+		<mapper resource="entidad/verificacion/telefonica/VerificacionTelefonicaCredProdTx.xml"/>
+		<mapper resource="entidad/seguros/SegurosTx.xml"/>
+		<mapper resource="entidad/solicitudes/SolicitudesTx.xml"/>
+		<mapper resource="entidad/chequescreditogrupal/ChequesCreditoGrupalTx.xml"/>
+		<mapper resource="entidad/consultas/ConsultasTx.xml"/>
+
+	</mappers>
+</configuration>
+<!--
+				<property name="driver" value="com.inet.tds.TdsDriver"/>
+				<property name="url" value="jdbc:inetdae://10.1.40.33:1433/credprod"/>
+				<property name="username" value="sybase"/>
+				<property name="password" value="sybase"/>
+ -->

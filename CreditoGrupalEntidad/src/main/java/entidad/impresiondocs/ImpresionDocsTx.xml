@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.impresiondocs.tx">
+
+	<resultMap id="respuestaOperacionCaja" type="resultado">
+		<result property="codigoRetorno" column="codigo_retorno" />
+		<result property="mensaje" column="mensaje" />
+	</resultMap>
+
+	<insert id="insertaVales" parameterType="java.util.HashMap">
+
+		INSERT INTO folios_notas_detalle (contrato, integrante, monto, status,
+		fecha_hora)
+		VALUES (#{contrato},#{integrante},#{monto},'A',getdate() )
+
+	</insert>
+
+	<update id="actualizarMuestra" parameterType="java.util.HashMap">
+		UPDATE contratos
+		SET interes_total = #{interesTotal}, iva_interes_total =
+		#{ivaInteresTotal}
+		WHERE contrato = #{contrato}
+	</update>
+
+	<insert id="insertaFichaPromesaLiq" parameterType="java.util.HashMap">
+
+		INSERT INTO ficha_promesa_liq
+		(contrato, fecha_hora, fecha_contable, fecha_calculo, usuario, importe, status)
+		VALUES
+		(#{contrato}, getdate(), #{fecha_contable} , #{fecha_calculo} , #{usuario}, #{importe}, 'A')
+
+	</insert>
+
+</mapper>

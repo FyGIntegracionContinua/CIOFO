@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" autowire="true" name="TransformadorCreditoGrupal" targetNamespace="urn:independencia.creditogrupal.infra">
+
+    <component name="Transformador">
+        <implementation.java class="transformador.TransformadorImpl"/>
+        <service name="Transformador"/>
+   	   	<reference name="parser" target=" Parser/Parser "/>
+   	   	<reference name="mapperEntrada" target=" MapperEntrada/MapperEntrada "/>
+		<reference name="mapperSalida" target=" MapperSalida/MapperSalida "/>
+		<!--  <reference  name="originacion" target="OriginacionCreditoGrupal"/>
+		<reference  name="administracion" target="AdmOperacionCreditoGrupal"/>
+		<reference  name="consultas" target="ConsultasCreditoGrupal"/>
+		<reference  name="operacion" target="OperacionGrupal"/> -->
+    </component>
+
+ 	<component name="Parser">
+        <implementation.java class="parser.ParserImpl"/>
+        <service name="Parser"/>
+ 	</component>
+
+ 	<component name="MapperEntrada">
+        <implementation.java class="mapper.MapperEntradaImpl"/>
+        <service name="MapperEntrada"/>
+        <reference name="parser" target=" Parser/Parser "/>
+ 	</component>
+
+ 	<component name="MapperSalida">
+        <implementation.java class="mapper.MapperSalidaImpl"/>
+        <service name="MapperSalida"/>
+ 	</component>
+
+</composite>

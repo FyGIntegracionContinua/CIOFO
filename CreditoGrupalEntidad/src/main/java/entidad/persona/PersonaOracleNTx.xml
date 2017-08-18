@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.originacion.tx">
+
+	<select id="buscarSimilitudesClienteUnico" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.persona.PersonaOV">
+		SELECT c.customer_id, c.first_name, c.other_name, c.second_name,
+		c.last_name, c.birthdate
+		FROM CU_CLIENTE c
+		<where>
+			<if test="nombre != null">AND c.first_name = #{nombre}</if>
+			<if test="apellidoMaterno != null">AND c.second_name = #{apellidoMaterno}</if>
+			<if test="apellidoPaterno != null">AND c.last_name = #{apellidoPaterno}</if>
+			<if test="fechaNacimiento != null">AND c.birthdate = #{fechaNacimiento}</if>
+			<if test="rfc != null">AND c.rfc like ( #{rfc}||'%' )</if>
+		</where>
+	</select>
+
+	<select id="existeCUDomicilio" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+
+		SELECT count(*)
+		FROM CU_DOMICILIOS
+		WHERE CUSTOMER_ID = #{customerID}
+		AND DOMICILIO_ACTUAL = #{domicilioActual}
+
+	</select>
+
+</mapper>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" name="ConsultasCreditoGrupalTarea" targetNamespace="urn:independencia.creditogrupal.tarea.consultas">
+
+ 	<component name="ConsultasCreditoGrupalTarea">
+		<implementation.java class="tarea.consultas.ConsultasImpl"/>
+		<reference name="comun" target="ComunCreditoGrupal"/>
+		<reference multiplicity="1..1" name="pagos" target="PagosCredito"/>
+	</component>
+ 	
+</composite>

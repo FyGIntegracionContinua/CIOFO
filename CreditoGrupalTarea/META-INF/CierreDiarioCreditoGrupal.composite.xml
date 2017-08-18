@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+		xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+		xmlns:f3="urn:fabric3.org"
+ 		name="CierreDiarioCreditoGrupal"
+ 		targetNamespace="urn:independencia.creditogrupal.tarea.cierre">
+
+	<channel name="ReportesCierre"/>
+
+ 	<component name="CierreDiario">
+		<implementation.java class="tarea.reportes.CierreDiarioImpl"/>
+        <consumer name="reportesCierre" source="ReportesCierre"/>
+        <reference name="comun" target="ComunCreditoGrupal"/>
+        <reference name="generadorReportes" target="GeneradorReportesCSV"/>
+    
+		<reference name="transferenciaDatosFtp">
+	    	<f3:binding.ftp uri="169.169.4.162:21" requires="sca:authentication.message" mode="PASSIVE"/>
+ 	    </reference>
+
+	</component>
+ 	
+	<component name="GeneradorReportesCSV">
+		<implementation.java class="tarea.reportes.cierre.GeneradorReportesCSVImpl"/>
+	</component>
+	
+	<component name="TransferenciaDatosFtp">
+	    <implementation.java class="tarea.transferir.TransferenciaDatosFtpImpl"/>
+	     <service name="TransferenciaDatosFtp">
+	     	<f3:binding.ftp uri="/SVCADMCuentas"/>
+	     </service>
+	</component> 
+
+  
+</composite>
+

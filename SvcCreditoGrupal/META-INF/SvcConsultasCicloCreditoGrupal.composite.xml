@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+	autowire="true"
+	name="SvcConsultasCicloCreditoGrupal"
+	targetNamespace="urn:independencia.creditogrupal.negocio">
+
+  	<component name="ConsultasCiclo">
+		<implementation.java class="negocio.consultasciclo.ConsultasCicloImpl"/>
+		<service name="ConsultasCiclo">
+            <binding.ws uri="/CIOF/SvcConsultasCicloCreditoGrupal"/>
+        </service>
+        <reference multiplicity="1..1" name="consultas" target="ConsultasCreditoGrupalTarea"/>
+        <reference multiplicity="1..1" name="transformador" target="Transformador"/>
+ 	</component>
+
+</composite>

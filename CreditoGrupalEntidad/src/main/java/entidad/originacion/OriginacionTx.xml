@@ -1,0 +1,980 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.originacion.tx">
+
+	<resultMap id="respuesta" type="resultado">
+		<result property="codigo" column="codigo" />
+		<result property="mensaje" column="mensaje" />
+	</resultMap>
+
+	<resultMap id="respuestaContrato" type="resultado">
+		<result property="codigo" column="codigo_resultado" />
+		<result property="mensaje" column="mensaje" />
+	</resultMap>
+
+	<resultMap id="respuestaDisposicion" type="resultado">
+		<result property="codigoRetorno" column="CodigoRetorno" />
+		<result property="mensaje" column="Descripcion" />
+	</resultMap>
+
+	<resultMap id="respuestaCancelaDisposicion" type="resultado">
+		<result property="codigoRetorno" column="Codigo" />
+		<result property="mensaje" column="Mensaje" />
+	</resultMap>
+
+	<resultMap id="respuestaEliminarCreditos" type="resultado">
+		<result property="codigoRetorno" column="resultado" />
+		<result property="mensaje" column="comentario" />
+	</resultMap>
+
+	<!-- ================================================================================================== -->
+	<!-- OPERACIONES CONSULTA, ACTULIZACION SECUENCIAS -->
+	<!-- ================================================================================================== -->
+
+	<select id="obtenerValorActualSequencias" parameterType="String"
+		resultType="java.util.HashMap">
+		SELECT actual, incremento FROM secuencias WHERE tipo = #{tipo}
+	</select>
+
+	<update id="updateSequenciasSigValor" parameterType="String">
+		UPDATE secuencias SET actual = actual + incremento WHERE tipo =
+		#{tipo}
+	</update>
+
+	<!-- ================================================================================================== -->
+	<!-- OPERACIONES ALTA, MODIFICACION CLIENTE -->
+	<!-- ================================================================================================== -->
+
+	<select id="registrarPersona" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultMap="respuesta">
+		{
+		call sp_registra_persona /*@p_persona*/ #{persona},
+		/*@p_nombre*/ #{nombre}, /*@p_apellido_pat*/ #{apellido_pat}, /*@p_apellido_mat*/
+		#{apellido_mat}, /*@p_personalidad*/ 'F',
+		/*@p_rfc */ #{rfc}, /*@p_no_iva*/ '', /*@p_iva_cobro*/ '', /*@p_iva_desglose*/
+		'', /*@p_fecha_nacimiento*/ #{fecha_nacimiento},
+		/*@p_nacionalidad*/ 'M', /*@p_sexo*/ #{sexo}, /*@p_edo_civil*/ #{edo_civil},
+		/*@p_regimen_mat*/ '', /*@p_no_dependientes*/ 0,
+		/*@p_calle*/ #{calle}, /*@p_colonia */ #{colonia}, /*@p_cp */ #{cp}, /*@p_ciudad*/
+		#{ciudad}, /*@p_entidad */ #{entidad}, /*@p_telefono */ '',
+		/*@p_fecha_domicilio*/ '', /*@p_fecha_ult_mod_dom*/ '',
+		/*@p_fecha_ult_ver_dom*/ '', /*@p_fecha_alta*/ #{fecha_alta},
+		/*@p_nombre_emp*/ '', /*@p_no_empresa */ '', /*@p_calle_emp*/ '',
+		/*@p_colonia_emp */ '',
+		/*@p_cp_emp */ 0, /*@p_ciudad_emp*/ '', /*@p_entidad_emp */ '', /*@p_giro_emp */
+		'',
+		/*@p_puesto_emp */ '', /*@p_departamento_emp */ '', /*@p_telefono_emp */ '',
+		/*@p_extension_emp */ '', /*@p_negocio_propio*/ '',
+		/*@p_fecha_ing_emp*/ '', /*@p_ingresos */ 0,/*@p_egresos */ 0,
+		/*@p_patrimonio*/ '',
+		/*@p_fecha_ult_mod_emp*/ '', /*@p_fecha_ult_ver_emp*/ '', /*@p_conyuge */ '',
+		/*@p_calificacion */ 0,
+		/*@p_comentario */ '', /*@p_rfc_calculado ,*/ '', /*@p_jefe */ '', /*@p_no_curp ,*/
+		#{curp}, /*@p_municipio ,*/ #{municipio},
+		/*@p_municipio_emp ,*/ '', /*@p_entre_calles*/ '', /*@p_dia_cobro*/ 0,
+		/*@p_forma_cobro*/ '', /*@p_ingreso_pago*/ 0,
+		/*@p_lada */ '', /*@p_lada_emp */ '', /*@p_no_empleado */ '',
+		/*@p_tipo_red_tel*/ '', /*@p_tipo_red_tel_emp*/ '',
+		/*@p_ext_emp */ '', /*@p_operador */ '', /*@p_fecha_ult_mod*/ #{fecha_alta},
+		/*@p_tipo_tel_dom*/ '', /*@p_pensionado*/ 'N', /*@p_ingreso_cp */ 0,
+		/*@p_correo*/ '', /*@p_asalariado*/ 'N',
+		/*@p_localizable*/ '', /*@p_rfc_emp */ '', /*@p_tipo_vivienda */ '', /*@p_tipo_mercado
+		*/ '', /*@p_telefonos_extra */ 0,
+		/*@p_nombre_jefe*/ '', /*@p_apellido_pat_jefe*/ '', /*@p_apellido_mat_jefe */ '',
+		/*@p_funcionario_publico */ 'N',
+		/*@p_relacion_funcionario*/ 'N', /*@p_tipo_establecimiento */ '', /*@p_entre_calle_emp */ '',
+		/*@p_otras_indicaciones */ '',
+		/*@p_nombre_conyuge */ '', /*@p_apellido_pat_conyuge */ '', /*@p_apellido_mat_conyuge */
+		'', /*@p_sexo_conyuge */ '', /*@p_horario_emp_inicial */ '',
+		/*@p_dias_emp*/ '', /*@p_otro_domicilio_emp */ 'N',
+		/*@p_horario_emp_final */ '', /*@p_fpd */ '', /*@p_actividad_emp */
+		#{actividad_economica},
+		/*@p_origen*/ 'FSOL', /*@p_cambio_dom*/ '', /*@p_tipo_riesgo*/ '',
+		/*@p_tipo_trabajo*/ '', /*@p_calificacion_buro*/ 0,
+		/*@p_tipo_cotizacion*/ '',
+		/*@p_puesto_jefe*/ '', /*@p_buro_calle1*/ '', /*@p_buro_calle2*/ '', /*@p_buro_colonia*/
+		'', /*@p_buro_ciudad*/ '', /*@p_buro_estado*/ '',
+		/*@p_buro_cp*/ '', /*@p_cuentas_buro*/ 0, /*@p_nss*/ '', /*@p_id_empres*/ 0,
+		/*@p_pais*/'MX', /*@no_curp_conyuge*/ '', /*@grado_estudios*/ '',
+		/*@objeto_venta_emp*/ '', /*@razon_social_emp*/ '',
+		/*@tipo_identificacion*/ 'CIFE', /*@numero_identificacion*/
+		#{numero_identificacion},
+		/*@emision_identificacion*/ '', /*@p_codigo*/ 0, /*@p_comentario_salida*/ '',1
+		}
+	</select>
+
+	<select id="registrarTelefono" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultMap="respuesta">
+		set nocount on {
+		call sp_registra_telefono #{persona}, #{tipo}, #{lada}, #{telefono}, '',
+		'', '', '', '', '',
+		'', 'A', /*p_fecha_alta*/#{fecha_alta}, '000000043', '', '000000043', '',
+		'', '', '',
+		#{origen}, '', 0, '',1 , 0 , ''
+		}
+	</select>
+
+	<update id="actualizarPersona" parameterType="java.util.HashMap">
+		UPDATE personas
+		SET nombre = #{nombre}, apellido_pat = #{apellido_pat}, apellido_mat =
+		#{apellido_mat},
+		rfc = #{rfc}, fecha_nacimiento = #{fecha_nacimiento}, sexo =#{sexo},
+		edo_civil = #{edo_civil},
+		calle = #{calle}, colonia = #{colonia}, cp = #{cp}, entidad = #{entidad},
+		ciudad = #{ciudad},
+		municipio = #{municipio}, fecha_ult_mod = #{fecha_ult_mod},
+		numero_identificacion = #{numero_identificacion}
+		<if test="curp != null">, no_curp = #{curp}</if>
+		WHERE persona = #{persona}
+	</update>
+
+
+	<insert id="registrarRelacionClaveFinsol" parameterType="java.util.HashMap">
+		INSERT
+		into relacion_clave_finsol
+		(persona,clave_finsol) values(#{persona}, #{clave_T24})
+	</insert>
+
+	<update id="actualizarNumeroCheque"
+		parameterType="utilitario.mensajes.originacion.cliente.ActualizarChequeClientePeticion">
+		UPDATE integrante_grupo
+		SET cheque = #{cheque}
+		WHERE
+		contrato = #{contrato} AND integrante = #{integrante}
+	</update>
+	<!-- ================================================================================================== -->
+	<!-- OPERACIONES ALTA, MODIFICACION, BUSQUEDA GRUPO -->
+	<!-- ================================================================================================== -->
+
+	<select id="registrarGrupo" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultMap="respuesta">
+		set nocount on {
+		call sp_registra_persona /*@p_persona*/ #{persona},
+		/*@p_nombre*/ #{nombre}, /*@p_apellido_pat*/ '', /*@p_apellido_mat*/ '',
+		/*@p_personalidad*/ 'G',
+		/*@p_rfc */ '', /*@p_no_iva*/ '', /*@p_iva_cobro*/ '', /*@p_iva_desglose*/ '',
+		/*@p_fecha_nacimiento*/ '',
+		/*@p_nacionalidad*/ '', /*@p_sexo*/ '', /*@p_edo_civil*/ '', /*@p_regimen_mat*/ '',
+		/*@p_no_dependientes*/ 0,
+		/*@p_calle*/ #{calle}, /*@p_colonia */ #{colonia}, /*@p_cp */ #{cp}, /*@p_ciudad*/
+		#{ciudad}, /*@p_entidad */ #{entidad}, /*@p_telefono */ '',
+		/*@p_fecha_domicilio*/ '', /*@p_fecha_ult_mod_dom*/ '',
+		/*@p_fecha_ult_ver_dom*/ '', /*@p_fecha_alta*/ #{fecha_alta},
+		/*@p_nombre_emp*/ '', /*@p_no_empresa */ '', /*@p_calle_emp*/ '',
+		/*@p_colonia_emp */ '',
+		/*@p_cp_emp */ 0, /*@p_ciudad_emp*/ '', /*@p_entidad_emp */ '', /*@p_giro_emp */
+		'',
+		/*@p_puesto_emp */ '', /*@p_departamento_emp */ '', /*@p_telefono_emp */ '',
+		/*@p_extension_emp */ '', /*@p_negocio_propio*/ '',
+		/*@p_fecha_ing_emp*/ '', /*@p_ingresos */ 0,/*@p_egresos */ 0,
+		/*@p_patrimonio*/ '',
+		/*@p_fecha_ult_mod_emp*/ '', /*@p_fecha_ult_ver_emp*/ '', /*@p_conyuge */ '',
+		/*@p_calificacion */ 0,
+		/*@p_comentario */ '', /*@p_rfc_calculado ,*/ '', /*@p_jefe */ '', /*@p_no_curp ,*/
+		'', /*@p_municipio ,*/ #{municipio},
+		/*@p_municipio_emp ,*/ '', /*@p_entre_calles*/ '', /*@p_dia_cobro*/ 0,
+		/*@p_forma_cobro*/ '', /*@p_ingreso_pago*/ 0,
+		/*@p_lada */ '', /*@p_lada_emp */ '', /*@p_no_empleado */ '',
+		/*@p_tipo_red_tel*/ '', /*@p_tipo_red_tel_emp*/ '',
+		/*@p_ext_emp */ '', /*@p_operador */ '', /*@p_fecha_ult_mod*/ #{fecha_alta},
+		/*@p_tipo_tel_dom*/ '', /*@p_pensionado*/ 'N', /*@p_ingreso_cp */ 0,
+		/*@p_correo*/ '', /*@p_asalariado*/ 'N',
+		/*@p_localizable*/ '', /*@p_rfc_emp */ '', /*@p_tipo_vivienda */ '', /*@p_tipo_mercado
+		*/ '', /*@p_telefonos_extra */ 0,
+		/*@p_nombre_jefe*/ '', /*@p_apellido_pat_jefe*/ '', /*@p_apellido_mat_jefe */ '',
+		/*@p_funcionario_publico */ 'N',
+		/*@p_relacion_funcionario*/ 'N', /*@p_tipo_establecimiento */ '', /*@p_entre_calle_emp */ '',
+		/*@p_otras_indicaciones */'',
+		/*@p_nombre_conyuge */ '', /*@p_apellido_pat_conyuge */ '', /*@p_apellido_mat_conyuge */
+		'', /*@p_sexo_conyuge */ '', /*@p_horario_emp_inicial */ '',
+		/*@p_dias_emp*/ '', /*@p_otro_domicilio_emp */ 'N',
+		/*@p_horario_emp_final */ '', /*@p_fpd */ '', /*@p_actividad_emp */'',
+		/*@p_origen*/ 'FSOL', /*@p_cambio_dom*/ '', /*@p_tipo_riesgo*/ '',
+		/*@p_tipo_trabajo*/ '', /*@p_calificacion_buro*/ 0,
+		/*@p_tipo_cotizacion*/ '',
+		/*@p_puesto_jefe*/ '', /*@p_buro_calle1*/ '', /*@p_buro_calle2*/ '', /*@p_buro_colonia*/
+		'', /*@p_buro_ciudad*/ '', /*@p_buro_estado*/ '',
+		/*@p_buro_cp*/ '', /*@p_cuentas_buro*/ 0, /*@p_nss*/ '', /*@p_id_empres*/ 0, /*@*/
+		'', /*@no_curp_conyuge*/ '', /*@grado_estudios*/ '',
+		/*@objeto_venta_emp*/ '', /*@razon_social_emp*/ '',
+		/*@tipo_identificacion*/ '', /*@numero_identificacion*/ '',
+		/*@emision_identificacion*/ '', /*@p_codigo*/ 0,
+		/*@p_comentario_salida*/ '', /*@display*/1
+		}
+	</select>
+
+	<update id="actualizarGrupo" parameterType="java.util.HashMap">
+		UPDATE personas SET calle = #{calle}, cp = #{cp}, entidad =
+		#{entidad}, ciudad = #{ciudad}, municipio = #{municipio}, colonia =
+		#{colonia}, fecha_ult_mod = #{fecha_ult_mod}
+		WHERE persona = #{persona}
+	</update>
+
+	<!-- ================================================================================================== -->
+	<!-- OPERACIONES ALTA DE CONTRATO / CREDITO -->
+	<!-- ================================================================================================== -->
+
+
+	<select id="registrarContrato" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultMap="respuestaContrato">
+
+		set nocount on {
+		call alta_contrato /*@contrato*/#{contrato},
+		/*@solicitud*/ #{solicitud},
+		/*@cliente*/ #{grupo},
+		/*@sucursal*/ #{sucursal},
+		/*@vendedor*/ #{asesor},
+		/*@tipo_credito*/ #{renovacion},
+		/*@tipo_disposicion*/'C',
+		/*@personalidad*/'',
+		/*@promocion*/'',
+		/*@efectivo*/ #{monto} ,
+		/*@monto*/#{monto},
+		/*@monto_pago*/ #{monto_pago},
+		/*@monto_ult_pago*/ #{monto_pago},
+		/*@no_pagos */#{plazo},
+		/*@tasa*/#{tasa},
+		/*@frecuencia_pago*/ #{frecuencia},
+		/*@fecha_ancla_pago*/ #{fechaDiaPago},
+		/*@fecha_prim_venc*/'',
+		/*@gastos_admon*/0,
+		/*@pct_iva_gastos_admon*/0,
+		/*@comision_apertura*/0,
+		/*@pct_iva_comision_aper*/0,
+		/*@seguro*/	#{seguro},
+		/*@pct_iva_seguro*/ #{pct_iva_seguro} ,
+		/*@monto_pcd*/0,
+		/*@pct_iva_pcd_1*/0,
+		/*@cod_monto_2*/'',
+		/*@monto_2*/0,
+		/*@pct_iva_monto_2*/0,
+		/*@fecha_prox_pago*/'',
+		/*@producto*/ #{producto},
+		/*@pct_finan*/100,
+		/*@vendedor_orig*/#{asesor},
+		/*@aval_1*/'',/*@aval_2*/'',/*@gte_ventas*/'',/*@monto_promocion*/0,/*@grupo*/0,/*@lugar_disposicion*/1,
+		/*@fecha_esp_liq*/ #{fecha_termino},
+		/*@tipo_verificacion_fisica_dom*/'',/*@tipo_verificacion_fisica_emp*/'',
+		/*@tipo_verificacion_referencias*/'',/*@contrato_recomienda*/'',/*@analista*/'',/*@cod_reso_forzado*/'',/*@monto_proyecto*/0,
+		/*@monto_subsidio*/0,
+		/*@monto_ahorro*/#{monto_ahorro},
+		/*@monto_material*/0,/*@folio_subsidio*/0,
+		/*@sucursal_cobranza*/#{sucursal},
+		/*@sucursal_origen*/0,/*@gte_sucursal*/'',/*@agente_telefonico*/'',/*@contacto*/'',/*@monto_efectivo*/0,/*@grupo_renovacion*/0,
+		/*@nivel_cliente*/0,/*@condiciones*/'',/*@clave_empresa*/'100000003',
+		/*@monto_seguro*/#{seguro},
+		/*@codigo*/'',/*@comentario*/'',
+		/*@fecha_contrato*/'',/*@p_display*/ 1, /*auto_commit*/	0,
+		/*@p_consecutivo*/#{consecutivo},
+		/*@p_fecha_disposicion*/#{fecha_disposicion}
+		}
+	</select>
+
+
+<select id="registrarContratoVenta" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultMap="respuestaContrato">
+
+		set nocount on {
+		call alta_contrato /*@contrato*/#{contrato},
+		/*@solicitud*/ #{solicitud},
+		/*@cliente*/ #{grupo},
+		/*@sucursal*/ #{sucursal},
+		/*@vendedor*/ #{asesor},
+		/*@tipo_credito*/ #{renovacion},
+		/*@tipo_disposicion*/'C',
+		/*@personalidad*/'',
+		/*@promocion*/'',
+		/*@efectivo*/ #{monto} ,
+		/*@monto*/#{monto},
+		/*@monto_pago*/ #{monto_pago},
+		/*@monto_ult_pago*/ #{monto_pago},
+		/*@no_pagos */#{plazo},
+		/*@tasa*/#{tasa},
+		/*@frecuencia_pago*/ #{frecuencia},
+		/*@fecha_ancla_pago*/  #{fechaDiaPago},
+		/*@fecha_prim_venc*/'',
+		/*@gastos_admon*/0,
+		/*@pct_iva_gastos_admon*/0,
+		/*@comision_apertura*/0,
+		/*@pct_iva_comision_aper*/0,
+		/*@seguro*/	#{seguro},
+		/*@pct_iva_seguro*/ #{pct_iva_seguro} ,
+		/*@monto_pcd*/0,
+		/*@pct_iva_pcd_1*/0,
+		/*@cod_monto_2*/'',
+		/*@monto_2*/0,
+		/*@pct_iva_monto_2*/0,
+		/*@fecha_prox_pago*/'',
+		/*@producto*/ #{producto},
+		/*@pct_finan*/100,
+		/*@vendedor_orig*/#{asesor},
+		/*@aval_1*/'',/*@aval_2*/'',/*@gte_ventas*/'',/*@monto_promocion*/0,/*@grupo*/0,/*@lugar_disposicion*/1,
+		/*@fecha_esp_liq*/ #{fecha_termino},
+		/*@tipo_verificacion_fisica_dom*/'',/*@tipo_verificacion_fisica_emp*/'',
+		/*@tipo_verificacion_referencias*/'',/*@contrato_recomienda*/'',/*@analista*/'',/*@cod_reso_forzado*/'',/*@monto_proyecto*/0,
+		/*@monto_subsidio*/0,
+		/*@monto_ahorro*/#{monto_ahorro},
+		/*@monto_material*/0,/*@folio_subsidio*/0,
+		/*@sucursal_cobranza*/#{sucursal},
+		/*@sucursal_origen*/0,/*@gte_sucursal*/'',/*@agente_telefonico*/'',/*@contacto*/'',/*@monto_efectivo*/0,/*@grupo_renovacion*/0,
+		/*@nivel_cliente*/0,/*@condiciones*/'',/*@clave_empresa*/'100000003',
+		/*@monto_seguro*/#{seguro},
+		/*@codigo*/'',/*@comentario*/'',
+		/*@fecha_contrato*/'',/*@p_display*/ 1, /*auto_commit*/	0,
+		/*@p_consecutivo*/#{consecutivo},
+		/*@p_fecha_disposicion*/#{fecha_disposicion}
+		}
+	</select>
+
+
+
+	<select id="registrarContratoRestructura" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultMap="respuestaContrato">
+		set nocount on {
+		call alta_contrato /*@contrato*/#{contrato},
+		/*@solicitud*/ #{solicitud}, /*@cliente*/ #{grupo}, /*@sucursal*/
+		#{sucursal},/*@vendedor*/ #{asesor}, /*@tipo_credito*/ #{renovacion},
+		/*@tipo_disposicion*/'C',/*@personalidad*/'',/*@promocion*/'',/*@efectivo*/
+		#{efectivo} ,/*@monto*/#{monto},/*@monto_pago*/ #{monto_pago},
+		/*@monto_ult_pago*/ #{monto_pago},/*@no_pagos */#{plazo},/*@tasa*/
+		#{tasa},/*@frecuencia_pago*/ #{frecuencia},/*@fecha_ancla_pago*/
+		#{fechaDiaPago},
+		/*@fecha_prim_venc*/'',/*@gastos_admon*/0,/*@pct_iva_gastos_admon*/0,/*@comision_apertura*/
+		#{comision},/*@pct_iva_comision_aper*/ #{pct_comision},/*@seguro*/0,
+		/*@pct_iva_seguro*/0,/*@monto_pcd*/0,/*@pct_iva_pcd_1*/0,/*@cod_monto_2*/'',/*@monto_2*/0,/*@pct_iva_monto_2*/0,/*@fecha_prox_pago*/'',
+		/*@producto*/ #{producto}, /*@pct_finan*/100, /*@vendedor_orig*/
+		#{asesor},/*@aval_1*/'',/*@aval_2*/'',/*@gte_ventas*/'',/*@monto_promocion*/0,
+		/*@grupo*/0,/*@lugar_disposicion*/1,/*@fecha_esp_liq*/
+		#{fecha_termino},/*@tipo_verificacion_fisica_dom*/'',/*@tipo_verificacion_fisica_emp*/'',
+		/*@tipo_verificacion_referencias*/'',/*@contrato_recomienda*/'',/*@analista*/'',/*@cod_reso_forzado*/'',/*@monto_proyecto*/0,
+		/*@monto_subsidio*/0,/*@monto_ahorro*/0,/*@monto_material*/0,/*@folio_subsidio*/0,/*@sucursal_cobranza*/
+		#{sucursal},
+		/*@sucursal_origen*/0,/*@gte_sucursal*/'',/*@agente_telefonico*/'',/*@contacto*/'',/*@monto_efectivo*/0,/*@grupo_renovacion*/0,
+		/*@nivel_cliente*/0,/*@condiciones*/'',/*@clave_empresa*/'100000003',/*@monto_seguro*/
+		0, /*@codigo*/'',/*@comentario*/'',
+		/*@fecha_contrato*/'',/*@p_display*/ 1, /*auto_commit*/
+		0,/*@p_consecutivo*/#{consecutivo}
+		,/*@p_fecha_disposicion*/#{fecha_disposicion}
+		}
+	</select>
+
+
+
+	<insert id="registrarContratoGrupo" parameterType="java.util.HashMap">
+		INSERT INTO contrato_grupo
+		(
+		contrato, asesor, asesor_orig, monto_otorgado, monto_devuelto, ciclo_grupo,
+		hora_reunion, dia_reunion, hora_reunion_fin, persona_dom_reunion
+		)
+		VALUES
+		(
+		#{contrato},#{asesor},/*asesor_orig*/#{asesor},#{monto_otorgado},/*monto_devuelto*/0,#{ciclo_grupo},
+		#{hora_reunion},#{dia_reunion} , #{hora_reunion_fin} ,
+		#{persona_dom_reunion}
+		)
+	</insert>
+
+	<insert id="registrarContratoClaveFinsol" parameterType="java.util.HashMap">
+		INSERT INTO contrato_clave_finsol(contrato,contrato_LD)
+		VALUES(#{contrato}, #{contrato_LD} )
+	</insert>
+
+	<update id="actualizarCicloGrupo" parameterType="java.util.HashMap">
+		UPDATE personas SET ciclo = ciclo + 1 WHERE persona = #{persona}
+	</update>
+
+	<update id="actualizarCicloIntegrante">
+		UPDATE personas SET ciclo = ciclo + 1 WHERE persona IN
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">#{item}</foreach>
+	</update>
+
+	<select id="obtenerCicloIntegrante" parameterType="List"
+		resultType="java.util.HashMap">
+		SELECT ciclo,persona FROM personas WHERE persona IN
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">#{item}</foreach>
+	</select>
+
+	<select id="cicloIntegrante" parameterType="java.lang.String">
+		SELECT P.ciclo from personas WHERE persona=#{persona}
+	</select>
+
+
+	<insert id="registrarIntegranteGrupo" parameterType="java.util.HashMap">
+		INSERT INTO integrante_grupo
+		(
+		contrato ,integrante ,rol ,monto_otorgado ,cheque ,destino_credito
+		,monto_liq_ctrant ,
+		status ,ciclo_integrante ,capital_insoluto,clasificacion_fira,
+		pct_participacion,
+		monto_seguro,
+		monto_seguro_vida,
+		monto_seguro_enfermedad
+		)
+		VALUES
+		(
+		#{contrato} ,#{integrante} ,#{rol} ,#{monto_otorgado} ,#{cheque}
+		,#{destino_credito} ,0 ,
+		'A' ,#{ciclo_integrante} ,#{capital_insoluto} ,#{tipo_localidad},
+		#{pct_participacion},
+		#{monto_seguro},
+		#{monto_seguro_vida},
+		#{monto_seguro_enfermedad}
+		)
+	</insert>
+
+	<update id="actualizarIntegranteGrupo" parameterType="java.util.HashMap">
+		UPDATE integrante_grupo SET monto_liq_ctrant = #{montoFin}
+		WHERE integrante = #{integrante} AND contrato = #{contrato}
+	</update>
+
+	<update id="actualizaMontoFinanciado" parameterType="java.util.HashMap">
+		UPDATE contratos SET monto_liq_ctrant = #{monto} WHERE contrato =
+		#{contrato}
+	</update>
+
+	<select id="registrarFolioNotas" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.lang.String">
+		set nocount on {
+		call cred_act_contrato_prom #{header}, #{contrato}, #{montoLiquidar},
+		#{montoPromedio},
+		#{folio}, #{contratoAnterior}, #{fechaHora}, #{folioPagare}
+		}
+	</select>
+
+
+	<select id="insertarRegistrarFolioNotas" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.lang.String">
+		insert into folios_notas ( contrato_nuevo,
+            					   contrato_vigente,
+            					   no_folio,
+            					   status,
+                                   fecha_hora,
+                                   folio_pagare )
+        				  values ( #{contrato},
+        					       #{contratoAnterior},
+        					      #{folio},
+        					       'A',
+                                   #{fechaHora},
+                                   '' )
+
+	</select>
+
+	<update id="actualizarFolioNotas" parameterType="java.util.HashMap">
+		UPDATE
+		folios_notas SET status = #{status}
+		WHERE contrato_vigente = #{contratoVigente} AND contrato_nuevo =
+		#{contratoNuevo}
+	</update>
+
+	<select id="obtenerSucursalFolio" parameterType="java.lang.Integer"
+		resultType="java.lang.Long">
+		SELECT numeroFolio = isnull(folio,0) FROM sucursal_folio
+		WHERE sucursal = #{1}
+	</select>
+
+	<update id="actualizarSucursalFolio" parameterType="java.util.HashMap">
+		UPDATE
+		sucursal_folio SET folio = #{folio}
+		WHERE sucursal = #{sucursal}
+	</update>
+
+	<insert id="insertarSucursalFolio" parameterType="java.util.HashMap">
+		INSERT INTO
+		sucursal_folio( sucursal, folio )
+		VALUES( #{sucursal}, #{folio} )
+	</insert>
+	<!-- ================================================================================================== -->
+	<!-- OPERACIONES DISPOSICION -->
+	<!-- ================================================================================================== -->
+	<select id="realizaDisposicion" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultMap="respuestaDisposicion">
+		set nocount on {
+		call Caja_Trad_Disp /*@p_header*/'P', /*@p_contrato*/ #{contrato},
+		/*@p_sucursal_origen*/ #{sucursal}, /*@p_operador*/ #{operador},
+		/*p_fecha_disposicion*/ #{fecha_disposicion},
+		/*@p_fecha_hora_movimiento*/ #{fecha_hora_movimiento},
+		/*@p_efectivo_uno*/#{monto},
+		/*@p_caja*/ 0,/*@p_forma_entrega*/'E',/*@p_display*/
+		1,/*@p_idx_trx_caja*/#{idx_trx_caja},/*@p_sucursal_cartera*/
+		#{sucursal},
+		/*@p_folio_pagare*/ '', /*@p_descripcion_movto */ '',/*@p_medio_pago*/ 'PAOC', null, null
+		}
+	</select>
+
+	<!-- ================================================================================================== -->
+	<!-- OPERACIONES CANCELACION DE CREDITO -->
+	<!-- ================================================================================================== -->
+
+	<select id="cancelaDisposicion" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultMap="respuestaCancelaDisposicion">
+		set nocount on {
+		call caja_cancela_disposicion /*@p_header*/'P', /*@p_contrato*/
+		#{contrato}, /*p_fecha_cancelacion*/ #{fecha_cancelacion},
+		/*@p_operador*/ #{operador},/*@p_caja*/ 0,/*@p_sucursal*/ #{sucursal},
+		/*@p_disposicion*/ #{disposicion}, /*@p_display*/ 'S',
+		/*@p_idx_trx_caja*/#{idx_trx_caja},/*@p_fecha_contable*/#{fechaContable}
+		}
+	</select>
+
+	<select id="eliminarContrato" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultMap="respuestaEliminarCreditos">
+		set nocount on {
+		call elimina_contrato /*@p_header*/'', /*@p_contrato*/ #{contrato},
+		/*@p_solicitud*/ #{solicitud},
+		/*@p_fecha*/ #{fechaContable}, /*@p_responsable*/'000000043', /*p_razon_baja*/
+		'ELIMINACION MANUAL', /*@p_codigo*/ '2',
+		/*@p_status_sol*/ 'N', /*@p_fecha_hora*/#{fecha_cancelacion},
+		/*@p_sucursal*/#{sucursal}, /*@p_display*/ 1, /*@p_resultado*/ 0,
+		/*@p_comentario*/ ''
+		}
+	</select>
+
+	<update id="decrementarCicloGrupo" parameterType="String">
+		UPDATE personas SET ciclo = ciclo - 1 WHERE persona = (SELECT cliente FROM
+		contratos WHERE contrato = #{contrato})
+	</update>
+
+	<update id="decrementarCicloIntegrante" parameterType="String">
+		UPDATE
+		personas SET ciclo = ciclo - 1 WHERE persona IN (SELECT integrante
+		FROM integrante_grupo WHERE contrato = #{contrato} AND status = 'A' )
+	</update>
+
+	<select id="obtenerPagosDesertores" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		<![CDATA[SELECT c.tipo_operacion as tipoOperacion, m.fecha_valor as fechaValor, -sum(monto_capital) as montoCapital
+		FROM movimientos m JOIN codigos_caja c ON c.codigo = m.codigo AND c.tipo_codigo = 'ABO' AND c.tipo_operacion <> 'PADO'
+		AND m.codigo != 'LCSM'
+		WHERE m.contrato = #{contratoAnterior}
+		AND m.status IS NULL
+		AND m.fecha_hora > #{fechaMovimiento}
+		GROUP BY c.tipo_operacion,m.fecha_valor ]]>
+	</select>
+
+	<!--<select id="obtenerPagosDesertoresMonto" parameterType="java.util.HashMap"
+		resultType="java.lang.String"> <![CDATA[SELECT -sum(monto_capital) as montoCapital
+		FROM movimientos m JOIN codigos_caja c ON c.codigo = m.codigo AND c.tipo_codigo
+		= 'ABO' AND c.tipo_operacion <> 'PADO' WHERE m.contrato = #{contratoAnterior}
+		AND m.status IS NULL AND m.fecha_hora > #{fechaMovimiento} GROUP BY c.tipo_operacion,m.fecha_valor
+		]]> </select> -->
+
+	<select id="obtenerFechaMovimiento" parameterType="java.lang.String"
+		resultType="java.util.Date">
+		SELECT hora_disposicion
+		FROM contratos
+		WHERE contrato = #{1}
+	</select>
+
+	<select id="obtenerMontoCancelar" parameterType="java.util.HashMap"
+		resultType="java.lang.Double">
+		SELECT isnull( (sum(monto_capital) * -1) , 0) as monto
+		FROM
+		movimientos WHERE contrato = #{contrato}
+		AND fecha_hora BETWEEN
+		#{fechaMovimiento} AND getDate()
+		AND isnull(status,'A') != 'C'
+		AND
+		codigo IN ( SELECT codigo
+		FROM codigos_caja
+		WHERE tipo_codigo = 'ABO'
+		AND tipo_operacion = 'PADO'
+		)
+	</select>
+
+	<!-- ================================================================================================== -->
+	<!-- ORIGINACION DEL CREDITO -->
+	<!-- ================================================================================================== -->
+	<select id="obtenLocalidadPersona" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT DISTINCT l.clasificacion FROM personas p
+		JOIN estados
+		e
+		ON p.entidad = e.codigo_financiera
+		LEFT OUTER JOIN localidades_fira l
+		ON ( e.id_estado = l.clave_entidad
+		AND p.municipio = l.municipio_finsol
+		AND p.ciudad = l.localidad_finsol )
+		WHERE p.persona = #{persona}
+	</select>
+
+
+	<insert id="insertMovimientoRING" parameterType="java.util.HashMap">
+
+		insert movimientos (contrato, fecha_hora, sucursal_origen, operador, codigo,
+		monto_capital, monto_concepto, iva_concepto, referencia, no_suceso,
+		fecha_esperada, fecha_contable, tasa_aplic, fecha_inicial,
+		fecha_final, status,
+		reporta_cobranza, sucursal_cartera, id_trx_caja, fecha_valor
+		)
+		values(
+		#{contrato}, getdate(), #{sucursal}, '000000043', 'RING',
+		#{monto},#{monto}, 0, 'Ajuste Saldo a Favor', #{no_ult_pago},
+		#{fechaContable}, #{fechaContable}, 0, '', '', null,
+		'N', #{sucursal} ,0, #{fechaContable}
+		)
+
+	</insert>
+
+	<update id="actualizarMontoCapital" parameterType="java.util.HashMap">
+
+		UPDATE contratos SET capital_insoluto = capital_insoluto + #{monto},
+		fecha_ult_mov = #{fechaContable}
+		WHERE contrato = #{contrato}
+
+	</update>
+
+	<select id="bonificaMora" statementType="CALLABLE"
+		parameterType="map" resultType="java.util.HashMap">
+
+		set nocount on{
+		call caja_bonifica_mora( '', 1, #{contrato}, #{montoCondonar},'000000043',
+		#{tipo} , NULL ,
+		#{idTrxCaja}, #{sucursal} , NULL , #{descripcion} )
+		}
+	</select>
+
+	<update id="actualizarAsignacionAsesores" parameterType="java.util.HashMap">
+		UPDATE contrato_grupo SET
+		<if test="horaReunionInicio != null">hora_reunion = convert(datetime, #{horaReunionInicio},
+			108) ,</if>
+		<if test="horaReunionFin != null">hora_reunion_fin = convert(datetime, #{horaReunionFin},
+			108)</if>
+		WHERE contrato = #{contrato}
+	</update>
+
+	<insert id="insertaAsignacionPendiente" parameterType="java.util.HashMap">
+
+		INSERT INTO asignaciones_pendientes (numAsig,sucursal,contrato,numAsesor,
+		diaReunion,horaReunionInicio,horaReunionFin,status
+		)
+		values( ,
+		#{numeroAsignacion},
+		#{numeroSucursal},
+		#{contrato},
+		#{numeroAsesor},
+		#{diaReunion},
+		#{horaReunionInicio},
+		#{horaReunionFin},
+		'P'
+		)
+
+	</insert>
+
+	<insert id="insertaBuzonTareas" parameterType="java.util.HashMap"
+		keyProperty="idTarea">
+
+		INSERT INTO buzon_tareas
+		(
+		tipo_tarea, sucursal, descripcion, fecha_alta, usuario_alta,
+		fecha_ult_mod, perfil, status, usuario_propietario
+		)
+		VALUES
+		(
+		#{tipoTarea}, #{sucursal}, #{descripcion}, #{fechaAlta}, #{usuarioAlta},
+		#{fechaUltMod}, #{perfil}, #{status} , #{usuario_propietario}
+		)
+		<selectKey resultType="java.lang.Integer" keyProperty="idTarea">
+			SELECT max(id_tarea) as value FROM buzon_tareas
+		</selectKey>
+
+	</insert>
+	<insert id="insertaTareasReasignacion" parameterType="java.util.HashMap">
+
+		INSERT INTO tareas_reasignacion_cartera
+		(
+		id_tarea, motivo_reasigna, contrato,
+		dia_reunion_actual, hora_reunion_actual, hora_reunion_fin_actual, vendedor_actual,
+		dia_reunion_nuevo, hora_reunion_nuevo, hora_reunion_fin_nuevo,
+		vendedor_nuevo
+		)
+		VALUES (
+		#{idTarea}, #{motivoReasignacion},#{contrato},
+		#{diaReunion}, convert(datetime, #{horaReunionInicio}, 108) , convert(datetime,
+		#{horaReunionFin}, 108), #{numeroAsesor},
+		#{diaReunionNuevo}, convert(datetime, #{horaReunionInicioNuevo}, 108) , convert(datetime,
+		#{horaReunionFinNuevo}, 108), #{numeroAsesorNuevo}
+		)
+
+
+
+	</insert>
+
+
+	<update id="actualizarTarea" parameterType="java.util.HashMap">
+		UPDATE buzon_tareas SET
+		fecha_ult_mod = getdate()
+
+		<if test="usuario_propietario != null">, fecha_asignacion = getdate() , usuario_propietario =
+			#{usuario_propietario} </if>
+		WHERE id_tarea = #{id_tarea}
+	</update>
+
+
+	<update id="actualizarAutorizacionAceptada" parameterType="java.util.HashMap">
+		UPDATE contrato_grupo SET
+		<if test="asesor != null">asesor = #{asesor},</if>
+		<if test="diaReunion != null">dia_reunion = #{diaReunion},</if>
+		<if test="horaReunionInicio != null">hora_reunion = convert(datetime, #{horaReunionInicio},
+			108) ,</if>
+		<if test="horaReunionFin != null">hora_reunion_fin = convert(datetime, #{horaReunionFin},
+			108)</if>
+		WHERE contrato = #{contrato}
+	</update>
+
+	<update id="terminarBuzonTarea" parameterType="java.util.HashMap">
+		UPDATE buzon_tareas SET
+		fecha_ult_mod = getdate(),
+		fecha_termino = getdate(),
+		status = #{status}
+		WHERE id_tarea = #{idTarea}
+
+	</update>
+
+	<select id="obtenerMaxIdSimulacion" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+
+			SELECT isnull(max(id_simulacion), 0) + 1 FROM reestructuras_simulaciones WHERE contrato = #{contrato}
+
+	</select>
+
+
+	<insert id="insertarSimulacion" parameterType="java.util.HashMap" keyProperty="idSimulacion">
+
+		INSERT INTO reestructuras_simulaciones (
+
+		id_simulacion, contrato, nombre_grupo, enganche, monto_enganche, monto_reestructura,
+
+		tasa, plazo, dia_reunion, ciclo, sucursal,
+
+		parcialidad, hora_inicio, hora_fin, dia_pago, frecuencia,
+
+		pct_solidaridad, numero_integrantes, usuario_registro, fecha_registro, usuario_ult_mod,
+
+		fecha_ult_mod, estatus, solicitud, saldo_capital, dias_mora,
+
+		capital_pagado,	intereses_ord_pag, intereses_mor_pag, adeudo_total, recargos,
+
+		saldo_interes, saldo_pendiente, fecha_contable)
+
+		VALUES (
+		#{idSimulacion}, #{contrato}, #{nombreGrupo}, #{enganche}, #{montoEnganche}, #{montoReestructura},
+
+		#{tasa}, #{plazo}, #{diaReunion}, #{ciclo}, #{sucursal},
+
+		#{parcialidad}, #{horaInicio}, #{horaFin}, #{diaPago}, #{frecuencia},
+
+		#{pctSolidaridad}, #{numeroIntegrantes}, #{usuarioRegistro}, getdate(), #{usuarioUltMod},
+
+		getdate(), #{estatus}, #{solicitud}, #{saldoCapital}, #{diasMora},
+
+		#{capitalPagado}, #{interesesOrdPag}, #{interesesMorPag}, #{adeudoTotal}, #{recargos},
+
+    	#{saldoInteres}, #{saldoPendiente}, convert(DATETIME , #{fechaContable})
+		)
+
+		<selectKey resultType="java.lang.Integer" keyProperty="idSimulacionH">
+			SELECT max(id_simulacion) as value FROM reestructuras_simulaciones WHERE contrato = #{contrato}
+		</selectKey>
+	</insert>
+
+
+	<insert id="insertarSimulacionIntegrantes" parameterType="java.util.HashMap">
+
+		INSERT INTO reestructuras_simulaciones_int (
+			contrato, id_simulacion, persona, pct_participacion_vigente,
+			saldo_vigente, interes_vigente, parcialidad, monto_reestructura,
+			pct_participacion_nuevo, coordinador, estatus)
+
+		VALUES (
+		#{contrato}, #{idSimulacion}, #{persona}, #{pctParticipacionVigente},
+
+		#{saldoVigente}, #{interesVigente},	#{parcialidad}, #{montoReestructura},
+
+		 #{pctParticipacionNuevo}, #{coordinador}, #{estatus}
+
+		)
+
+	</insert>
+
+	<insert id="insertarCondicionesContrato" parameterType="java.util.HashMap">
+		INSERT INTO condiciones_contrato( producto, fecha_inicio_vigencia,
+		clave_condicion, contrato, valor )
+		VALUES( #{producto}, getDate(), #{claveCondicion}, #{contrato}, #{valor} )
+	</insert>
+
+	<select id="verificaConfirmarAtomo" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+
+		SELECT 	count(*)
+		FROM atomos
+		WHERE solicitud = #{solicitud}
+		AND proceso = #{proceso}
+		AND codigo_resolucion = #{codigoRes}
+
+	</select>
+
+	<select id="consultaConfirmarVerificacion" parameterType="java.util.HashMap"
+			resultType="java.lang.Integer">
+				select	count(*)
+				from 	bitacora_verificacion_finsol bvf
+				where	bvf.solicitud	= #{solicitud}
+				AND 	bvf.estatus_verificacion = #{estatusVer}
+	</select>
+
+	<update id="actualizarContratoConfirmar" parameterType="java.util.HashMap">
+		UPDATE solicitudes_finsol SET
+		contrato = #{contrato}
+		WHERE solicitud = #{solicitud}
+	</update>
+
+
+	<insert id="insertarTraspasoConDepGar" parameterType="java.util.HashMap">
+		INSERT INTO contrato_deposito_garantia (contrato, medio_pago, status, pago_garantia,
+											saldo_garantia, fecha_alta, fecha_ult_mod )
+		SELECT #{contratoNuevo}, medio_pago, status, #{saldoTraspaso}, #{saldoTraspaso}, getdate(), NULL
+		FROM contrato_deposito_garantia WHERE contrato = #{contratoAnt}
+
+		<selectKey resultType="java.lang.Integer" keyProperty="contratoValor">
+			SELECT count(contrato) as contrato FROM contrato_deposito_garantia WHERE contrato = #{contratoNuevo}
+		</selectKey>
+	</insert>
+
+	<insert id="insertarTraspasoSumConMovDepGar" parameterType="java.util.HashMap">
+		INSERT INTO contrato_movimientos_dg (contrato, codigo, fecha_hora, fecha_contable, fecha_valor,
+										 importe, monto_capital, monto_interes, monto_recargos, usuario,
+										  status, integrante, folio_cheque, contrato_transaccion)
+		VALUES (#{contratoNuevo}, #{codigo}, getdate(), #{fechaContable}, #{fechaContable},
+		#{saldoTraspaso}, 0, 0, 0, #{usuario}, 'A', '', 0, #{contratoAnt})
+	</insert>
+
+	<update id="actualizarSaldoDepGar" parameterType="java.util.HashMap">
+		UPDATE contrato_deposito_garantia
+		SET saldo_garantia = #{saldoGarantia} - #{saldoTraspaso},
+		fecha_ult_mod = getdate()
+		WHERE contrato = #{contratoAnt}
+	</update>
+
+	<insert id="insertarTraspasoConMovDepGarRes" parameterType="java.util.HashMap">
+		INSERT INTO contrato_movimientos_dg (contrato, codigo, fecha_hora, fecha_contable, fecha_valor,
+										 importe, monto_capital, monto_interes, monto_recargos, usuario,
+										  status, integrante, folio_cheque, contrato_transaccion)
+		VALUES (#{contratoAnt}, #{codigo}, getdate(), #{fechaContable}, #{fechaContable},
+		#{saldoTraspaso}, 0, 0, 0, #{usuario}, 'A', '', 0, #{contratoNuevo})
+	</insert>
+
+	<select id="obtenerIntegrantesContratosTraspaso" parameterType="java.util.HashMap"
+			resultType="utilitario.mensajes.originacion.consulta.TraspasoGarantiaOV">
+			 SELECT #{contratoAnt} AS contrato, sum(convert(DECIMAL(20,8), convert(DECIMAL(20,8),monto_otorgado)
+			 / (SELECT sum(monto_otorgado) AS porcentaje FROM integrante_grupo
+ 				WHERE contrato = #{contratoAnt} )) ) AS pctParticipacionTotal
+ 				FROM integrante_grupo WHERE contrato = #{contratoAnt} AND status = 'A'
+ 				AND integrante IN
+ 					( SELECT integrante FROM integrante_grupo WHERE contrato = #{contratoNuevo})
+	</select>
+
+	<update id="actualizarOpcionGarantiaDepGar" parameterType="java.util.HashMap">
+		UPDATE contrato_deposito_garantia
+		SET opcion_garantia = #{opcionGarantia}
+			,usuario_opc_garantia = #{usuario}
+			,fecha_mod_opc_garantia = getdate()
+		WHERE contrato = #{contrato}
+	</update>
+
+	<update id="actualizarBajaIntegrantes" parameterType="java.lang.String">
+		UPDATE integrante_grupo SET status = 'I', fecha_act_status = getdate()
+		WHERE contrato =  #{contrato}
+		AND status != 'I'
+
+	</update>
+
+	<!-- Consultas reglas creditos activos -->
+
+	<select id="obtenerCreditosActuales" parameterType="java.util.HashMap"
+		resultType="Integer">
+
+		SELECT count(contrato) as cuantos
+		FROM contratos
+		WHERE status IN ('N','D','V')
+		AND cliente = #{grupo}
+
+		<if test="tipo == 1">
+			AND producto in (SELECT producto FROM productos WHERE
+			substring(categoria,1,3) = 'OPO')
+		</if>
+
+	</select>
+
+	<!-- Consultas reglas creditos activos por integrante -->
+
+	<select id="obtenerCreditosActualesIntegrante" parameterType="java.util.HashMap"
+		resultType="Integer">
+
+		SELECT count(c.contrato) as cuantos
+		FROM contratos c INNER JOIN
+		integrante_grupo ig ON ig.contrato =
+		c.contrato
+		WHERE c.status IN
+		('N','D','V')
+		AND ig.integrante = #{integrante}
+		AND ig.status NOT IN ('I','P')
+		<if test="tipo == 1">
+			AND c.producto in (SELECT producto FROM productos WHERE
+			substring(categoria,1,3) = 'OPO')
+		</if>
+	</select>
+
+	<!-- ========================= INSERT PARA REGISTRAR EL CAT ==================== -->
+	<insert id="insertarCondicionesContratoCAT" parameterType="java.util.HashMap">
+		INSERT INTO condiciones_contrato( producto, fecha_inicio_vigencia,
+		clave_condicion, contrato, valor )
+		VALUES( #{producto}, getDate(), 'COSTO_ANUAL_TOTAL', #{contrato}, #{valor} )
+	</insert>
+
+	<select id="obtDatAntConfirmar" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.originacion.contrato.ContratoOV">
+
+			SELECT c.status as status,
+				isnull(cdg.saldo_garantia,0) AS saldoGarantia,
+				c.producto AS producto,
+				cdg.medio_pago AS medioPago
+			FROM contratos c
+			LEFT JOIN contrato_deposito_garantia cdg ON c.contrato = cdg.contrato
+			WHERE c.contrato = #{contratoAnt}
+
+	</select>
+
+	<select id="obtDatAntConfirmarTraspaso" parameterType="java.util.HashMap"
+	resultType="utilitario.mensajes.originacion.contrato.ContratoOV">
+
+			SELECT c.status as status,
+				isnull(cdg.saldo_garantia,0) AS saldoGarantia,
+				c.producto AS producto,
+				cdg.medio_pago AS medioPago
+			FROM contratos c
+			LEFT JOIN contrato_deposito_garantia cdg ON c.contrato = cdg.contrato
+			WHERE c.contrato = #{contratoAnt}
+
+	</select>
+
+	<select id="obtenerMontoDevolucionesParciales" parameterType="java.util.HashMap" resultType="java.lang.Double">
+		SELECT isnull(sum(importe),0) AS importe FROM contrato_movimientos_dg
+			WHERE contrato = #{contrato}
+			AND status =  'A'
+			AND codigo IN
+			<foreach item="item" index="index" collection="listDevolucionesParciales" open="(" separator="," close=")">
+		    	#{item, jdbcType=VARCHAR}
+		    </foreach>
+	</select>
+
+	<update id="updateSolicitudFinsolDesertor" parameterType="String">
+		UPDATE dbo.solicitudes_finsol
+		SET  aplicar_garantia_desertor = 'S'
+		WHERE solicitud = #{solicitud}
+	</update>
+
+</mapper>

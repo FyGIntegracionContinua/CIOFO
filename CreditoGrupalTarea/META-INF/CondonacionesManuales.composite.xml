@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+ 		name="CondonacionesManuales"
+ 		targetNamespace="urn:independencia.creditogrupal.tarea.condonaciones">
+ 
+
+
+ 	<component name="CondonacionesManuales">
+ 		<implementation.java class="tarea.condonaciones.CondonacionesManualesImpl" />
+ 		<reference name="comun" target="ComunCreditoGrupal"/>
+ 		<reference name="consultas" target="ConsultasCreditoGrupalTarea"/>
+ 		<reference multiplicity="1..1" name="transformador" target="Transformador"/>
+	</component>
+</composite>
+

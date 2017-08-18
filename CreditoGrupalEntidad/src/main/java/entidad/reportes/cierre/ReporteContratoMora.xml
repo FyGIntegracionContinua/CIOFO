@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<!-- Namespace es un nombre cualquiera -->
+<mapper namespace="creditogrupal.entity.reportes.cierre.ibatis">
+
+	<!-- ******************************************************************************************* -->
+	<!-- SECCION PARA DEFINIR LOS RESULT MAPS QUE SERÁN EMPLEADOS POR ALGUN
+		QUERY DESDE ESTE ARCHIVO -->
+	<!-- ******************************************************************************************* -->
+
+	<!-- type sale del archivo ConfigNTx.xml del typeAlias, id= nombre cualquiera
+		para identificar el resultMap generado -->
+
+	<!-- Mapeo para obtener los datos del reporte de contratos activos con mora -->
+	<resultMap id="contratosActivosMoraId" type="contratosActivosMora">
+		<!-- property=campo en mi OV, column=nombre_campo_tabla (en dado caso el
+			que esta despues de AS) -->
+		<result property="contrato" column="Contrato" />
+		<result property="numGrupo" column="No_Grupo" />
+		<result property="producto" column="Producto" />
+		<result property="primerDiaMora" column="Primer_Dia_Mora" />
+		<result property="diasMora" column="Dias_Mora" />
+
+		<result property="capitalEnMora" column="Capital_en_Mora" />
+		<result property="saldoPeriodo" column="Saldo_Periodo" />
+		<result property="saldoIVAPeriodo" column="Saldo_Iva_Periodo" />
+		<result property="saldoMoratorios" column="Saldo_Moratorios" />
+		<result property="saldoIVAMoratorios" column="Saldo_Iva_Moratorios" />
+
+		<result property="nombreSucursal" column="Sucursal" />
+		<result property="plazo" column="Plazo" />
+		<result property="tasa" column="Tasa" />
+		<result property="fechaFin" column="Fecha_Fin" />
+		<result property="asesor" column="Asesor" />
+
+		<result property="nombreAsesor" column="Nombre_Asesor" />
+		<result property="nombreGrupo" column="Nombre_Grupo" />
+		<result property="numMiembros" column="No_Mem" />
+		<result property="iva" column="IVA" />
+		<result property="claveT24" column="clave_finsol" />
+	</resultMap>
+
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR EL NUMERO DE REGISTROS A PROCESAR -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Contamos todos los registros a procesar para el reporte Contratos Activos
+		Mora -->
+	<!--<select id ="obtenerTotalRegistrosReporteCierreConMora" parameterType="java.lang.String"
+		resultType="Integer"> <![CDATA[ SELECT COUNT(c.contrato) AS TotalMora FROM
+		contratos c WHERE c.status ='D' AND c.clave_empresa = '100000003' AND c.fecha_prox_pago
+		< #{1} ]]> </select> -->
+
+	<select id="obtenerTotalRegistrosReporteCierreConMora"
+		parameterType="java.lang.String" resultType="Integer">
+	   <![CDATA[
+			SELECT
+			COUNT(c.contrato) AS TotalMora
+		FROM
+		    contratos c
+		WHERE c.status ='D'
+		AND c.clave_empresa = '100000003'
+		AND c.fecha_prox_pago < #{1}
+		]]>
+	</select>
+
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR LOS QUERIES QUE SERÁN EJECUTADOS DESDE ALGUNA
+		CLASE DE JAVA -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Obtenemos el bloque correspondiente de registros (contratosActivosMora) -->
+	<!--<select id="obtenerReporteCierreContratosActivosMora" parameterType="java.lang.String"
+		resultMap="contratosActivosMoraId"> <![CDATA[ SELECT distinct ccf.contrato_LD
+		AS Contrato, c.cliente AS No_Grupo, p.descripcion AS Producto, convert(char(10),
+		c.fecha_prox_pago, 103) AS Primer_Dia_Mora, pv.dias_vencidos AS Dias_Mora,
+		c.saldo_capital_vencido AS Capital_en_Mora, c.saldo_int_periodo AS Saldo_Periodo,
+		c.saldo_iva_int_periodo AS Saldo_Iva_Periodo, c.saldo_moratorios AS Saldo_Moratorios,
+		c.saldo_iva_moratorios AS Saldo_Iva_Moratorios, s.nombre AS Sucursal, c.no_pagos
+		AS Plazo, c.tasa AS Tasa, convert(char(10), c.fecha_esp_liq, 103) AS Fecha_Fin,
+		cg.asesor AS Asesor, r.clave_finsol AS claveT24, 'Pendiente' AS Nombre_Asesor,
+		per.nombre AS Nombre_Grupo, ( SELECT COUNT(integrante) FROM integrante_grupo
+		i WHERE i.status='A' AND i.contrato = c.contrato ) AS No_Mem, ( SELECT MAX(valor)
+		FROM valores_historicos vh WHERE vh.codigo = 'IVIN' AND vh.sucursal = c.sucursal
+		AND vh.fecha_inicial < #{1} ) AS IVA FROM contratos c LEFT OUTER JOIN pagos_vencidos
+		pv ON c.contrato = pv.contrato, contrato_clave_finsol ccf, productos p, sucursales
+		s, contrato_grupo cg, relacion_clave_finsol r, personas per WHERE ccf.contrato
+		= c.contrato AND p.producto = c.producto AND s.sucursal = c.sucursal AND
+		cg.contrato = c.contrato AND per.persona = c.cliente AND per.persona = r.persona
+		AND c.status ='D' AND c.clave_empresa = '100000003' AND c.fecha_prox_pago
+		< #{1} ]]> </select> -->
+	<select id="obtenerReporteCierreContratosActivosMora"
+		parameterType="java.lang.String" resultMap="contratosActivosMoraId">
+		<![CDATA[
+		SELECT
+				ccf.contrato_LD									AS Contrato,
+				c.cliente										AS No_Grupo,
+				p.descripcion                                   AS Producto,
+				convert(char(10), c.fecha_prox_pago, 103)       AS Primer_Dia_Mora,
+				pv.dias_vencidos	                            AS Dias_Mora,
+				c.saldo_capital_vencido							AS Capital_en_Mora,
+				c.saldo_int_periodo								AS Saldo_Periodo,
+				c.saldo_iva_int_periodo							AS Saldo_Iva_Periodo,
+				c.saldo_moratorios								AS Saldo_Moratorios,
+				c.saldo_iva_moratorios							AS Saldo_Iva_Moratorios,
+				s.nombre                                        AS Sucursal,
+				c.no_pagos										AS Plazo,
+				c.tasa											AS Tasa,
+				convert(char(10), c.fecha_esp_liq, 103)         AS Fecha_Fin,
+				cg.asesor                                       AS Asesor,
+				r.clave_finsol									AS claveT24,
+				'Pendiente'                                     AS Nombre_Asesor,
+				per.nombre                                      AS Nombre_Grupo,
+				(
+					SELECT COUNT(i.integrante)
+					FROM integrante_grupo i
+					WHERE i.status='A'
+					AND i.contrato = c.contrato
+				)												AS No_Mem,
+				(
+					SELECT MAX(vh.valor)
+					FROM valores_historicos vh
+					WHERE vh.codigo = 'IVIN'
+					AND vh.sucursal = c.sucursal
+					AND vh.fecha_inicial < #{1}
+				)  												AS IVA
+			FROM
+				contratos c
+			LEFT OUTER JOIN pagos_vencidos pv (INDEX PK_pagos_vencidos)
+				ON pv.contrato = c.contrato
+			INNER JOIN productos p
+				ON p.producto = c.producto
+			INNER JOIN personas per
+				ON per.persona = c.cliente
+			INNER JOIN contrato_clave_finsol ccf
+				ON ccf.contrato = c.contrato
+			INNER JOIN contrato_grupo cg
+				ON cg.contrato = c.contrato
+			INNER JOIN relacion_clave_finsol r (INDEX PK_relacion_clave_finsol)
+				ON r.persona = per.persona
+			INNER JOIN sucursales s (INDEX PK_sucursales)
+				ON s.sucursal = c.sucursal
+			WHERE c.status ='D'
+			AND c.clave_empresa = '100000003'
+			AND c.fecha_prox_pago < #{1}
+		 ]]>
+	</select>
+
+</mapper>

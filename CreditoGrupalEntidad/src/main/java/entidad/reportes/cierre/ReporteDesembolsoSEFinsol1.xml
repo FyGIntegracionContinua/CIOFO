@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="creditogrupal.entity.reportes.cierre.ibatis">
+
+	<!-- ******************************************************************************************* -->
+	<!-- SECCION PARA DEFINIR LOS RESULT MAPS QUE SERÁN EMPLEADOS POR ALGUN
+		QUERY DESDE ESTE ARCHIVO -->
+	<!-- ******************************************************************************************* -->
+
+	<!-- type sale del archivo ConfigNTx.xml del typeAlias, id= nombre cualquiera
+		para identificar el resultMap generado -->
+
+	<!-- Mapeo para obtener los datos del reporte de contratos activos con mora -->
+	<resultMap id="desembolsoSEFinsol1Id" type="desembolsoSEFinsol1">
+		<!-- property=campo en mi OV, column=nombre_campo_tabla (en dado caso el
+			que esta despues de AS) -->
+		<result property="numContrato" column="No_Contrato" />
+		<result property="producto" column="Producto" />
+		<result property="numGrupo" column="No_Grupo" />
+		<result property="nombreGrupo" column="Nombre_Grupo" />
+
+		<result property="codigoSucursal" column="Codigo_Sucursal" />
+		<result property="nombreSucursal" column="Nombre_Sucursal" />
+		<result property="parcialidad" column="Parcialidad" />
+		<result property="claveT24" column="clave_finsol" />
+		<result property="contrato" column="contrato" />
+	</resultMap>
+
+	<resultMap id="pagadoCapitalID" type="desembolsoSEFinsol1">
+		<!-- property=campo en mi OV, column=nombre_campo_tabla (en dado caso el
+			que esta despues de AS) -->
+		<result property="pagadoCapital" column="Pagado_Capital" />
+	</resultMap>
+
+	<resultMap id="pagadoInteresesID" type="desembolsoSEFinsol1">
+		<!-- property=campo en mi OV, column=nombre_campo_tabla (en dado caso el
+			que esta despues de AS) -->
+		<result property="pagadoIntereses" column="Pagado_Capital" />
+	</resultMap>
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR EL NUMERO DE REGISTROS A PROCESAR -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Contamos todos los registros a procesar para el reporte Contratos Activos
+		Mora -->
+	<!-- select id ="obtenerTotalRegistrosReporteCierreSEFinsol1" parameterType="java.lang.String"
+		resultType="Integer"> SELECT count( distinct c.contrato ) FROM contratos
+		c, movimientos m LEFT JOIN codigos_caja cod ON m.codigo = cod.codigo AND
+		cod.tipo_codigo = 'ABO' WHERE c.clave_empresa = '100000003' AND m.contrato
+		= c.contrato AND m.fecha_contable = #{1} AND cod.tipo_codigo IN ('ABO','INT')
+		AND cod.tipo_operacion in ('PAGO','PADO') AND c.contrato NOT IN ( SELECT
+		distinct c.contrato FROM movimientos m LEFT JOIN codigos_caja cod ON m.codigo
+		= cod.codigo JOIN contratos c ON c.contrato = m.contrato WHERE m.contrato
+		= c.contrato AND cod.tipo_codigo = 'MOR' /*Pago Moratorio*/ AND m.fecha_contable
+		= #{1} AND cod.tipo_operacion in ('PAGO','PADO') ) </select> -->
+
+	<select id="obtenerTotalRegistrosReporteCierreSEFinsol1"
+		parameterType="java.lang.String" resultType="Integer">
+		SELECT
+		count( distinct c.contrato )
+		FROM
+		contratos c
+		INNER JOIN movimientos m
+		ON m.contrato = c.contrato
+		AND m.fecha_contable = #{1}
+		INNER JOIN codigos_caja cod (INDEX
+		PK_ccodigos_caja)
+		ON cod.codigo = m.codigo
+		AND cod.tipo_operacion in ('PAGO','PADO')
+		AND cod.tipo_codigo IN ('ABO', 'INT')
+		WHERE c.clave_empresa = '100000003'
+		AND NOT EXISTS (
+		SELECT
+		mov.contrato
+		FROM
+		movimientos mov (INDEX PK_movimientos)
+		INNER JOIN codigos_caja cod
+		ON cod.codigo = mov.codigo
+		AND cod.tipo_operacion in ('PAGO','PADO')
+		AND cod.tipo_codigo = 'MOR' /*Pago Moratorio*/
+		WHERE mov.fecha_contable = #{1}
+		AND mov.contrato = c.contrato
+		)
+	</select>
+
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR LOS QUERIES QUE SERÁN EJECUTADOS DESDE ALGUNA
+		CLASE DE JAVA -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Obtenemos el bloque correspondiente de registros (contratosActivosMora) -->
+	<!-- select id="obtenerReporteCierreDesembolsoSEFinsol1" parameterType="java.lang.String"
+		resultMap="desembolsoSEFinsol1Id"> SELECT distinct ccf.contrato_LD AS No_Contrato,
+		c.contrato AS contrato, p.descripcion AS Producto, /*Dia_Pago, definido en
+		ReporteDesembolsoSEFinsol1OV como fechaCierre*/ c.cliente AS No_Grupo, per.nombre
+		AS Nombre_Grupo, /*Pagado Total, suma de Pagado_Capital + Pagado_Interes*/
+		c.sucursal AS Codigo_Sucursal, s.nombre AS Nombre_Sucursal, r.clave_finsol
+		AS claveT24, c.monto_pago AS Parcialidad FROM contratos c, contrato_clave_finsol
+		ccf, productos p, relacion_clave_finsol r, sucursales s, personas per, movimientos
+		m LEFT JOIN codigos_caja cod ON m.codigo = cod.codigo AND cod.tipo_codigo
+		= 'ABO' WHERE ccf.contrato = c.contrato AND p.producto = c.producto AND s.sucursal
+		= c.sucursal AND per.persona = r.persona AND per.persona = c.cliente AND
+		c.clave_empresa = '100000003' AND m.contrato = c.contrato AND m.fecha_contable
+		= #{1} AND cod.tipo_codigo IN ('ABO','INT') AND cod.tipo_operacion in ('PAGO','PADO')
+		AND c.contrato NOT IN ( SELECT distinct c.contrato FROM movimientos m LEFT
+		JOIN codigos_caja cod ON m.codigo = cod.codigo JOIN contratos c ON c.contrato
+		= m.contrato WHERE m.contrato = c.contrato AND cod.tipo_codigo = 'MOR' /*Pago
+		Moratorio*/ AND m.fecha_contable = #{1} AND cod.tipo_operacion in ('PAGO','PADO')
+		) ORDER BY c.contrato </select> -->
+
+	<select id="obtenerReporteCierreDesembolsoSEFinsol1"
+		parameterType="java.lang.String" resultMap="desembolsoSEFinsol1Id">
+		SELECT DISTINCT
+		ccf.contrato_LD AS No_Contrato,
+		c.contrato AS contrato,
+		p.descripcion AS Producto,
+		/*Dia_Pago, definido en ReporteDesembolsoSEFinsol1OV como fechaCierre*/
+		c.cliente AS No_Grupo,
+		per.nombre AS Nombre_Grupo,
+		/*Pagado Total, suma de Pagado_Capital + Pagado_Interes*/
+		c.sucursal AS Codigo_Sucursal,
+		s.nombre AS Nombre_Sucursal,
+		r.clave_finsol AS claveT24,
+		c.monto_pago AS Parcialidad
+		FROM
+		contratos c
+		INNER JOIN contrato_clave_finsol ccf
+		ON ccf.contrato = c.contrato
+		INNER JOIN productos p
+		ON p.producto = c.producto
+		INNER JOIN sucursales s
+		ON s.sucursal = c.sucursal
+		INNER JOIN personas per
+		ON per.persona = c.cliente
+		INNER JOIN relacion_clave_finsol r
+		ON r.persona = per.persona
+		INNER JOIN movimientos m
+		ON m.contrato = c.contrato
+		AND m.fecha_contable = #{1}
+		INNER JOIN codigos_caja cod (INDEX PK_ccodigos_caja)
+		ON cod.codigo = m.codigo
+		AND cod.tipo_operacion in ('PAGO','PADO')
+		AND cod.tipo_codigo IN ('ABO', 'INT')
+		WHERE c.clave_empresa = '100000003'
+	</select>
+
+	<!-- Obtenemos el campo de Pagado Capital -->
+	<!-- select id="obtenerPagadoCapital" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT ISNULL(SUM (m.monto_concepto)* -1,0) AS Pagado_Capital, c.contrato
+		AS Contrato FROM contratos c LEFT JOIN movimientos m ON c.contrato = m.contrato
+		LEFT JOIN codigos_caja cod ON m.codigo = cod.codigo AND cod.tipo_operacion
+		in ('PAGO','PADO') WHERE c.clave_empresa = '100000003' AND cod.tipo_codigo
+		= 'ABO' AND m.fecha_contable = #{1} AND c.contrato NOT IN ( SELECT contrato
+		FROM movimientos m LEFT JOIN codigos_caja cod ON m.codigo = cod.codigo WHERE
+		m.contrato = c.contrato AND cod.tipo_codigo = 'MOR' /*Pago Moratorio*/ AND
+		m.fecha_contable = #{1} AND cod.tipo_operacion in ('PAGO','PADO') ) GROUP
+		BY c.contrato ORDER BY c.contrato </select> -->
+
+	<select id="obtenerPagadoCapital" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+		SELECT
+		ISNULL(SUM (m.monto_concepto)* -1,0) AS Pagado_Capital,
+		c.contrato AS Contrato
+		FROM
+		contratos c
+		INNER JOIN movimientos m
+		ON m.contrato = c.contrato
+		AND m.fecha_contable = #{1}
+		INNER JOIN codigos_caja cod
+		ON m.codigo = cod.codigo
+		AND cod.tipo_operacion in ('PAGO','PADO')
+		AND cod.tipo_codigo = 'ABO'
+		WHERE c.clave_empresa = '100000003'
+		GROUP BY c.contrato
+
+	</select>
+
+
+	<!-- Obtenemos el campo Pagado Intereses -->
+	<!--select id="obtenerPagadoIntereses" parameterType="java.lang.String"
+		resultType="java.util.HashMap"> SELECT distinct c.contrato AS Contrato, ISNULL(SUM
+		(mInt.monto_concepto + mInt.iva_concepto)*-1,0) AS Pagado_Intereses FROM
+		contratos c LEFT JOIN movimientos mInt ON c.contrato = mInt.contrato LEFT
+		JOIN codigos_caja codInt ON mInt.codigo = codInt.codigo AND codInt.tipo_operacion
+		in ('PAGO','PADO') WHERE c.clave_empresa = '100000003' AND codInt.tipo_codigo
+		= 'INT' AND mInt.fecha_contable = #{1} AND c.contrato NOT IN ( SELECT contrato
+		FROM movimientos m LEFT JOIN codigos_caja cod ON m.codigo = cod.codigo WHERE
+		m.contrato = c.contrato AND cod.tipo_codigo = 'MOR' /*Pago Moratorio*/ AND
+		m.fecha_contable = #{1} AND cod.tipo_operacion in ('PAGO','PADO') ) GROUP
+		BY c.contrato ORDER BY c.contrato </select> -->
+
+	<select id="obtenerPagadoIntereses" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+		SELECT
+		c.contrato AS Contrato,
+		ISNULL(SUM (m.monto_concepto + m.iva_concepto)*-1,0) AS Pagado_Intereses
+		FROM
+		contratos c
+		INNER JOIN movimientos m
+		ON m.contrato = c.contrato
+		AND m.fecha_contable = #{1}
+		INNER JOIN codigos_caja cod
+		ON m.codigo = cod.codigo
+		AND cod.tipo_operacion in ('PAGO','PADO')
+		AND cod.tipo_codigo = 'INT'
+		WHERE c.clave_empresa = '100000003'
+		GROUP BY
+		c.contrato
+	</select>
+
+	<!-- Esta consulta se crea para hacer el match externo a la base y q la
+		consulta no pase por un timeout -->
+	<select id="obtenerPagadoMora" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT
+		mov.contrato
+		FROM
+		movimientos mov (INDEX PK_movimientos)
+		INNER JOIN codigos_caja cod
+		ON cod.codigo = mov.codigo
+		AND cod.tipo_operacion in ('PAGO','PADO')
+		AND cod.tipo_codigo = 'MOR' /*Pago Moratorio*/
+		WHERE mov.fecha_contable =
+		#{1}
+		GROUP BY mov.contrato
+	</select>
+</mapper>

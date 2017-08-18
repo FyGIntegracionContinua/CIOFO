@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contribution xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+              xmlns:originacion="urn:independencia.creditogrupal.tarea.originacion"
+              xmlns:comun="urn:independencia.creditogrupal.tarea.comun"
+              xmlns:impresiondocs="urn:independencia.creditogrupal.tarea.impresiondocs"
+              xmlns:consultas="urn:independencia.creditogrupal.tarea.consultas"
+              xmlns:condonaciones="urn:independencia.creditogrupal.tarea.condonaciones"
+              xmlns:operacion="urn:independencia.creditogrupal.tarea.operacion"
+              xmlns:reportes="urn:independencia.creditogrupal.tarea.reportes"
+              xmlns:administracion="urn:independencia.creditogrupal.tarea.administracion"
+              xmlns:cierre="urn:independencia.creditogrupal.tarea.cierre"
+              xmlns:operacionadministrativa="urn:independencia.creditogrupal.tarea.operacionadministrativa"
+              xmlns:operacionadministrativaevento="urn:independencia.creditogrupal.tarea.operacionadministrativaevento"
+              xmlns:buro="urn:independencia.creditogrupal.tarea.buro"
+              xmlns:seguros="urn:independencia.creditogrupal.tarea.seguros"
+              xmlns:chequescreditogrupal="urn:independencia.creditogrupal.tarea.chequescreditogrupal"
+              xmlns:solicitudes="urn:independencia.creditogrupal.tarea.solicitudes"
+              xmlns:burocredito="urn:independencia.creditogrupal.tarea.burocredito">
+
+    <deployable composite="originacion:OriginacionCreditoGrupal"/>
+    <deployable composite="comun:ComunCreditoGrupal"/>
+    <deployable composite="buro:BuroInterno"/>
+    <deployable composite="impresiondocs:ImpresionDocumentos"/>
+    <deployable composite="condonaciones:CondonacionesManuales"/>
+    <deployable composite="consultas:ConsultasCreditoGrupalTarea"/>
+    <deployable composite="operacion:OperacionCreditoGrupal"/>
+    <deployable composite="reportes:ReportesCreditoGrupal"/>
+    <deployable composite="administracion:AdministracionCreditoGrupal"/>
+    <deployable composite="cierre:CierreDiarioCreditoGrupal"/>
+    <deployable composite="operacionadministrativa:OperacionAdministrativaGrupalTarea"/>
+    <deployable composite="operacionadministrativaevento:OperacionAdministrativaGrupalEvento"/>
+    <deployable composite="seguros:Seguros"/>
+    <deployable composite="solicitudes:SolicitudesCredito"/>
+    <deployable composite="chequescreditogrupal:ChequesCreditoGrupalTarea"/>
+    <deployable composite="burocredito:BuroCreditoTarea"/>
+
+    <import.java package="utilitario"/>
+    <import.java package="entidad"/>
+    <import.java package="datamapper"/>
+    <export.java package="tarea"/>
+    <import.java package="transformador"/>
+    <import.java package="com.findep.credito.buro"/>
+    <import.java package="mx.com.findep.crediseguros"/>
+    <import.java package="com.findep.finsol.asignacion"/>
+    <import.java package="org.tempuri"/>
+    <import.java package="mx.com.findep.depositosgarantia.ws"/>
+    <import.java package="org.example.www.ChequesOperacionWS"/>
+
+</contribution>

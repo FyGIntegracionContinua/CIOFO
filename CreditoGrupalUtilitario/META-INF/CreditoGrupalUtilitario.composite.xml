@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" xmlns:f3="urn:fabric3.org" name="CreditoGrupalUtilitario" targetNamespace="urn:independencia.creditogrupal.utilitario">
+
+   <channel name="Log" requires="f3:synchronous"/>
+
+	<component name="LogMonitor">
+        <implementation.monitor>
+	        <configuration >
+			 	<contextName>CIOF</contextName>
+			 	<!--  property resource="logback.properties"/-->
+
+			 	<!-- Appender for log monitoring -->
+				<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="LOG_MONITOR">
+			    	<!--  <file>${fileMonitorName}.log</file> -->
+			    	<file>Monitor.log</file>
+			    	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			      		<!-- fileNamePattern>/rollinglogsCIOF/${fileMonitorName}-%i.log.zip</fileNamePattern -->
+			      		<fileNamePattern>rollinglogsCIOF/Monitor-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			      		<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        					<maxFileSize>10MB</maxFileSize>
+     					</timeBasedFileNamingAndTriggeringPolicy>
+			    	</rollingPolicy>
+			    	<encoder>
+			      		<pattern>%date [%thread] %-5level - %msg %n</pattern>
+			    	</encoder>
+				</appender>
+
+			 	<!-- Appender for error handler -->
+			 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="LOG_ERRORS">
+			    	<!-- file>${fileErrorsName}.log</file-->
+			    	<file>Errors.log</file>
+			    	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			      		<!-- fileNamePattern>/rollinglogsCIOF/${fileErrorsName}-%i.log.zip</fileNamePattern-->
+			      		<fileNamePattern>rollinglogsCIOF/Errors-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			      		<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        					<maxFileSize>10MB</maxFileSize>
+     					</timeBasedFileNamingAndTriggeringPolicy>
+			    	</rollingPolicy>
+			    	<encoder>
+			      		<pattern>%date [%thread] %-5level - %msg %n</pattern>
+			    	</encoder>
+				</appender>
+
+				<!-- Appender for performance of Entidad -->
+				<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="LOG_ENTIDAD">
+			    	<!-- file>${fileErrorsName}.log</file-->
+			    	<file>DatosEntidad.log</file>
+			    	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			      		<!-- fileNamePattern>/rollinglogsCIOF/${fileErrorsName}-%i.log.zip</fileNamePattern-->
+			      		<fileNamePattern>rollinglogsCIOF/DatosEntidad-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			      		<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        					<maxFileSize>10MB</maxFileSize>
+     					</timeBasedFileNamingAndTriggeringPolicy>
+			    	</rollingPolicy>
+			    	<encoder>
+			      		<pattern>%date %-5level - %msg %n</pattern>
+			    	</encoder>
+				</appender>
+
+				<!-- Appender for console -->
+				<appender class="ch.qos.logback.core.ConsoleAppender" name="STDOUT">
+			    	<encoder>
+			      		<pattern>%date [%thread] %-5level - %msg %n</pattern>
+			    	</encoder>
+			  	</appender>
+
+ 			   	<!-- additivity=false ensures errors data only goes to the analytics log -->
+			   	<logger additivity="false" level="ERROR" name="errors">
+			   		<appender-ref ref="LOG_ERRORS"/>
+			    </logger>
+
+ 			   	<!-- additivity=false ensures errors data only goes to the analytics log -->
+			   	<logger additivity="false" level="WARN" name="monitor">
+			   		<appender-ref ref="LOG_MONITOR"/>
+			    </logger>
+
+ 			   	<!-- additivity=false ensures errors data only goes to the analytics log -->
+			    <!-- log para mybatis para observar la configuracion -->
+			    <logger level="DEBUG" name="java.sql">
+			   		<appender-ref ref="LOG_ENTIDAD"/>
+			    </logger>
+
+			    <logger level="INFO" name="infoEntidad">
+			   		<appender-ref ref="LOG_ENTIDAD"/>
+			    </logger>
+
+				<root level="WARN"/>
+
+			</configuration>
+		</implementation.monitor>
+        <consumer name="monitor" source="Log"/>
+    </component>
+
+</composite>

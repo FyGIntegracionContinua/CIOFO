@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+ 		name="SvcProcesaOFSCreditoGrupal"
+ 		targetNamespace="urn:independencia.creditogrupal.negocio"
+ 		autowire="true">
+
+    <component name="ProcesaOFSCreditoGrupal">
+        <implementation.java class="negocio.procesarOFS.ProcesaOFSCreditoGrupalImpl"/>
+        <service name="ProcesaOFSCreditoGrupal">
+            <binding.ws uri="/CIOF/SvcProcesaOFSCreditoGrupal"/>
+        </service>
+
+        <reference multiplicity="1..1" name="transformador" target="Transformador"/>
+   	   	<reference multiplicity="1..1" name="cliente"  target="OriginacionCliente"/>
+   	   	<reference multiplicity="1..1" name="grupo"  target="OriginacionGrupo"/>
+   	   	<reference multiplicity="1..1" name="credito"  target="OriginacionCredito"/>
+   	   	<reference multiplicity="1..1" name="cheques"  target="ChequesSIC"/>
+   	   	<reference multiplicity="1..1" name="originacionConsultas"  target="OriginacionConsultas"/>
+   	   	<reference multiplicity="1..1" name="kitImpresion"  target="ImpresionDocsInformacion"/>
+   	   	<reference multiplicity="1..1" name="pagos"  target="PagosCredito"/>
+   	   	<reference multiplicity="1..1" name="consultas"  target="ConsultasCreditoGrupalTarea"/>
+   	   	<reference multiplicity="1..1" name="administracion"  target="AdministracionCredito"/>
+   	   	<reference multiplicity="1..1" name="condonaciones"  target="CondonacionesManuales"/>
+   	   	CondonacionesManuales
+    </component>
+</composite>

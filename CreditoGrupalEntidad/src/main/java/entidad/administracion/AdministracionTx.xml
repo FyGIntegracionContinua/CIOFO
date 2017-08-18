@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.administracion.tx">
+
+	<resultMap id="respuesta" type="resultado">
+		<result property="codigo" column="codigo" />
+		<result property="mensaje" column="mensaje" />
+	</resultMap>
+
+	<insert id="insertaContratosMovimientosAjuste" parameterType="java.util.HashMap">
+		INSERT contratos_movimientos (
+		usuario_reestru,
+		fecha_reestru,
+		contrato,
+		cliente,
+		sucursal,
+		fecha_contrato,
+		fecha_disposicion,
+		monto,
+		efectivo,
+		monto_pago,
+		monto_ult_pago,
+		no_pagos,
+		tasa,
+		frecuencia_pago,
+		fecha_ancla_pago,
+		fecha_prim_venc,
+		fecha_prox_venc,
+		fecha_prox_pago,
+		fecha_ult_pago,
+		no_ult_pago,
+		capital_insoluto,
+		status,
+		fecha_corte,
+		fecha_esp_liq,
+		fecha_ult_mov,
+		producto,
+		limite_credito,
+		status_cv,
+		interes_periodo,
+		iva_interes_periodo,
+		no_pagos_vencidos,
+		saldo_capital,
+		saldo_int_periodo,
+		saldo_iva_int_periodo,
+		saldo_moratorios,
+		saldo_iva_moratorios,
+		saldo_gastos_cobranza,
+		saldo_iva_gastos_cobranza,
+		tipo_movimiento)
+		SELECT #{usuario},
+		getdate(),
+		contrato,
+		cliente,
+		sucursal,
+		fecha_contrato,
+		fecha_disposicion,
+		monto,
+		efectivo,
+		monto_pago,
+		monto_ult_pago,
+		no_pagos,
+		tasa,
+		frecuencia_pago,
+		fecha_ancla_pago,
+		fecha_prim_venc,
+		fecha_prox_venc,
+		fecha_prox_pago,
+		fecha_ult_pago,
+		no_ult_pago,
+		capital_insoluto,
+		status,
+		fecha_corte,
+		fecha_esp_liq,
+		fecha_ult_mov,
+		producto,
+		limite_credito,
+		status_cv,
+		interes_periodo,
+		iva_interes_periodo,
+		no_pagos_vencidos,
+		saldo_capital,
+		saldo_int_periodo,
+		saldo_iva_int_periodo,
+		saldo_moratorios,
+		saldo_iva_moratorios,
+		saldo_gastos_cobranza,
+		saldo_iva_gastos_cobranza,
+		#{tipoMovimiento}
+		FROM contratos where contrato = #{contrato}
+
+	</insert>
+
+	<update id="actualizaContratoAjuste" parameterType="java.util.HashMap">
+		update
+		contratos set tasa = #{tasa}, no_pagos = #{no_pagos}, monto_pago =
+		#{monto_pago}, fecha_ult_mov = #{fecha}, fecha_esp_liq =
+		#{fecha_esp_liq}
+		where contrato = #{contrato}
+	</update>
+
+	<select id="modFechaPago" statementType="CALLABLE" parameterType="java.util.HashMap" resultType="java.lang.String">
+		{ call mod_fecha_pago( #{p_header}, #{p_contrato}, #{p_f_ancla_pago},
+			#{p_f_prox_pago}, #{p_f_prox_venc}, #{p_operador}, #{p_fecha_contable}
+		)}
+	</select>
+
+	<update id="actualizaPrimerVencimiento" parameterType="java.util.HashMap">
+		UPDATE contratos set fecha_prim_venc = #{p_f_prox_venc}
+		WHERE contrato = #{p_contrato}
+	</update>
+
+	<update id="actualizaContratoGrupoAjuste" parameterType="java.util.HashMap">
+		update
+		contrato_grupo set persona_dom_reunion = #{persona_dom_reunion}
+		where
+		contrato = #{contrato}
+	</update>
+
+	<update id="actualizaContratoAjusteChequeDev" parameterType="java.util.HashMap">
+		update contratos set
+		monto = #{monto},
+		capital_insoluto = capital_insoluto -#{montoIntegrante} - #{montoSeguroIntegrante},
+		fecha_ult_mov = #{fecha},
+		monto_pago = #{montoPago}
+		where contrato = #{contrato}
+	</update>
+
+	<insert id="insertMovimientos" parameterType="java.util.HashMap">
+		INSERT into movimientos (contrato,fecha_hora,sucursal_origen,operador,
+		codigo, monto_capital, monto_concepto, iva_concepto, referencia,
+		no_suceso, propietario, reporta_cobranza, codigo_servicio,
+		fecha_esperada, fecha_contable, fecha_inicial, fecha_final,
+		id_trx_caja, sucursal_cartera, fecha_valor)
+		VALUES(#{contrato},
+		#{fechaHora}, #{sucursal}, #{usuario}, #{codigo}, #{montoCapital},
+		#{montoConcepto}, #{ivaConcepto}, #{referencia}, #{numSuceso},
+		#{propietario},
+		#{reportaCobranza}, #{codigoServicio},
+		#{fechaEsperada}, #{fechaContable}, #{fechaInicial}, #{fechaFinal},
+		#{idTrxCaja}, #{sucursalCartera}, #{fechaValor})
+	</insert>
+
+	<select id="cancelarPagos" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.lang.String">
+		{call caja_cancela_pagos('P', #{contrato}, #{pagoInicial}, #{fechaInicial},
+		#{fechaSistema} , #{operador},
+		'S', '', #{idTransaccion}, #{sucursal}, #{fechaContable}) }
+	</select>
+
+	<update id="actualizaContratoGrupoChequeDev" parameterType="java.util.HashMap">
+		UPDATE contrato_grupo
+		SET monto_devuelto = monto_devuelto + #{montoIntegrante}
+		WHERE contrato = #{contrato}
+	</update>
+
+	<update id="actualizaEstatusIntegrante" parameterType="java.util.HashMap">
+		UPDATE integrante_grupo SET status = #{estatus}, fecha_act_status = #{fecha}
+		WHERE contrato = #{contrato} AND integrante = #{cliente}
+	</update>
+
+	<update id="actualizaCicloIntegrante" parameterType="java.util.HashMap">
+		UPDATE personas SET ciclo = (ciclo -1)
+		WHERE persona = #{cliente}
+	</update>
+
+	<update id="actualizaCapitalInsolutoIntegrante" parameterType="java.util.HashMap">
+		UPDATE integrante_grupo
+		SET integrante_grupo.capital_insoluto =
+		round((convert(FLOAT,integrante_grupo.monto_otorgado) / c.monto) *
+		c.capital_insoluto,2)
+		FROM contratos c
+		WHERE c.contrato = #{contrato}
+		AND c.contrato = integrante_grupo.contrato
+		AND integrante_grupo.status = 'A'
+
+	</update>
+
+	<update id="ajusteDiaReunion" parameterType="java.util.HashMap">
+		UPDATE contrato_grupo
+		SET contrato = contrato
+		<if test="diaReunion != null">, dia_reunion = #{diaReunion}</if>
+		<if test="horaReunion != null">, hora_reunion = #{horaReunion}</if>
+		WHERE contrato = #{contrato}
+	</update>
+
+	<!--<select id="pagoMontoFinanciado" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		<![CDATA[ SELECT a.id_trx_caja as idCaja, min(m.fecha_hora) as fechaInicio
+		FROM auditoria_cajas a JOIN movimientos m ON a.contrato = m.contrato AND
+		a.id_trx_caja = m.id_trx_caja AND a.fecha_contable = m.fecha_contable WHERE
+		a.contrato = #{contrato} AND a.monto = #{montoFinanciado} AND a.codigo_op
+		= 'PREF' AND m.status IS NULL GROUP BY a.id_trx_caja ]]> </select> -->
+	<select id="pagoMontoFinanciado" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT id_trx_caja as idCaja, fecha_operacion as
+		fechaInicio
+		FROM auditoria_cajas
+		WHERE contrato = #{contrato}
+		AND monto = #{montoFinanciado}
+		AND codigo_op =
+		'PREF'
+	</select>
+
+	<select id="obtenerSucursalContrato" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT sucursal FROM contratos WHERE contrato = #{1}
+	</select>
+
+	<update id="actualizaFechaFinPlazoPrueba" parameterType="java.util.HashMap">
+		UPDATE
+		contratos SET fecha_esp_liq = #{fecha}
+		WHERE contrato = #{contrato}
+	</update>
+
+	<!-- ************************************************************************************************ -->
+	<!-- ************************* Saldo a favor *********************** -->
+	<!-- ************************************************************************************************ -->
+	<select id="cancelaSaldoAFavor" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		set nocount on
+		{
+		call cancela_devoluciones '', #{contrato}, #{fechaHora}, #{operador},
+		#{caja}, #{idTrxCaja}, #{sucursal}, #{sucursal},
+		#{fechaContable}, 0, #{monto}, 1
+		}
+	</select>
+
+	<!-- ************************************************************************************************ -->
+	<!-- ************************* Reasignacion *********************** -->
+	<!-- ************************************************************************************************ -->
+	<insert id="insertarRegistroReasignacion" parameterType="java.util.HashMap">
+		INSERT
+		INTO reasigna_contrato
+		( contrato, folio_reasigna, tipo_reasigna, fecha_autoriza,
+		usuario_autoriza, tipo_cambio,
+		motivo_reasigna, persona_asig_ant, persona_asig_nva, sucursal_asig_ant,
+		sucursal_asig_nva,
+		dias_vencidos, asig_automatica, saldo_total, iva_saldo_total, saldo_vencido,
+		iva_saldo_vencido, nivel_gestion_ant, nivel_gestion_nvo,
+		folio_solicitud, fecha_solicitud,
+		usuario_solicitud, saldo_capital )
+		VALUES( #{contrato}, #{folioReasignacion},
+		#{tipoReasigna}, #{fechaReasigna},
+		#{usuario}, #{tipoCambio}, #{motivoReasigna}, #{cveRedAnterior},
+		#{cveRedNueva}, #{sucursalAnterior}, #{sucursalNueva}, #{diasVencidos},
+		0, #{saldoTotal}, #{ivaSaldoTotal}, #{saldoVencido}, #{ivaSaldoVencido},
+		'', '', #{folioSolicitud}, #{fechaSolicitud}, #{usuarioSolicitud},
+		#{saldoCapital} )
+	</insert>
+
+	<update id="actualizarVendedor" parameterType="java.util.HashMap">
+		UPDATE contratos
+		SET vendedor = #{vendedor}
+		WHERE contrato = #{contrato}
+	</update>
+
+	<update id="actualizarAsesorContrato" parameterType="java.util.HashMap">
+		UPDATE
+		contrato_grupo
+		SET asesor = #{asesor}
+		WHERE contrato = #{contrato}
+	</update>
+
+	<select id="reasignarSucursal" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		set nocount on
+		{
+		call traspaso_sucursal /*display*/1, #{contrato}, #{sucursalNueva},
+		/*insertarLog*/1,
+		/*retorno*/0, /*mensaje*/''
+		}
+	</select>
+
+	<insert id="registrarSolicitudReasignarCartera"
+		parameterType="utilitario.mensajes.administracion.contrato.RegistrarSolicitudReasignarCarteraPeticion">
+		INSERT INTO solicitud_reasigna_contrato
+		( folio_solicitud, sucursal_solicitud, usuario_solicitud,
+		fecha_solicitud,
+		fecha_envio, status, usuario_resolucion, fecha_resolucion, observaciones )
+		VALUES
+		( #{folioSolicitud},
+		#{sucursal},
+		#{numeroPersonaSolicitud},
+		#{fechaSolicitud},
+		#{fechaEnvio},
+		'E',
+		'',
+		'1900-01-01',
+		<if test="observaciones == null">''</if>
+		<if test="observaciones != null">#{observaciones}</if>
+		)
+	</insert>
+
+	<update id="actualizarSolicitudReasignarCartera"
+		parameterType="utilitario.mensajes.administracion.contrato.ActualizarSolicitudReasignarCarteraPeticion">
+		UPDATE solicitud_reasigna_contrato
+		SET
+		<if test="fechaReenvio != null">fecha_envio = #{fechaReenvio},</if>
+		status = #{status},
+		usuario_resolucion = #{numeroPersonaSolicitud},
+		<if test="fechaResolucion != null">fecha_resolucion = #{fechaResolucion},</if>
+		observaciones = #{observaciones}
+		WHERE
+		folio_solicitud = #{folioSolicitud}
+	</update>
+
+	<update id="actualizaUsuarioInicioOperacion" parameterType="java.util.HashMap">
+
+		update auditoria_cajas set cajera = #{usuario}
+		where fecha_contable = #{fechaContable}
+		and sucursal = #{sucursal}
+		and
+		codigo_op = 'APER'
+
+	</update>
+
+	<select id="registrarTelefonoIntegrante" statementType="CALLABLE"
+		parameterType="java.util.HashMap" resultMap="respuesta">
+		set nocount on {
+		call sp_registra_telefono #{integrante}, #{tipo}, #{lada}, #{telefono},
+		/*tipoRed*/'', /*extension*/'', /*nombre*/#{nombre},
+		/*apellido paterno*/#{apellidoPaterno}, /*apellido materno*/#{apellidoMaterno},
+		/*relacion*/#{relacion},
+		/*codigo_resolucion*/'', 'A', /*fecha alta*/#{fechaAlta}, /*usuario_alta*/#{usuario}, '',
+		'000000043', '', '', '', '',
+		#{origen}, '', 0, '', 1 , #{idRelacion} , #{tipo_plan}
+		}
+	</select>
+
+	<update id="actualizaCargoSeguroDevolucion" parameterType="java.util.HashMap">
+		update movimientos SET status = 'C'
+		WHERE contrato =  #{contrato}
+		AND codigo =  #{tipoMovimiento}
+		AND status IS null
+	</update>
+
+	<update id="actualizaPromesaLiquidacion" parameterType="java.util.HashMap">
+		UPDATE ficha_promesa_liq SET fecha_ult_pago = getdate(), importe_pago = isnull(importe_pago, 0 ) + #{importe}
+		WHERE contrato = #{contrato}
+		AND fecha_calculo = #{fechaPago}
+	</update>
+
+	<update id="actualizaMontoAhorro" parameterType="java.util.HashMap">
+		UPDATE contratos
+			SET monto_ahorro = efectivo*#{porcentajeGarantia}
+		WHERE contrato = #{contrato}
+	</update>
+
+	<update id="actualizaCondicionesContratos" parameterType="java.util.HashMap">
+		UPDATE condiciones_contrato
+		SET valor = #{porcentajeGarantia}
+		WHERE clave_condicion = 'PCT_DEP_GARANTIA' AND contrato = #{contrato}
+	</update>
+
+	<select id="obtenerNumeroPagosContrato" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT count(*) AS pagos FROM movimientos WHERE contrato =  #{contrato}
+					AND codigo IN
+					( 	SELECT codigo FROM codigos_caja
+						WHERE tipo_codigo = 'ABO'
+						AND tipo_operacion = 'PAGO' )
+					AND status IS null
+	</select>
+
+	<select id="obtenerNumeroPagosContratoTx" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT count(*) AS pagos FROM movimientos WHERE contrato =  #{contrato}
+					AND codigo IN
+					( 	SELECT codigo FROM codigos_caja
+						WHERE tipo_codigo = 'ABO'
+						AND tipo_operacion = 'PAGO' )
+					AND status IS null
+	</select>
+
+	<select id="obtenerIntegranteConSeguro" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.DatosIntegranteResumenOV">
+		SELECT ig.integrante as cliente,
+			CASE WHEN ig.monto_seguro_vida > 0 THEN 'S'
+				 WHEN ig.monto_seguro_vida = 0 THEN 'N'
+				 WHEN ig.monto_seguro_vida is NULL THEN 'N'
+			END AS seguro,
+			CASE WHEN ig.monto_seguro_enfermedad > 0 THEN 'S'
+				WHEN ig.monto_seguro_enfermedad = 0 THEN 'N'
+				WHEN ig.monto_seguro_enfermedad is NULL THEN 'N'
+			END AS seguroEnfermedad
+		FROM integrante_grupo ig
+		WHERE ig.contrato =#{contrato}
+		AND ig.status = 'A'
+	</select>
+
+<update id="actualizaSucursales" parameterType="java.util.HashMap">
+
+		UPDATE dbo.sucursales
+		SET fecha_modif_config = getdate(),
+			usuario_modif_config = #{usuario_modificacion}
+
+			<if test="cuposCampana != null">,
+				cupos_campania = #{cuposCampana}
+			</if>
+
+			<if test="montoMesCampana != null">,
+				monto_mes_campania = #{montoMesCampana}
+			</if>
+
+			<if test="suspensionGrupoNuevo != null">,
+				susp_grupo_nvo = #{suspensionGrupoNuevo}
+			</if>
+
+			<if test="restriccionColocacion != null">,
+				plazo_restriccion_colocacion = #{restriccionColocacion}
+			</if>
+
+			<if test="restriccionPlazoCatorcenal != null">,
+				restriccion_plazo_catorcenal = #{restriccionPlazoCatorcenal}
+			</if>
+
+			<if test="aplicaCampana3 != null">,
+				aplica_campania_tres = #{aplicaCampana3}
+			</if>
+
+			<if test="estatus != null">,
+				configuracion_status = #{estatus}
+			</if>
+
+		WHERE sucursal = #{sucursal}
+	</update>
+
+	<update id="actualizaSucursalesTipificacion" parameterType="java.util.HashMap">
+
+		UPDATE dbo.sucursales_tipificaciones
+		SET valor_tipificacion = #{valor_tipificacion},
+			fecha_modificacion =  getdate(),
+			usuario_modificacion = #{usuario_modificacion}
+		WHERE sucursal = #{sucursal} AND tipificacion = #{tipificacion}
+	</update>
+
+	<update id="actualizaAsesores" parameterType="java.util.HashMap">
+
+		UPDATE dbo.red_operativa
+			SET participa_campania_tres = #{participaCampana3}
+		WHERE persona = #{persona} AND sucursal = #{sucursal}
+	</update>
+
+	<update id="actualizarPoolPersonasFinsol" parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		UPDATE dbo.pool_personas_finsol
+		SET fecha_ult_mod = getdate(), usuario_mod =  #{usuario}, lunes = #{cbLunes}, martes = #{cbMartes},
+			miercoles = #{cbMiercoles},	jueves = #{cbJueves}, viernes = #{cbViernes}, sabado = #{cbSabado},
+
+			<if test="cmbHorarioTrabajoInicio != null and cmbHorarioTrabajoFin != null">
+				<if test="cmbHorarioTrabajoInicio != '' and cmbHorarioTrabajoFin != ''">
+			hora_entrada_sem =  #{cmbHorarioTrabajoInicio},
+			hora_salida_sem = #{cmbHorarioTrabajoFin},
+				</if>
+			</if>
+
+			<if test="cmbHorarioDescansoInicio != null and cmbHorarioDescansoFin != null">
+				<if test="cmbHorarioDescansoInicio != '' and cmbHorarioDescansoFin != ''">
+			hora_ini_desc_sem = #{cmbHorarioDescansoInicio},
+			hora_fin_desc_sem = #{cmbHorarioDescansoFin},
+				</if>
+			</if>
+
+			<if test="cmbHorarioTrabajoInicioFS != null and cmbHorarioTrabajoFinFS != null">
+				<if test="cmbHorarioTrabajoInicioFS != '' and cmbHorarioTrabajoFinFS != ''">
+			hora_entrada_fin = #{cmbHorarioTrabajoInicioFS},
+			hora_salida_fin = #{cmbHorarioTrabajoFinFS},
+				</if>
+			</if>
+
+			<if test="cmbHorarioDescansoInicioFS != null and cmbHorarioDescansoFinFS != null">
+				<if test="cmbHorarioDescansoInicioFS != '' and cmbHorarioDescansoFinFS != ''">
+			hora_ini_desc_fin = #{cmbHorarioDescansoInicioFS},
+			hora_fin_desc_fin = #{cmbHorarioDescansoFinFS},
+				</if>
+			</if>
+
+			<if test="cmbCategoriaAnalista != null and cmbCategoriaAnalista != ''">
+			tipo_perfil = #{cmbCategoriaAnalista},
+			</if>
+
+			domingo = #{cbDomingo}
+
+		WHERE persona = #{numAnalista}
+	</update>
+
+	<delete id="borrarAnalistaEstatusAsistencia" parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		DELETE FROM dbo.analista_estatus_asistencia WHERE persona = #{numAnalista}
+	</delete>
+
+	<delete id="borrarAnalistaSucursal" parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		DELETE FROM dbo.analista_sucursal WHERE persona = #{numAnalista}
+	</delete>
+
+	<delete id="borrarAnalistaTipoSucursal" parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		DELETE FROM dbo.analista_tipo_sucursal WHERE persona = #{numAnalista}
+	</delete>
+
+	<delete id="borrarAnalistaProducto" parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		DELETE FROM dbo.analista_producto WHERE persona = #{numAnalista}
+	</delete>
+
+	<delete id="borrarAnalistaTipoRestriccion" parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		DELETE FROM dbo.analista_tipo_restriccion WHERE persona = #{numAnalista}
+	</delete>
+
+	<delete id="borrarAnalistaCampania" parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		DELETE FROM dbo.analista_campania WHERE persona = #{numAnalista}
+	</delete>
+
+	<insert id="registrarAnalistaEstatusAsistencia"
+		parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		INSERT INTO dbo.analista_estatus_asistencia (persona, fecha_registro, estatus, fecha_inicio, fecha_fin, usuario_registra)
+		VALUES (#{numAnalista}, getdate(), 'PFVA', convert(DATE, #{dfFechaVacacionesInicio}, 101), convert(DATE,#{dfFechaVacacionesFin}, 101), #{usuario})
+	</insert>
+
+	<insert id="registrarAnalistaSucursal" parameterType="java.util.HashMap">
+		INSERT INTO dbo.analista_sucursal (persona, sucursal, status, usuario_modifica, fecha_modifica)
+		VALUES (#{numAnalista}, #{sucursal}, 'A', #{usuario}, getdate())
+	</insert>
+
+	<insert id="registrarAnalistaTipoSucursal"
+		parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		INSERT INTO dbo.analista_tipo_sucursal (persona, tipo_sucursal, status, usuario_modifica, fecha_modifica)
+		VALUES (#{numAnalista}, #{tipoSucursal}, 'A', #{usuario}, getdate())
+	</insert>
+
+	<insert id="registrarAnalistaProducto"
+		parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		INSERT INTO dbo.analista_producto (persona, producto, status, usuario_modifica, fecha_modifica)
+		VALUES (#{numAnalista}, #{producto}, 'A', #{usuario}, getdate())
+	</insert>
+
+	<insert id="registrarAnalistaTipoRestriccion"
+		parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		INSERT INTO dbo.analista_tipo_restriccion (persona, tipo_restriccion, status, usuario_modifica, fecha_modifica)
+		VALUES (#{numAnalista}, #{nivelRestriccion}, 'A', #{usuario}, getdate())
+	</insert>
+
+	<insert id="registrarAnalistaCampania"
+		parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		INSERT INTO dbo.analista_campania (persona, campania, status, usuario_modifica, fecha_modifica)
+		VALUES (#{numAnalista}, #{campana}, 'A', #{usuario}, getdate())
+	</insert>
+
+	<insert id="registrarContingenciaAnalista"
+		parameterType="utilitario.mensajes.administracion.contrato.AdministracionAnalistasPeticion">
+		INSERT INTO dbo.analista_contingencia (fecha_contingencia, usuario_registra, fecha_registra)
+		VALUES (getdate(), #{usuario}, getdate())
+	</insert>
+
+	<insert id="insertarPagoTraspaso" parameterType="java.util.HashMap">
+		INSERT	INTO pago_traspasos
+		(
+		contrato_origen, contrato_destino, fecha_hora, fecha_contable,
+		fecha_valor, id_trx_caja, codigo_servicio, monto, status
+		)
+		VALUES
+		(
+		#{contrato_origen}, #{contrato_destino}, getdate(), #{fecha_contable},
+		#{fecha_valor}, #{id_trx_caja}, #{codigo_servicio}, #{monto}, 'A'
+		)
+	</insert>
+
+	<update id="actualizarContratoCoordenadas" parameterType="java.util.HashMap">
+		UPDATE personas
+		SET latitud = #{latitud},
+			longitud = #{longitud},
+			fecha_ult_mod = getdate()
+		WHERE persona = #{grupo}
+	</update>
+</mapper>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+	name="OperacionCreditoGrupal" 
+	targetNamespace="urn:independencia.creditogrupal.tarea.operacion">
+	
+	<component name="PagosCredito">
+		<implementation.java class="tarea.operacion.PagosCreditoImpl" />
+        <reference name="comun" target="ComunCreditoGrupal"/>
+        <reference name="consultas" target="ConsultasCreditoGrupalTarea"/>
+	</component>
+	
+</composite>
+	
+	
+	

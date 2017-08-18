@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+  "http://localhost:8080/config/ibatis-3-config.dtd">
+<configuration>
+
+	<properties resource="entidad/config.properties" />
+
+	<settings>
+	    <setting name="aggressiveLazyLoading" value="false"/>
+	    <setting name="defaultStatementTimeout" value="500"/>
+    </settings>
+
+	<typeAliases>
+
+		<typeAlias type="utilitario.mensajes.comun.ResultadoOV" alias="resultado" />
+ 		<typeAlias type="utilitario.mensajes.consultas.DatosCreditoOV" alias="datosCredito" />
+ 		<typeAlias type="utilitario.mensajes.condonaciones.comun.TransCajaResult" alias="resultadoCaja" />
+		<typeAlias type="utilitario.mensajes.comun.AmortizacionOV" alias="calculaAmortizacion" />
+		<typeAlias type="utilitario.mensajes.comun.AmortizacionActualOV" alias="calculaAmortizacionActual" />
+		<typeAlias type="utilitario.mensajes.condonaciones.comun.SaldoVencidoResult" alias="saldoVencido" />
+		<typeAlias type="utilitario.mensajes.reportes.comun.PagoOV" alias="reportePago" />
+		<typeAlias type="utilitario.mensajes.reportes.comun.CreditoGrupalOV" alias="creditoGrupo" />
+		<typeAlias type="utilitario.mensajes.reportes.comun.CreditoOV" alias="reporteCredito" />
+		<typeAlias type="utilitario.mensajes.reportes.comun.ResumenSaldoOV" alias="resumenSaldo" />
+		<typeAlias type="utilitario.mensajes.impresiondocs.comun.ContratoVO" alias="contratoVO" />
+		<typeAlias type="utilitario.mensajes.impresiondocs.comun.MiembroGrupoVO" alias="miembroGrupoVO" />
+		<typeAlias type="utilitario.mensajes.condonaciones.comun.CreditoSaldo" alias="creditoSaldo" />
+		<typeAlias type="utilitario.mensajes.originacion.aprobacion.PlanillaAprobacionOV" alias="planillaAprobacion" />
+		<typeAlias type="utilitario.mensajes.impresiondocs.oportunidadcontrato.OportunidadContratoOV" alias="oportunidadContrato" />
+		<typeAlias type="utilitario.mensajes.originacion.cheques.ContratoChequesSICOV" alias="contratoChequesSIC"/>
+		<typeAlias type="utilitario.mensajes.originacion.cheques.ClienteChequesSICOV" alias="clienteChequesSIC"/>
+		<typeAlias type="utilitario.mensajes.consultas.CreditosAsignadosOV" alias="CreditosAsignadosOV"/>
+		<typeAlias type="utilitario.mensajes.consultas.ConsolidadoCreditosAsignadosOV" alias="ConsolidadoCreditosAsignadosOV"/>
+		<typeAlias type="utilitario.mensajes.operacion.ActaRecaudacionOV" alias="actaRecaudacion" />
+		<typeAlias type="utilitario.mensajes.operacion.ActaRecaudacionParcialidadOV" alias="actaRecaudacionParcialidad" />
+		<typeAlias type="utilitario.mensajes.operacion.ActaRecaudacionClienteOV" alias="actaRecaudacionCliente" />
+		<typeAlias type="utilitario.mensajes.impresiondocs.comun.ContratoFinsolOV" alias="contratoFinsolOV" />
+		<typeAlias type="utilitario.mensajes.persona.ReferenciaOV" alias="userReferencia" />
+		<typeAlias type="utilitario.mensajes.persona.DomicilioOV" alias="userDomicilio" />
+
+	</typeAliases>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+
+ 				<property name="driver" value="com.sybase.jdbc4.jdbc.SybDriver"/>
+				<property name="url" value="jdbc:sybase:Tds:${sybase.ip}:${sybase.puerto}/${sybase.instancia}"/>
+				<property name="username" value="${sybase.username}"/>
+				<property name="password" value="${sybase.password}"/>
+
+			    <property name="poolMaximumActiveConnections" value="450"/>
+	   			<property name="poolMaximumIdleConnections" value="450"/>
+	   			<property name="poolMaximumCheckoutTime" value="5000"/>
+	   			<property name="poolTimeToWait" value="10000"/>
+	   			<property name="poolPingQuery" value="select getdate()"/>
+	   			<property name="poolPingEnabled" value="true"/>
+	   			<property name="poolPingConnectionsNotUsedFor" value="1"/>
+	   			<property name="loginTimeout" value="1"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+ 		<mapper resource="entidad/originacion/OriginacionNTx.xml"/>
+ 		<mapper resource="entidad/comun/ComunNTx.xml"/>
+ 		<mapper resource="entidad/administracion/AdministracionNTx.xml"/>
+ 		<mapper resource="entidad/impresiondocs/ImpresionDocsNTx.xml"/>
+ 		<mapper resource="entidad/consultas/ConsultasNTx.xml"/>
+ 		<mapper resource="entidad/condonaciones/CondonacionManualNTx.xml"/>
+		<mapper resource="entidad/reportes/Reportes.xml"/>
+		<mapper resource="entidad/operacion/OperacionNTX.xml"/>
+		<mapper resource="entidad/persona/PersonaCredProdNTx.xml"/>
+		<mapper resource="entidad/verificacion/telefonica/VerificacionTelefonicaCredProdNTx.xml"/>
+		<mapper resource="entidad/buro/BuroInternoNTx.xml"/>
+		<mapper resource="entidad/seguros/SegurosNTx.xml"/>
+		<mapper resource="entidad/chequescreditogrupal/ChequesCreditoGrupalNTx.xml"/>
+		<mapper resource="entidad/solicitudes/SolicitudesNTx.xml"/>
+		<mapper resource="entidad/burocredito/BuroCreditoNTx.xml"/>
+	</mappers>
+</configuration>

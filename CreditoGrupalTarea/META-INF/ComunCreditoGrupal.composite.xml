@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+ 		name="ComunCreditoGrupal"
+ 		xmlns:f3="urn:fabric3.org"
+ 		targetNamespace="urn:independencia.creditogrupal.tarea.comun">
+
+ 	<component name="ComunCreditoGrupal">
+		<implementation.java class="tarea.comun.ComunTareaImpl"/>
+	</component>
+ 	
+ 	<component name="OFSResultAssembler">
+		<implementation.java class="tarea.comun.OFSResultAssemblerImpl"/>
+	</component>
+	
+<!--	<component name="IncializacionCIOF">-->
+<!--		<f3:implementation.timer class="tarea.comun.InicializacionCIOF" fireOnce="10000"/>-->
+<!--	</component>-->
+</composite>
+

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contribution xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+              xmlns:clientes="urn:independencia.creditogrupal.clientes">
+    <deployable composite="clientes:CreditoGrupalClientes"/>
+    <export.java package="com.findep.credito.buro"/>
+    <export.java package="mx.com.findep.crediseguros"/>
+    <export.java package="com.findep.finsol.asignacion"/>
+    <export.java package="org.tempuri"/>
+    <export.java package="mx.com.findep.depositosgarantia.ws"/>
+    <export.java package="org.example.www.ChequesOperacionWS"/>
+</contribution>

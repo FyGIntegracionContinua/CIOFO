@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+ 		name="ReportesCreditoGrupal"
+ 		targetNamespace="urn:independencia.creditogrupal.tarea.reportes">
+
+ 	<component name="EstadoCuenta">
+		<implementation.java class="tarea.reportes.EstadoCuentaImpl"/>
+		<reference multiplicity="1..1" name="comun" target="ComunCreditoGrupal"/>
+		<reference multiplicity="1..1" name="transformador" target="Transformador"/>
+	</component>
+
+ 	<component name="Amortizacion">
+		<implementation.java class="tarea.reportes.AmortizacionImpl"/>
+		<reference multiplicity="1..1" name="comun" target="ComunCreditoGrupal"/>
+	</component>
+
+	<component name="Contables">
+		<implementation.java class="tarea.reportes.ContablesImpl"/>
+	</component>
+
+	<component name="Generales">
+		<implementation.java class="tarea.reportes.GeneralesImpl"/>
+		<reference multiplicity="1..1" name="comun" target="ComunCreditoGrupal"/>
+	</component>
+
+</composite>
+

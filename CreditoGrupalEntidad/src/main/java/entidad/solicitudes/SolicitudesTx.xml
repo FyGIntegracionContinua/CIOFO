@@ -1,0 +1,2153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.solicitudes.SolicitudesTx">
+
+	<resultMap type="utilitario.mensajes.solicitudes.SolicitudesOV"
+		id="solicitudMap">
+		<result property="solicitud" column="solicitud" />
+		<result property="claveEmpresa" column="clave_empresa" />
+		<result property="creditoGrupal" column="credito_grupal" />
+		<result property="numeroIntegrantes" column="numero_integrantes" />
+		<result property="oficina" column="oficina" />
+		<result property="segmento" column="segmento" />
+		<result property="categoria" column="categoria" />
+		<result property="codigoProducto" column="codigo_producto" />
+		<result property="cliente" column="cliente" />
+		<result property="efectivoSolicitado" column="efectivo_solicitado" />
+		<result property="montoSolicitado" column="monto_solicitado" />
+		<result property="frecuenciaPago" column="frecuencia_pago" />
+		<result property="plazoSolicitado" column="plazo_solicitado" />
+		<result property="diaPago" column="dia_pago" />
+		<result property="tasa" column="tasa" />
+		<result property="comisionApertura" column="comision_apertura" />
+		<result property="cat" column="cat" />
+		<result property="oficinaDisposicion" column="oficina_disposicion" />
+		<result property="plazo" column="plazo" />
+		<result property="horaReunion" column="hora_reunion" />
+		<result property="diaReunion" column="dia_reunion" />
+		<result property="numeroFamiliaresGrupo" column="numero_familiares_grupo" />
+		<result property="montoPago" column="monto_pago" />
+		<result property="montoFinanciadoContAnt" column="monto_financiado_cont_ant" />
+		<result property="contratoAnt" column="contrato_ant" />
+		<result property="fechaResolucion" column="fecha_resolucion" />
+		<result property="horaResolucion" column="hora_resolucion" />
+		<result property="efectivoOtorgado" column="efectivo_otorgado" />
+		<result property="montoOtorgado" column="monto_otorgado" />
+		<result property="contrato" column="contrato" />
+		<result property="vendedor" column="vendedor" />
+		<result property="vendedorOrig" column="vendedor_orig" />
+		<result property="gteVentas" column="gte_ventas" />
+		<result property="grupoVentas" column="grupo_ventas" />
+		<result property="gteSucursal" column="gte_sucursal" />
+		<result property="contratoRecomienda" column="contrato_recomienda" />
+		<result property="claveCorresponsal" column="clave_corresponsal" />
+		<result property="status" column="status" />
+		<result property="ciclo" column="ciclo" />
+		<result property="origenVenta" column="origen_venta" />
+		<result property="etapa" column="etapa" />
+		<result property="tipoVerificacion" column="tipo_verificacion" />
+		<result property="fechaCaptura" column="fecha_captura" />
+		<result property="horaCaptura" column="hora_captura" />
+		<result property="etapaAnterior" column="etapa_anterior" />
+		<result property="motivoStatus" column="motivo_status" />
+		<result property="fechaUltMod" column="fecha_ult_mod" />
+		<result property="horaUltMod" column="hora_ult_mod" />
+		<result property="usuarioRegistraSolicitud" column="usuario_registra_solicitud" />
+		<result property="horaReunionFin" column="hora_reunion_fin" />
+		<result property="personaDomReunion" column="persona_dom_reunion" />
+		<result property="express" column="express" />
+	</resultMap>
+
+	<resultMap type="utilitario.mensajes.solicitudes.BuzonExcepcionOV"
+		id="buzonExMap">
+		<result property="idTarea" column="idTarea" />
+		<result property="nombreDiv" column="nombreDiv" />
+		<result property="producto" column="producto" />
+		<result property="solicitud" column="solicitud" />
+		<result property="nombreGrupo" column="nombreGrupo" />
+		<result property="sucursal" column="sucursal" />
+		<result property="numeroSucursal" column="numeroSucursal" />
+		<result property="division" column="division" />
+		<result property="numeroDivision" column="numeroDivision" />
+		<result property="tipoTarea" column="tipoTarea" />
+		<result property="region" column="region" />
+		<result property="numeroRegion" column="numeroRegion" />
+		<result property="fechaAlta" column="fechaAlta" />
+		<result property="espera" column="espera" />
+		<result property="observaciones" column="observaciones" />
+		<result property="contrato" column="contrato" />
+		<result property="montoSolicitado" column="montoSolicitado" />
+		<result property="cliente" column="cliente" />
+		<result property="justificacion" column="justificacion" />
+		<result property="fechaCaptura" column="fechaCaptura" />
+		<result property="fechaIngreso" column="fechaIngreso" />
+		<result property="fechaAutorizacion" column="fechaAutorizacion" />
+		<result property="pctGarantia" column="pctGarantia" />
+		<result property="montoCreditoAnterior" column="montoCreditoAnterior" />
+		<result property="garantiaCreditoAnterior" column="garantiaCreditoAnterior" />
+		<result property="express" column="express" />
+	</resultMap>
+
+	<resultMap type="utilitario.mensajes.solicitudes.CreditoAnteriorOV"
+		id="creditoAntMap">
+		<result property="contratoLD" column="contratoLD" />
+		<result property="ciclo" column="ciclo" />
+	</resultMap>
+
+	<insert id="insertaSolicitud" parameterType="java.util.HashMap">
+
+		INSERT INTO solicitudes_finsol
+		(
+		solicitud,
+		clave_empresa,
+		credito_grupal,
+		numero_integrantes,
+		oficina,
+
+		segmento,
+		categoria,
+		codigo_producto,
+		cliente,
+		efectivo_solicitado,
+
+		monto_solicitado,
+		frecuencia_pago,
+		plazo_solicitado,
+		dia_pago,
+		tasa,
+
+		comision_apertura,
+		cat,
+		oficina_disposicion,
+		plazo,
+		hora_reunion,
+
+		dia_reunion,
+		numero_familiares_grupo,
+		monto_pago,
+		monto_financiado_cont_ant,
+		contrato_ant,
+
+		fecha_resolucion,
+		hora_resolucion,
+		efectivo_otorgado,
+		monto_otorgado,
+		contrato,
+
+		vendedor,
+		vendedor_orig,
+		gte_ventas,
+		grupo_ventas,
+		gte_sucursal,
+
+		contrato_recomienda,
+		clave_corresponsal,
+		status,
+		ciclo,
+		origen_venta,
+
+		etapa,
+		tipo_verificacion,
+		fecha_captura,
+		hora_captura,
+		etapa_anterior,
+
+		motivo_status,
+		fecha_ult_mod,
+		hora_ult_mod,
+		usuario_registra_solicitud,
+		hora_reunion_fin,
+		persona_dom_reunion,
+
+		excepcion_garantia,
+		autorizacion_garantia,
+		usuario_autorizacion,
+		fecha_autorizacion,
+
+		seguro,
+		estatus,
+		descripcion,
+		fecha_fin,
+		express,
+		campana,
+		senalamiento_excepcion,
+		traspaso_garantia,
+		pct_garantia,
+		aplicar_garantia,
+		aplicar_garantia_desertor,
+		garantia_justificacion
+
+		)
+		VALUES
+		(
+			<![CDATA[
+			  	#{solicitud}, #{claveEmpresa}, #{creditoGrupal},#{numeroIntegrantes}, #{oficina},
+
+			  	#{segmento}, #{categoria}, #{codigoProducto},#{cliente}, #{efectivoSolicitado},
+
+			  	#{montoSolicitado}, #{frecuenciaPago}, #{plazoSolicitado},#{diaPago}, #{tasa},
+
+			  	#{comisionApertura}, #{cat}, #{oficinaDisposicion},#{plazo}, #{horaReunion},
+
+			  	#{diaReunion}, #{numeroFamiliaresGrupo}, #{montoPago},#{montoFinanciadoContAnt}, #{contratoAnt},
+
+			  	#{fechaResolucion}, #{horaResolucion}, #{efectivoOtorgado},#{montoOtorgado}, #{contrato},
+
+			  	#{vendedor}, #{vendedorOrig}, #{gteVentas},#{grupoVentas}, #{gteSucursal},
+
+			  	#{contratoRecomienda}, #{claveCorresponsal}, #{status},#{ciclo}, #{origenVenta},
+
+			  	#{etapa}, #{tipoVerificacion}, GETDATE(), GETDATE(), #{etapaAnterior},
+
+			  	#{motivoStatus}, GETDATE(), GETDATE(), #{usuarioRegistraSolicitud},#{horaReunionFin},#{personaDomReunion},
+
+			  	#{excepcionGarantia}, #{autorizacionGarantia}, #{usuarioAutorizacion}, #{fechaAutorizacion},
+
+			  	#{seguro}, #{estatus}, #{descripcion}, #{fechaFin}, #{express}, #{campana}, #{senalamientoExcepcion},
+
+			  	#{traspasoGarantia}, #{pctGarantia}, #{aplicarGarantia}, #{aplicarGarantiaDesertor}, #{justificacionExc}
+		  	]]>
+		)
+	</insert>
+
+
+
+	<insert id="insertaSolicitudIntegrante" parameterType="java.util.HashMap">
+		INSERT INTO solicitud_integrantes
+		(
+		solicitud,
+		cliente,
+		monto_ahorro,
+		efectivo_solicitado,
+		monto_solicitado,
+
+		monto_financiado_cont_ant,
+		monto_pago,
+		efectivo_otorgado,
+		monto_otorgado,
+		ingresos,
+
+		otros_ingresos,
+		egresos,
+		medio_contacto,
+		findep_score,
+		tabla_score,
+
+		bc_score,
+		codigo_destino_credito,
+		autorizo_consulta_imss,
+		clave_imss,
+		clave_reso_infonavit,
+
+		clave_reso_imss,
+		cheque_para,
+		monto_seguro,
+		tipo_disposicion,
+		cargo_mesa_directiva,
+
+		contrato_anterior,
+		monto_contrato_anterior,
+		hit_bc,
+		numero_cuentas_bc,
+		clasificacion_fira,
+
+		pct_participacion,
+		etapa_anterior,
+		motivo_status,
+		status,
+		etapa,
+
+		numero_integrante,
+		referencia,
+		aprobado,
+		saldo_actual,
+		seguro,
+
+		ciclo,
+		campania_iguala,
+		plazo_seguro,
+		seguro_enfermedad,
+		per_cre_renovar,
+		desertor,
+		desertor_garantia_aplicar,
+		desertor_diferencia_pagar
+
+		)
+		VALUES
+		(
+			<![CDATA[
+			  	#{solicitud}, #{cliente}, #{montoAhorro}, #{efectivoSolicitado}, #{montoSolicitado},
+
+			  	#{montoFinanciadoContAnt}, #{montoPago}, #{efectivoOtorgado}, #{montoOtorgado}, #{ingresos},
+
+			  	#{otrosIngresos}, #{egresos}, #{medioContacto}, #{findepScore}, #{tablaScore},
+
+			  	#{bcScore}, #{codigoDestinoCredito}, #{autorizoConsultaImss}, #{claveImss}, #{claveResoInfonavit},
+
+			  	#{claveResoImss}, #{chequePara}, #{montoSeguro}, #{tipoDisposicion}, #{cargoMesaDirectiva},
+
+			  	#{contratoAnterior}, #{montoContratoAnterior}, #{hitBc}, #{numeroCuentasBc}, #{clasificacionFira},
+
+			  	#{pctParticipacion}, #{etapaAnterior}, #{motivoStatus}, #{status}, #{etapa},
+
+			  	#{numeroIntegrante}, #{referencia}, #{aprobado}, #{saldoActual}, #{seguro},
+
+			  	#{ciclo}, #{iguala}, #{plazoSeguro} , #{seguroEnfermedad}, #{perteneceCreditoRenovar},
+
+			  	#{desertor} , #{garantiaAplicada} , #{diferenciaPago}
+
+			  	]]>
+
+		)
+
+	</insert>
+
+
+	<!-- Query que se utiliza para actualizar la solicitud que viene de la pantalla 
+		Analista Documental BC -->
+	<update id="actualizaSolicitudAnalistaBC" parameterType="java.util.HashMap">
+		UPDATE tareas_excepcion_documental
+		SET
+		fecha_fin_gestion = getdate(),
+		usuario_gestion = #{usuarioGestion},
+		codigo_estatus = #{codigoEstatus}
+
+		<if test="motivoExcepcion != null">,
+			motivo_excepcion = #{motivoExcepcion}
+		</if>
+
+		<if test="justificacionOrig != null">,
+			justificacion_orig = #{justificacionOrig}
+		</if>
+
+		WHERE id_tarea = #{idTarea} AND solicitud = #{solicitud}
+
+	</update>
+
+	<!-- Query que se utiliza para eliminar un cliente que viene de la pantalla 
+		Analista Documental en la tabla solicitud_integrantes -->
+	<update id="eliminaIntegranteAnalistaDocumentalBC"
+		parameterType="java.util.HashMap">
+		UPDATE dbo.solicitud_integrantes
+		SET status = 'X',
+		origen_elimina = #{codigoEstatus},
+		usuario_elimina = #{usuarioElimina}
+		WHERE solicitud = #{solicitud} AND cliente =
+		#{clienteElimina}
+	</update>
+
+	<!-- Query que se utiliza para actualizar la solicitud que viene de la pantalla 
+		Analista Documental BC en la tabla buzon_tareas -->
+	<update id="actualizaSolicitudBuzonTareas" parameterType="java.util.HashMap">
+		UPDATE buzon_tareas
+		SET status = #{status},
+		fecha_ult_mod = getdate(),
+		fecha_termino = getdate()
+		WHERE id_tarea = #{idTarea}
+	</update>
+
+	<!-- Query que se utliza para guardar la solicitud viene que de la pantalla 
+		Analista Documental BC -->
+	<update id="actualizaSolicitudFinsolAnalistaBC" parameterType="java.util.HashMap">
+		UPDATE solicitudes_finsol
+		SET
+		campana = #{campana}
+		WHERE solicitud = #{solicitud}
+	</update>
+
+	<!-- Query que se utliza para guardar la solicitud viene que de la pantalla 
+		Analista Documental BC -->
+	<update id="actualizaSolicitudIntegrantesAnalistaBC"
+		parameterType="java.util.HashMap">
+		UPDATE solicitud_integrantes
+		SET cargo_mesa_directiva =
+		#{cargoMesaDirectiva}
+
+		<if test="empresaOrigen != null">,
+			empresa_origen = #{empresaOrigen},
+		</if>
+		WHERE solicitud = #{solicitud} AND cliente = #{cliente}
+	</update>
+
+
+
+
+	<update id="actualizaSolicitud" parameterType="java.util.HashMap">
+		UPDATE solicitudes_finsol
+		SET
+		fecha_ult_mod = GETDATE(),
+		hora_ult_mod =
+		GETDATE()
+
+		<if test="claveEmpresa != null">,
+			clave_empresa = <![CDATA[#{claveEmpresa}]]>
+		</if>
+		<if test="creditoGrupal != null">,
+			credito_grupal = <![CDATA[#{creditoGrupal}]]>
+		</if>
+		<if test="numeroIntegrantes != null">,
+			numero_integrantes = <![CDATA[#{numeroIntegrantes}]]>
+		</if>
+		<if test="oficina != null">,
+			oficina = <![CDATA[#{oficina}]]>
+		</if>
+
+		<if test="segmento != null">,
+			segmento= <![CDATA[#{segmento}]]>
+		</if>
+		<if test="categoria != null">,
+			categoria = <![CDATA[#{categoria}]]>
+		</if>
+		<if test="codigoProducto != null">,
+			codigo_producto = <![CDATA[#{codigoProducto}]]>
+		</if>
+		<if test="cliente != null">,
+			cliente = <![CDATA[#{cliente}]]>
+		</if>
+		<if test="efectivoSolicitado != null">,
+			efectivo_solicitado = <![CDATA[#{efectivoSolicitado}]]>
+		</if>
+
+		<if test="montoSolicitado != null">,
+			monto_solicitado = <![CDATA[#{montoSolicitado}]]>
+		</if>
+		<if test="frecuenciaPago != null">,
+			frecuencia_pago = <![CDATA[#{frecuenciaPago}]]>
+		</if>
+		<if test="plazoSolicitado != null">,
+			plazo_solicitado = <![CDATA[#{plazoSolicitado}]]>
+		</if>
+		<if test="diaPago != null">,
+			dia_pago = <![CDATA[#{diaPago}]]>
+		</if>
+		<if test="tasa != null">,
+			tasa = <![CDATA[#{tasa}]]>
+		</if>
+
+		<if test="comisionApertura != null">,
+			comision_apertura = <![CDATA[#{comisionApertura}]]>
+		</if>
+		<if test="cat != null">,
+			cat = <![CDATA[#{cat}]]>
+		</if>
+		<if test="oficinaDisposicion != null">,
+			oficina_disposicion = <![CDATA[#{oficinaDisposicion}]]>
+		</if>
+		<if test="plazo != null">,
+			plazo = <![CDATA[#{plazo}]]>
+		</if>
+		<if test="horaReunion != null">,
+			hora_reunion =  <![CDATA[#{horaReunion}]]>
+		</if>
+
+		<if test="diaReunion != null">,
+			dia_reunion = <![CDATA[#{diaReunion}]]>
+		</if>
+		<if test="numeroFamiliaresGrupo != null">,
+			numero_familiares_grupo = <![CDATA[#{numeroFamiliaresGrupo}]]>
+		</if>
+		<if test="montoPago != null">,
+			monto_pago = <![CDATA[#{montoPago}]]>
+		</if>
+		<if test="montoFinanciadoContAnt != null">,
+			monto_financiado_cont_ant = <![CDATA[#{montoFinanciadoContAnt}]]>
+		</if>
+		<if test="contratoAnt != null">,
+			contrato_ant = <![CDATA[#{contratoAnt}]]>
+		</if>
+
+		<if test="fechaResolucion != null">,
+			fecha_resolucion = <![CDATA[#{fechaResolucion}]]>
+		</if>
+		<if test="horaResolucion != null">,
+			hora_resolucion = GETDATE()
+		</if>
+		<if test="efectivoOtorgado != null">,
+			efectivo_otorgado = <![CDATA[#{efectivoOtorgado}]]>
+		</if>
+		<if test="montoOtorgado != null">,
+			monto_otorgado = <![CDATA[#{montoOtorgado}]]>
+		</if>
+		<if test="contrato != null">,
+			contrato = <![CDATA[#{contrato}]]>
+		</if>
+
+		<if test="vendedor != null">,
+			vendedor = <![CDATA[#{vendedor}]]>
+		</if>
+		<if test="vendedorOrig != null">,
+			vendedor_orig = <![CDATA[#{vendedorOrig}]]>
+		</if>
+		<if test="gteVentas != null">,
+			gte_ventas = <![CDATA[#{gteVentas}]]>
+		</if>
+		<if test="grupoVentas != null">,
+			grupo_ventas = <![CDATA[#{grupoVentas}]]>
+		</if>
+		<if test="gteSucursal != null">,
+			gte_sucursal= <![CDATA[#{gteSucursal}]]>
+		</if>
+
+		<if test="contratoRecomienda != null">,
+			contrato_recomienda = <![CDATA[#{contratoRecomienda}]]>
+		</if>
+		<if test="claveCorresponsal != null">,
+			clave_corresponsal = <![CDATA[#{claveCorresponsal}]]>
+		</if>
+		<if test="status != null">,
+			status = <![CDATA[#{status}]]>
+		</if>
+		<if test="ciclo != null">,
+			ciclo = <![CDATA[#{ciclo}]]>
+		</if>
+		<if test="origenVenta != null">,
+			origen_venta = <![CDATA[#{origenVenta}]]>
+		</if>
+
+		<if test="etapa != null">,
+			etapa = <![CDATA[#{etapa}]]>
+		</if>
+		<if test="tipoVerificacion != null">,
+			tipo_verificacion = <![CDATA[#{tipoVerificacion}]]>
+		</if>
+
+		<if test="etapaAnterior != null">,
+			etapa_anterior = <![CDATA[#{etapaAnterior}]]>
+		</if>
+
+		<if test="motivoStatus != null">,
+			motivo_status = <![CDATA[#{motivoStatus}]]>
+		</if>
+		<if test="usuarioRegistraSolicitud != null">,
+			usuario_registra_solicitud = <![CDATA[#{usuarioRegistraSolicitud}]]>
+		</if>
+		<if test="horaReunionFin != null">,
+			hora_reunion_fin = <![CDATA[#{horaReunionFin}]]>
+		</if>
+		<if test="personaDomReunion != null">,
+			persona_dom_reunion = <![CDATA[#{personaDomReunion}]]>
+		</if>
+
+		<if test="excepcionGarantia != null">,
+			excepcion_garantia = <![CDATA[#{excepcionGarantia}]]>
+		</if>
+		<if test="autorizacionGarantia != null">,
+			autorizacion_garantia = <![CDATA[#{autorizacionGarantia}]]>
+		</if>
+		<if test="usuarioAutorizacion != null">,
+			usuario_autorizacion = <![CDATA[#{usuarioAutorizacion}]]>
+		</if>
+		<if test="fechaAutorizacion != null">,
+			fecha_autorizacion = <![CDATA[#{fechaAutorizacion}]]>
+		</if>
+
+		<if test="seguro != null">,
+			seguro = <![CDATA[#{seguro}]]>
+		</if>
+		<if test="estatus != null">,
+			estatus = <![CDATA[#{estatus}]]>
+		</if>
+		<if test="descripcion != null">,
+			descripcion = <![CDATA[#{descripcion}]]>
+		</if>
+		<if test="fechaFin != null">,
+			fecha_fin = <![CDATA[#{fechaFin}]]>
+		</if>
+		<if test="express != null">,
+			express = <![CDATA[#{express}]]>
+		</if>
+		<if test="campana != null">,
+			campana = <![CDATA[#{campana}]]>
+		</if>
+		<if test="senalamientoExcepcion != null">,
+			senalamiento_excepcion = <![CDATA[#{senalamientoExcepcion}]]>
+		</if>
+
+		<if test="traspasoGarantia != null">,
+			traspaso_garantia = <![CDATA[#{traspasoGarantia}]]>
+		</if>
+
+		<if test="pctGarantia != null">,
+			pct_garantia = <![CDATA[#{pctGarantia}]]>
+		</if>
+
+		<if test="motivoCancelacion != null">,
+			motivo_cancelacion = <![CDATA[#{motivoCancelacion}]]>
+		</if>
+
+		<if test="aplicarGarantia != null">,
+			aplicar_garantia = <![CDATA[#{aplicarGarantia}]]>
+		</if>
+
+		<if test="aplicarGarantiaDesertor != null">,
+			aplicar_garantia_desertor = <![CDATA[#{aplicarGarantiaDesertor}]]>
+		</if>
+
+		<if test="justificacionExc != null">,
+			garantia_justificacion = <![CDATA[#{justificacionExc}]]>
+		</if>
+
+		WHERE solicitud = <![CDATA[#{solicitud}]]>
+	</update>
+
+
+	<update id="actualizaSolicitudIntegrante" parameterType="java.util.HashMap">
+		UPDATE solicitud_integrantes
+		SET
+		solicitud = <![CDATA[#{solicitud}]]>
+
+		<if test="montoAhorro != null">,
+			monto_ahorro = <![CDATA[#{montoAhorro}]]>
+		</if>
+		<if test="efectivoSolicitado != null">,
+			efectivo_solicitado = <![CDATA[#{efectivoSolicitado}]]>
+		</if>
+		<if test="montoSolicitado != null">,
+			monto_solicitado = <![CDATA[#{montoSolicitado}]]>
+		</if>
+
+		<if test="montoFinanciadoContAnt != null">,
+			monto_financiado_cont_ant = <![CDATA[#{montoFinanciadoContAnt}]]>
+		</if>
+		<if test="montoPago != null">,
+			monto_pago = <![CDATA[#{montoPago}]]>
+		</if>
+		<if test="efectivoOtorgado != null">,
+			efectivo_otorgado = <![CDATA[#{efectivoOtorgado}]]>
+		</if>
+		<if test="montoOtorgado != null">,
+			monto_otorgado = <![CDATA[#{montoOtorgado}]]>
+		</if>
+		<if test="ingresos != null">,
+			ingresos = <![CDATA[#{ingresos}]]>
+		</if>
+
+		<if test="otrosIngresos != null">,
+			otros_ingresos = <![CDATA[#{otrosIngresos}]]>
+		</if>
+		<if test="egresos != null">,
+			egresos = <![CDATA[#{egresos}]]>
+		</if>
+		<if test="medioContacto != null">,
+			medio_contacto = <![CDATA[#{medioContacto}]]>
+		</if>
+		<if test="findepScore != null">,
+			findep_score = <![CDATA[#{findepScore}]]>
+		</if>
+		<if test="tablaScore != null">,
+			tabla_score = <![CDATA[#{tablaScore}]]>
+		</if>
+
+		<if test="bcScore != null">,
+			bc_score = <![CDATA[#{bcScore}]]>
+		</if>
+		<if test="codigoDestinoCredito != null">,
+			codigo_destino_credito = <![CDATA[#{codigoDestinoCredito}]]>
+		</if>
+		<if test="autorizoConsultaImss != null">,
+			autorizo_consulta_imss = <![CDATA[#{autorizoConsultaImss}]]>
+		</if>
+		<if test="claveImss != null">,
+			clave_imss = <![CDATA[#{claveImss}]]>
+		</if>
+		<if test="claveResoInfonavit != null">,
+			clave_reso_infonavit = <![CDATA[#{claveResoInfonavit}]]>
+		</if>
+
+		<if test="claveResoImss != null">,
+			clave_reso_imss = <![CDATA[#{claveResoImss}]]>
+		</if>
+		<if test="chequePara != null">,
+			cheque_para = <![CDATA[#{chequePara}]]>
+		</if>
+		<if test="montoSeguro != null">,
+			monto_seguro = <![CDATA[#{montoSeguro}]]>
+		</if>
+		<if test="tipoDisposicion != null">,
+			tipo_disposicion = <![CDATA[#{tipoDisposicion}]]>
+		</if>
+		<if test="cargoMesaDirectiva != null">,
+			cargo_mesa_directiva = <![CDATA[#{cargoMesaDirectiva}]]>
+		</if>
+
+		<if test="contratoAnterior != null">,
+			contrato_anterior = <![CDATA[#{contratoAnterior}]]>
+		</if>
+		<if test="montoContratoAnterior != null">,
+			monto_contrato_anterior = <![CDATA[#{montoContratoAnterior}]]>
+		</if>
+		<if test="hitBc != null">,
+			hit_bc = <![CDATA[#{hitBc}]]>
+		</if>
+		<if test="numeroCuentasBc != null">,
+			numero_cuentas_bc = <![CDATA[#{numeroCuentasBc}]]>
+		</if>
+		<if test="clasificacionFira != null">,
+			clasificacion_fira = <![CDATA[#{clasificacionFira}]]>
+		</if>
+
+		<if test="pctParticipacion != null">,
+			pct_participacion = <![CDATA[#{pctParticipacion}]]>
+		</if>
+		<if test="etapaAnterior != null">,
+			etapa_anterior = <![CDATA[#{etapaAnterior}]]>
+		</if>
+		<if test="motivoStatus != null">,
+			motivo_status = <![CDATA[#{motivoStatus}]]>
+		</if>
+		<if test="status != null">,
+			status = <![CDATA[#{status}]]>
+		</if>
+		<if test="etapa != null">,
+			etapa = <![CDATA[#{etapa}]]>
+		</if>
+
+		<if test="numeroIntegrante != null">,
+			numero_integrante = <![CDATA[#{numeroIntegrante}]]>
+		</if>
+		<if test="referencia != null">,
+			referencia = <![CDATA[#{referencia}]]>
+		</if>
+		<if test="aprobado != null">,
+			aprobado = <![CDATA[#{aprobado}]]>
+		</if>
+		<if test="saldoActual != null">,
+			saldo_actual = <![CDATA[#{saldoActual}]]>
+		</if>
+		<if test="seguro != null">,
+			seguro = <![CDATA[#{seguro}]]>
+		</if>
+		<if test="iguala != null">,
+			campania_iguala = <![CDATA[#{iguala}]]>
+		</if>
+		<if test="ciclo != null">,
+			ciclo = <![CDATA[#{ciclo}]]>
+		</if>
+		<if test="plazoSeguro != null">,
+			plazo_seguro = <![CDATA[#{plazoSeguro}]]>
+		</if>
+		<if test="seguroEnfermedad != null">,
+			seguro_enfermedad = <![CDATA[#{seguroEnfermedad}]]>
+		</if>
+		<if test="perteneceCreditoRenovar != null">,
+			per_cre_renovar = <![CDATA[#{perteneceCreditoRenovar}]]>
+		</if>
+		<if test="desertor != null">,
+			desertor = <![CDATA[#{desertor}]]>
+		</if>
+		<if test="garantiaAplicada != null">,
+			desertor_garantia_aplicar = <![CDATA[#{garantiaAplicada}]]>
+		</if>
+		<if test="diferenciaPago != null">,
+			desertor_diferencia_pagar = <![CDATA[#{diferenciaPago}]]>
+		</if>
+		WHERE
+		cliente = <![CDATA[#{cliente}]]>
+		and
+		solicitud = <![CDATA[#{solicitud}]]>
+	</update>
+
+
+
+	<select id="obtenerNumeroIntegrante" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT
+		ISNULL(MAX(numero_integrante) + 1, 1)
+		FROM
+		solicitud_integrantes
+		WHERE
+		solicitud = #{1}
+	</select>
+
+
+	<select id="buscaIntegranteSolicitud" parameterType="java.util.HashMap"
+		resultType="java.lang.String">
+		SELECT
+		cliente
+		FROM
+		solicitud_integrantes
+		WHERE
+		solicitud =
+		#{solicitud}
+		AND
+		cliente = #{cliente}
+	</select>
+
+
+	<insert id="insertaSolicitudLog" parameterType="java.util.HashMap">
+
+		INSERT INTO
+		solicitudes_finsol_log
+		(solicitudId, usuarioId, fecha,
+		descripcion)
+		VALUES
+		<![CDATA[
+			(#{solicitudId}, #{usuarioId}, GETDATE(), #{descripcion})
+		]]>
+
+	</insert>
+
+
+
+	<update id="actualizaProcEliminacionCredito" parameterType="java.lang.String">
+
+		UPDATE
+		solicitudes_finsol
+		SET
+		status = 'X',
+		fecha_ult_mod = getdate(),
+		hora_ult_mod = getdate()
+		FROM
+		solicitudes_finsol sol1,
+		contrato_clave_finsol ccvf
+		WHERE
+		sol1.contrato = ccvf.contrato
+		AND
+		(ccvf.contrato_LD = #{1} OR ccvf.contrato = #{1})
+
+	</update>
+
+
+	<insert id="insertaProcEliminacionCreditoLog" parameterType="java.util.HashMap">
+
+		INSERT INTO
+		dbo.solicitudes_finsol_log (solicitudId, usuarioId,
+		descripcion, fecha)
+		SELECT solf.solicitud, #{pUsuario}, #{descripcion},
+		getdate()
+		FROM
+		solicitudes_finsol solf,
+		contrato_clave_finsol ccvf
+		WHERE
+		solf.contrato = ccvf.contrato
+		AND
+		( ccvf.contrato_LD = #{pContrato} OR
+		ccvf.contrato = #{pContrato})
+
+	</insert>
+
+	<select id="numeroIntegrantes" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT
+		COUNT(cliente)
+		FROM
+		solicitud_integrantes
+		WHERE
+		solicitud = #{1}
+		AND
+		status != 'X'
+	</select>
+
+	<select id="buscarClavePersonaSolicitud" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT TOP 1 persona FROM relacion_clave_finsol WHERE
+		persona = #{claveFinsol}
+		UNION
+		SELECT TOP 1 persona FROM
+		relacion_clave_finsol WHERE clave_finsol = #{claveFinsol}
+		UNION
+		SELECT
+		TOP 1 persona FROM relacion_clave_finsol WHERE clave_cu =
+		#{claveFinsol}
+
+	</select>
+
+
+	<select id="consultaSolicitudTx" parameterType="java.lang.String"
+		resultMap="solicitudMap">
+		SELECT
+		*
+		FROM
+		solicitudes_finsol
+		WHERE
+		solicitud = #{1}
+	</select>
+
+
+	<insert id="insertaAtomos" parameterType="java.util.HashMap">
+
+		INSERT INTO atomos
+		(
+		proceso, id_proceso, id_tarea, solicitud, cliente,
+		usuario_genero_atomo, status, tipo_atomo, es_critico, etapa,
+		hora_registro, hora_resolucion, codigo_resolucion, resolucion, comentario,
+		id_atomo_anterior, genero_atomo_siguiente, origen_error,
+		numero_integrante
+		)
+		VALUES
+		(
+		#{proceso}, #{id_proceso}, #{id_tarea},
+		#{solicitud}, #{cliente},
+		#{usuario_genero_atomo}, #{status},
+		#{tipo_atomo}, #{es_critico}, #{etapa},
+		getdate(),
+		<choose>
+			<when test="codigo_resolucion != ''">
+				getdate(),
+			</when>
+			<otherwise>
+				'1900-01-01',
+			</otherwise>
+		</choose>
+		#{codigo_resolucion}, #{resolucion}, #{comentario},
+		#{id_atomo_anterior}, #{genero_atomo_siguiente}, #{origen_error},
+		#{numero_integrante}
+		)
+
+		<selectKey resultType="java.lang.Integer" keyProperty="idAtomo">
+			SELECT max(id_atomo) as value FROM atomos where solicitud =
+			#{solicitud}
+		</selectKey>
+
+	</insert>
+
+	<insert id="insertaSolicitudBuro" parameterType="java.util.HashMap">
+
+		INSERT INTO
+		solicitud_buro
+		(
+		solicitud,
+		persona,
+		cuentas_mop01,
+		cuentas_mop02,
+		cuentas_mop03,
+		cuentas_mop04,
+		cuentas_mop05,
+		cuentas_mop06,
+		cuentas_mop07,
+		cuentas_mop96,
+		cuentas_mop97,
+		cuentas_mop99,
+		cuentas_mopUR,
+		folio_consulta_buro,
+		status,
+		hipotecario,
+		hipotecario_mop,
+		hipotecario_desc,
+		automotriz,
+		automotriz_mop,
+		automotriz_desc,
+		descarte,
+		desc_descarte,
+		mop99_saldo_vencido,
+		fecha_modificacion
+		)
+		VALUES
+		(
+		#{solicitud}, #{persona}, #{cuentas_mop01}, #{cuentas_mop02},
+		#{cuentas_mop03},
+		#{cuentas_mop04}, #{cuentas_mop05}, #{cuentas_mop06},
+		#{cuentas_mop07}, #{cuentas_mop96},
+		#{cuentas_mop97}, #{cuentas_mop99},
+		#{cuentas_mopur}, #{folio_consulta_buro},
+		#{status},
+		#{hipotecario},
+		#{hipotecario_mop}, #{hipotecario_desc}, #{automotriz},
+		#{automotriz_mop},
+		#{automotriz_desc}, #{descarte}, #{desc_descarte},
+		#{mop99_saldo_vencido}, getdate()
+		)
+
+	</insert>
+
+	<update id="actualizarSolicitudBuro" parameterType="java.util.HashMap">
+
+		UPDATE solicitud_buro
+		SET fecha_modificacion = getdate()
+		<if test="persona != null">, persona = #{persona}</if>
+		<if test="cuentas_mop01 != null">, cuentas_mop01 = #{cuentas_mop01}</if>
+		<if test="cuentas_mop02 != null">, cuentas_mop02 = #{cuentas_mop02}</if>
+		<if test="cuentas_mop03 != null">, cuentas_mop03 = #{cuentas_mop03}</if>
+		<if test="cuentas_mop04 != null">, cuentas_mop04 = #{cuentas_mop04}</if>
+		<if test="cuentas_mop05 != null">, cuentas_mop05 = #{cuentas_mop05}</if>
+		<if test="cuentas_mop06 != null">, cuentas_mop06 = #{cuentas_mop06}</if>
+		<if test="cuentas_mop07 != null">, cuentas_mop07 = #{cuentas_mop07}</if>
+		<if test="cuentas_mop96 != null">, cuentas_mop96 = #{cuentas_mop96}</if>
+		<if test="cuentas_mop97 != null">, cuentas_mop97 = #{cuentas_mop97}</if>
+		<if test="cuentas_mop99 != null">, cuentas_mop99 = #{cuentas_mop99}</if>
+		<if test="cuentas_mopur != null">, cuentas_mopUR = #{cuentas_mopur}</if>
+		<if test="folio_consulta_buro != null">, folio_consulta_buro = #{folio_consulta_buro}</if>
+		<if test="status != null">, status = #{status}</if>
+		<if test="hipotecario != null">, hipotecario = #{hipotecario}</if>
+		<if test="hipotecario_mop != null">, hipotecario_mop = #{hipotecario_mop}</if>
+		<if test="hipotecario_desc != null">, hipotecario_desc = #{hipotecario_desc}</if>
+		<if test="automotriz != null">, automotriz = #{automotriz}</if>
+		<if test="automotriz_mop != null">, automotriz_mop = #{automotriz_mop}</if>
+		<if test="automotriz_desc != null">, automotriz_desc = #{automotriz_desc}</if>
+		<if test="descarte != null">, descarte = #{descarte}</if>
+		<if test="desc_descarte != null">, desc_descarte = #{desc_descarte}</if>
+		<if test="mop99_saldo_vencido != null">, mop99_saldo_vencido = #{mop99_saldo_vencido}</if>
+		WHERE solicitud = #{solicitud}
+		<if test="persona != null">
+			AND persona= #{persona}
+		</if>
+
+	</update>
+
+	<select id="existeSolicitudBuro" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.solicitudes.SolicitudBuroClienteOV">
+		SELECT * FROM solicitud_buro
+		WHERE solicitud = #{solicitud}
+		<if test="persona != null">
+			AND persona= #{persona}
+		</if>
+	</select>
+
+	<select id="buscaIntegranteStatusSolicitud" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT
+		cliente,
+		status
+		FROM
+		solicitud_integrantes
+		WHERE
+		solicitud = #{solicitud}
+		AND
+		cliente = #{cliente}
+	</select>
+
+	<insert id="registrarSolicitudBuroGeneral" parameterType="java.util.HashMap">
+
+		INSERT
+		INTO solicitud_buro_general
+		(
+		solicitud, valor_tipificacion,
+		promedio_edad, porcentaje_cuentas_1,
+		porcentaje_cuentas_2, fecha,
+		resultado
+		)
+		VALUES
+		(
+		#{solicitud}, #{valorTipificacion}, #{promedioEdad},
+		#{porcentajeCuentas1},
+		#{porcentajeCuentas2},
+		getdate() , #{resultado}
+		)
+
+	</insert>
+
+
+	<update id="actualizaCreditoTempMO" parameterType="java.util.HashMap">
+		UPDATE solicitudes_finsol
+		SET estatus = #{estatus},
+		descripcion = #{desEstatus}
+		<if test="actualizaFecha == 'SI'">
+			,
+			fecha_reg_exp_cm = getdate()
+		</if>
+		WHERE solicitud = #{id}
+	</update>
+
+	<update id="actualizaFechaAprobacion" parameterType="java.lang.String">
+		UPDATE solicitudes_finsol
+		SET fecha_aprobacion_cec = getdate()
+		WHERE solicitud = #{1}
+	</update>
+
+
+	<update id="eliminaCargoIntegrantesSolicitud" parameterType="java.lang.String">
+
+		UPDATE
+		solicitud_integrantes
+		SET
+		cargo_mesa_directiva = ''
+		WHERE
+		solicitud
+		= #{1}
+
+	</update>
+
+	<update id="modificaPoolPersonas" parameterType="java.util.HashMap">
+
+		UPDATE pool_personas_finsol
+		SET fecha_ult_mod = getdate()
+		<if test="tipoPerfil != null">, tipo_perfil = #{tipoPerfil}</if>
+		<if test="usuarioMod != null">, usuario_mod = #{usuarioMod}</if>
+		<if test="estatus != null">, estatus = #{estatus}</if>
+		WHERE persona = #{persona}
+
+	</update>
+
+	<update id="reasignarCargaTrabajo" parameterType="java.util.HashMap">
+
+		UPDATE buzon_tareas
+		SET fecha_ult_mod = getdate(),
+		fecha_asignacion =
+		getdate()
+		<if test="nuevoPropietario != null">, usuario_propietario = #{nuevoPropietario}</if>
+		WHERE id_tarea = #{idTarea}
+
+	</update>
+
+	<insert id="registrarBuzonTareaReasignacion" parameterType="java.util.HashMap">
+
+		INSERT INTO buzon_tarea_reasigna
+		(
+		id_tarea, usuario_propietario,
+		usuario_propietario_nuevo, fecha_reasigna,
+		usuario_reasigna
+		)
+		VALUES
+		(
+		#{idTarea}, #{usuarioProp}, #{nuevoUsuarioProp}, getdate(),
+		#{usuarioReasigna}
+		)
+
+	</insert>
+
+	<insert id="insertarCamposPlanillaObservaciones" parameterType="java.util.HashMap">
+
+		INSERT INTO planilla_observaciones
+		(
+		solicitud, campo_id, valor_binario,
+		valor_comentario, estatus
+		)
+		VALUES
+		(
+		#{solicitud}, #{campoId},
+		#{valorBinario}, #{valorComentario}, 'A'
+		)
+
+	</insert>
+
+	<insert id="eliminaCamposPlanillaObservaciones" parameterType="java.lang.String">
+
+		delete from planilla_observaciones where solicitud = #{solicitud}
+
+	</insert>
+
+	<update id="actualizarCamposPlanillaObservaciones"
+		parameterType="java.util.HashMap">
+
+		UPDATE planilla_observaciones
+		SET solicitud = #{solicitud}
+		<if test="nuevoCampoId != null">, campo_id = #{nuevoCampoId}</if>
+		<if test="valorBinario != null">, valor_binario = #{valorBinario}</if>
+		<if test="valorComentario != null">, valor_comentario = #{valorComentario}</if>
+		WHERE solicitud = #{solicitud} AND campo_id = #{campoId}
+
+	</update>
+
+	<update id="actualizarTareasEvaluacionCreditos" parameterType="java.util.HashMap">
+
+		UPDATE tareas_evaluacion_credito
+		SET captura_observaciones = getdate(),
+		usuario_captura_obs = #{usuario}
+		WHERE solicitud = #{solicitud}
+		AND
+		captura_observaciones IS null
+
+	</update>
+
+	<insert id="insertarPlanillaObservacionesHis" parameterType="java.util.HashMap">
+
+		INSERT INTO planilla_observaciones_his
+		( solicitud, campo_id,
+		valor_binario , valor_comentario, fecha_registro , estatus, id_atomo )
+		SELECT solicitud, campo_id, valor_binario , valor_comentario,
+		getdate() , estatus, convert(NUMERIC(10),#{solicitud})
+		FROM
+		planilla_observaciones WHERE solicitud = #{solicitud}
+
+	</insert>
+
+	<insert id="insertaBuzonTareasPlanilla" parameterType="java.util.HashMap"
+		keyProperty="idTarea">
+
+		INSERT INTO buzon_tareas
+		(
+		tipo_tarea, sucursal, descripcion,
+		fecha_alta, usuario_alta,
+		fecha_ult_mod, perfil, status, id_tarea_padre
+		)
+		VALUES
+		(
+		#{tipoTarea}, #{sucursal}, #{descripcion}, getdate(),
+		#{usuarioAlta},
+		getdate(), #{perfil}, #{status}, #{idTareaPadre}
+		)
+		<selectKey resultType="java.lang.Integer" keyProperty="idTarea">
+			SELECT max(id_tarea) as value FROM buzon_tareas
+		</selectKey>
+
+	</insert>
+
+	<select id="existeSolicitud" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT
+		count(*)
+		FROM
+		solicitudes_finsol
+		WHERE
+		solicitud = #{1}
+
+	</select>
+
+	<update id="actualizarBuzonTareaHija" parameterType="java.lang.Integer">
+
+		UPDATE
+		buzon_tareas
+		SET status = 'X', fecha_termino = getdate()
+		WHERE
+		id_tarea_padre = #{idTarea}
+		AND status = 'P'
+
+	</update>
+
+	<update id="terminarTareaSucursal" parameterType="java.lang.Integer">
+
+		UPDATE
+		buzon_tareas
+		SET status = 'A', fecha_termino = getdate()
+		WHERE id_tarea
+		= #{idTarea}
+
+	</update>
+
+	<select id="existeCampoPlantillaObservaciones" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		SELECT campo_id
+		FROM planilla_observaciones
+		WHERE solicitud =
+		#{solicitud}
+		AND campo_id = #{campoId}
+	</select>
+
+	<update id="eliminarTareasBuzonSolicitud" parameterType="java.util.HashMap">
+		update
+		buzon_tareas SET status = 'X', fecha_termino = getdate()
+		WHERE status =
+		'P'
+		AND (
+		id_tarea IN
+		(
+		SELECT id_tarea FROM tareas_evaluacion_credito
+		WHERE solicitud = #{solicitud}
+		)
+		OR id_tarea_padre IN
+		(
+		SELECT id_tarea FROM tareas_evaluacion_credito
+		WHERE solicitud = #{solicitud}
+		)
+		)
+	</update>
+
+	<select id="verificaUltimoAtomo" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.solicitudes.AtomosOV">
+		SELECT TOP 1 proceso AS proceso,
+		usuario_genero_atomo AS usuarioGeneroAtomo
+		FROM atomos
+		WHERE solicitud = #{solicitud}
+		ORDER
+		BY id_atomo desc
+	</select>
+
+	<insert id="insertaPlanillaAprobacion" parameterType="java.util.HashMap">
+		INSERT INTO integrante_planilla_aprobacion
+		(
+		id_planilla,
+		solicitud,
+		persona,
+		clave_cliente_unico,
+		di_nombre_cliente,
+		di_edad,
+		di_estado_civil,
+		di_ciclo,
+		di_contrato_anterior,
+		di_monto_contrato_anterior,
+		di_estatus_contrato_anterior,
+		di_producto_contrato_anterior,
+		di_tipificacion_producto,
+		di_monto_solicitado,
+		di_monto_propuesto,
+		af_monto_ult_cred,
+		af_max_atr_ult_cred,
+		af_max_atr_posterior_ult_cred,
+		af_monto_penult_cred,
+		af_max_atr_penult_cred,
+		af_max_atr_post_penult_cred,
+		af_monto_antepenultimo_cred,
+		af_max_atr_antepenult_cred,
+		af_max_atr_post_apenult_cred,
+		asf_folio_consulta,
+		asf_vigencia,
+		asf_saldo_deuda_vigente,
+		asf_saldo_deuda_vencido,
+		asf_cuota_semanal,
+		asf_mop_maximo_abierto,
+		asf_mop_maximo_cerrado,
+		asf_mop_automotriz_hip,
+		asf_saldo_venciodo_aut_hip,
+		se_cuota_semanal,
+		se_tipo_domicilio,
+		se_tiempo_residencia,
+		se_destino_credito,
+		se_actividad_primaria,
+		se_antiguedad_negocio,
+		se_antiguedad_rubro,
+		se_tipo_negocio,
+		se_porcentaje_ganancia,
+		se_ganancia_semanal_negocio,
+		se_otros_ingresos,
+		se_ganancia_act_sec,
+		se_total_gastos_familiares,
+		se_disponible_calculado,
+		se_monto_declarado,
+		se_superavit_cuota_monto,
+		se_superavit_cuota_disponible,
+		se_total_declarado_negocio
+		)
+		VALUES
+		(
+		#{idPlanilla},
+		#{solicitud},
+		#{persona},
+		#{claveClienteUnico},
+		#{dINombreCliente},
+		#{dIEdad},
+
+		#{dIEstadoCivil},
+		#{dICiclo},
+		#{dIContratoAnterior},
+		#{dIMontoContratoAnterior},
+		#{dIEstatusContratoAnterior},
+		#{dIProductoContratoAnterior},
+		#{dITipificacionProducto},
+		#{dIMontoSolicitado},
+		#{dIMontoPropuesto},
+
+		#{aFmontoUltimoCredito},
+		#{aFmaximoAtrasoUltimoCredito},
+		#{aFmaximoAtrasoPosteriorUltimoCredito},
+		#{aFmontoPenultimoCredito},
+		#{aFmaximoAtrasoPenultimoCredito},
+		#{aFmaximoAtrasoPosteriorPenultimoCredito},
+		#{aFmontoAntepenultimoCredito},
+		#{aFmaximoAtrasoAntepenultimoCredito},
+		#{aFmaximoAtrasoPosteriorAntepenultimoCredito},
+
+		#{asFFolioConsulta},
+		#{aSFVigencia},
+		#{aSFSaldoDeudaVigente},
+		#{aSFSaldoDeudaVencido},
+		#{aSFCuotaSemanal},
+		#{aSFMopMaximoAbierto},
+		#{aSFMopMaximoCerrado},
+		#{aSFMopAutomotrizHipotecario},
+		#{aSFSaldoVenciodotrizHipotecario},
+
+		#{sECuotaSemanal},
+		#{sETipoDomicilio},
+		#{sETiempoResidencia},
+		#{sEDestinoCredito},
+		#{sEActividadPrimaria},
+		#{sEAntiguedadNegocio},
+		#{sEAntiguedadRubro},
+		#{sETipoNegocio},
+		#{sEPorcentajeGanancia},
+		#{sEGananciaSemanalNegocio},
+		#{sEOtrosIngresos},
+		#{sEGananciaActividadSecundaria},
+		#{sETotalGastosFamiliares},
+		#{sEDisponibleCalculado},
+		#{sEMontoDeclarado},
+		#{sESuperavitCuotaMonto},
+		#{sESuperavitCuotaDisponible},
+		#{sETotalDeclaradoNegocio}
+		)
+	</insert>
+
+	<select id="verificaExisteAtomo" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+
+		SELECT count(*)
+		FROM atomos
+		WHERE solicitud = #{solicitud}
+		AND proceso = #{proceso}
+
+	</select>
+
+	<update id="actualizarEtapaCEC" parameterType="java.util.HashMap">
+		UPDATE
+		solicitudes_finsol SET
+		etapa = 'true'
+		WHERE solicitud = #{solicitud}
+	</update>
+
+	<update id="pasaXIntegrantesSolicitud" parameterType="java.lang.String">
+		UPDATE
+		solicitud_integrantes SET
+		status = 'X'
+		WHERE solicitud = #{solicitud}
+	</update>
+
+	<update id="actualizaPerDomReu" parameterType="java.lang.String">
+		UPDATE
+		solicitudes_finsol SET
+		persona_dom_reunion = ''
+		WHERE solicitud =
+		#{solicitud}
+	</update>
+
+	<update id="actualizarEtapaFalseSolicitud" parameterType="java.lang.String">
+		UPDATE
+		solicitudes_finsol SET
+		etapa = 'false'
+		WHERE solicitud = #{solicitud}
+	</update>
+
+	<update id="actualizarDesertor" parameterType="java.util.HashMap">
+		UPDATE
+		dbo.solicitud_integrantes
+		SET desertor = 'S'
+		WHERE solicitud = #{solicitud}
+		AND cliente = #{cliente}
+	</update>
+
+	<!-- Buzon de Excepciones -->
+
+	<insert id="insertaTareaExcepcionGarantia" parameterType="java.util.HashMap">
+
+		INSERT
+		INTO tareas_excepcion_garantia
+		(
+		id_tarea, solicitud, justificacion,
+		codigo_estatus_autorizacion, usuario_autorizacion,
+		fecha_autorizacion,
+		observaciones
+		)
+		VALUES
+		(
+		#{idTarea}, #{solicitud}, #{justificacion}, null,
+		null,
+		null, null
+		)
+
+	</insert>
+
+	<select id="obtenerBuzonExAsigPorDiv" parameterType="java.util.HashMap"
+		resultMap="buzonExMap">
+
+		SELECT
+		bt.id_tarea AS idTarea,
+		solf.contrato AS contrato,
+		prod.descripcion AS producto,
+		solf.efectivo_solicitado AS
+		montoSolicitado,
+		bt.descripcion AS solicitud,
+		pers.nombre AS
+		nombreGrupo,
+		solf.cliente AS cliente,
+		suc.sucursal AS numeroSucursal,
+		suc.nombre AS sucursal,
+		div.division AS numeroDivision,
+		div.nombre AS
+		division,
+		solf.ciclo AS ciclo,
+		zona.nombre AS region,
+		zona.region AS
+		numeroRegion,
+		cod.descripcion AS campana,
+		bt.tipo_tarea AS tipoTarea,
+		tex.justificacion AS justificacion,
+		CONVERT(varchar(10),
+		tex.fecha_autorizacion, 103) AS fechaAutorizacion,
+		CONVERT(varchar(10), solf.fecha_captura, 103) AS fechaCaptura,
+		CONVERT(varchar(10), bt.fecha_alta, 103) AS fechaIngreso,
+		datediff(mi,
+		bt.fecha_alta , getdate()) AS espera,
+		tex.observaciones AS
+		observaciones,
+		isnull(solf.pct_garantia,0) AS pctGarantia,
+		isnull(c.monto,0) AS montoCreditoAnterior,
+		isnull(cc.valor,'0') AS
+		garantiaCreditoAnterior,
+		isnull(solf.express,'N') AS express
+
+		FROM buzon_tareas bt
+
+		LEFT JOIN tareas_excepcion_garantia tex ON tex.id_tarea = bt.id_tarea
+		LEFT JOIN solicitudes_finsol solf ON bt.descripcion = solf.solicitud
+		LEFT JOIN codigos cod ON solf.campana = cod.codigo AND tipo_codigo =
+		'CECG'
+		LEFT JOIN productos prod ON solf.codigo_producto = prod.producto
+		LEFT JOIN personas pers ON pers.persona = solf.cliente
+		LEFT JOIN sucursales suc ON (suc.sucursal = bt.sucursal)
+		LEFT JOIN regiones zona ON (zona.region = suc.region)
+		LEFT JOIN divisiones div ON (div.division = zona.division)
+		LEFT JOIN contratos c ON c.contrato = solf.contrato_ant
+		LEFT JOIN condiciones_contrato cc ON cc.contrato = c.contrato AND
+		cc.clave_condicion = 'PCT_DEP_GARANTIA'
+
+		WHERE
+		div.division = #{division}
+		AND bt.perfil = 'PCOM'
+		AND bt.tipo_tarea = 'TOEG'
+		AND bt.status = 'P'
+		ORDER BY espera desc
+
+	</select>
+
+	
+
+
+	<update id="autorizaBuzonExcepcionTareasExGar" parameterType="java.util.HashMap">
+
+		UPDATE tareas_excepcion_garantia
+		SET codigo_estatus_autorizacion = 'APRO' ,
+		fecha_autorizacion = getdate(),
+		usuario_autorizacion = #{usuarioAut},
+		observaciones = #{observaciones}
+		WHERE id_tarea = #{idTarea}
+
+	</update>
+
+	<update id="autorizaBuzonExcepcion" parameterType="java.util.HashMap">
+
+		UPDATE
+		dbo.buzon_tareas
+		SET fecha_ult_mod = getdate() ,status = 'A'
+		WHERE
+		id_tarea = #{idTarea}
+
+	</update>
+
+	<update id="rechazaBuzonExcepcionTareasExGar" parameterType="java.util.HashMap">
+
+		UPDATE tareas_excepcion_garantia
+		SET codigo_estatus_autorizacion =
+		'RECH',
+		fecha_autorizacion = getdate(),
+		usuario_autorizacion =
+		#{usuarioAut},
+		observaciones = #{observaciones}
+		WHERE id_tarea =
+		#{idTarea}
+
+	</update>
+
+	<update id="rechazaBuzonExcepcion" parameterType="java.util.HashMap">
+
+		UPDATE
+		dbo.buzon_tareas
+		SET fecha_ult_mod = getdate() ,status = 'A'
+		WHERE
+		id_tarea = #{idTarea}
+
+
+	</update>
+
+	<update id="accionEnteradoIdTareaExcepcion" parameterType="java.util.HashMap">
+
+		UPDATE dbo.buzon_tareas
+		SET fecha_ult_mod = getdate() ,status = 'A'
+		WHERE id_tarea = #{idTarea}
+		AND tipo_tarea = 'TOEG'
+		AND perfil = 'PSUC'
+		AND status = 'P'
+
+	</update>
+
+	<!-- Buzon de Excepciones -->
+
+	<select id="obtenerIdplanillaAprobacionIntegrante" resultType="java.lang.Integer">
+		SELECT CASE
+		WHEN max(id_planilla) = NULL then 1
+		ELSE max(id_planilla) + 1
+		END AS numero
+		FROM integrante_planilla_aprobacion
+	</select>
+
+	<insert id="insertaSolicitudPlanillaAprobacion" parameterType="java.util.HashMap">
+		<![CDATA[INSERT INTO solicitud_planilla_aprobacion
+			(
+			solicitud,
+			producto,
+			sucursal,
+			plazo,
+			frecuencia,
+
+			monto_solicitado,
+			tasa,
+			ciclo,
+			campana,
+			nivel_restriccion,
+
+			tipificacion_sucursal,
+			resultado_verificacion_tel,
+			resultado_buro_credito,
+			usuario_buro_credito,
+			json_planilla,
+
+			id_atomo,
+			fecha_hora,
+			estatus
+			)
+		VALUES
+			(
+			#{solicitud},
+			#{producto},
+			#{sucursal},
+			#{plazo},
+			#{frecuencia},
+
+			#{montoSolicitado},
+			#{tasa},
+			#{ciclo},
+			#{campana},
+			#{nivelRestriccion},
+
+			#{tipificacionSucursal},
+			#{resultadoVerificacionTel},
+			#{resultadoBuroCredito},
+			#{usuarioBuroCredito},
+			#{jsonPlanilla},
+			#{idAtomo},
+			getdate(),
+			#{estatus}
+		)]]>
+	</insert>
+
+	<update id="updateSolicitudPlanillaAprobacion" parameterType="java.util.HashMap">
+		update solicitud_planilla_aprobacion set json_planilla = json_planilla
+		+ #{jsonPlanilla} where id_planilla = #{idPlanilla}
+	</update>
+
+	<select id="obtenerIdSolicitudPlanillaAprobacion" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT CASE
+		WHEN max(id_planilla) = NULL then 1
+		ELSE max(id_planilla)
+		END
+		FROM solicitud_planilla_aprobacion
+	</select>
+
+	<update id="actualizarAtomoObservaciones" parameterType="java.util.HashMap">
+		update
+		planilla_observaciones_his
+		SET id_atomo = #{idAtomo}
+		WHERE id_atomo =
+		convert(NUMERIC(10), #{solicitud})
+	</update>
+
+	<select id="obtenerVariableParGeneral" parameterType="String"
+		resultType="java.lang.String">
+
+		SELECT cg_valor as valor FROM par_general pg WHERE
+		pg.cc_parametro = #{1}
+
+	</select>
+
+	<select id="obtenerDatosPlanillaAprobacionModuloCEC"
+		parameterType="java.lang.String"
+		resultType="utilitario.mensajes.originacion.aprobacion.IntegrantePlanillaAprobacionDTO">
+
+		SELECT sfi.cliente AS persona,
+		rcf.clave_cu AS claveClienteUnico,
+		p.nombre +' '+ p.apellido_pat +' '+ p.apellido_mat AS dINombreCliente,
+		p.fecha_nacimiento,
+		DATEDIFF(yy, p.fecha_nacimiento, GETDATE()) AS dIEdad,
+		p.edo_civil,
+		ISNULL(codigo_edo_civil.descripcion, 'SOLTERO') AS dIEstadoCivil,
+		(SELECT isnull(max(inte.ciclo_integrante), 0)
+		FROM integrante_grupo inte
+		INNER JOIN contratos con ON con.contrato = inte.contrato
+		where inte.integrante = p.persona
+		AND inte.status != 'I'
+		AND con.status != 'X'
+		) AS dICiclo,
+		isnull(sfi.efectivo_solicitado,0) AS dIMontoSolicitado,
+		p.tipo_vivienda,
+		CASE
+		WHEN frecuencia_pago = 'S' THEN
+		(isnull(datediff(day,sf.fecha_resolucion,sf.fecha_fin),0) *
+		(sf.tasa/100/360) *
+		isnull(sfi.efectivo_solicitado,0) + isnull(sfi.efectivo_solicitado,0)) / (sf.plazo)
+		ELSE
+		(isnull(datediff(day,sf.fecha_resolucion,sf.fecha_fin),0) *
+		(sf.tasa/100/360) *
+		isnull(sfi.efectivo_solicitado,0) + isnull(sfi.efectivo_solicitado,0)) / (sf.plazo*2)
+		END AS sECuotaSemanal,
+		isnull(codigo_tipo_domicilio.descripcion,'Otra') AS sETipoDomicilio,
+		DATEDIFF(year, p.fecha_domicilio, getdate()) AS sETiempoResidencia,
+		isnull(codigo_destino_credito.descripcion,'') AS sEDestinoCredito,
+		isnull(p.actividad_emp, 'COMERCIO') AS sEActividadPrimaria,
+		isnull(pc.exp_negocio,0) AS sEAntiguedadNegocio,
+		isnull(pc.exp_rubro,0) AS sEAntiguedadRubro,
+		isnull(codigo_tipo_negocio.descripcion,'OTRO') AS sETipoNegocio,
+		CASE
+		WHEN isnull(pc.monto_ventas,0) = 0 THEN 0
+		ELSE
+		(isnull(pc.ganancia_neta,0) / isnull(pc.monto_ventas,0))
+		END AS sEPorcentajeGanancia,
+		isnull(pc.ganancia_neta,0) AS sEGananciaSemanalNegocio,
+		isnull(pc.otros_ingresos,0) / 2 AS sEOtrosIngresos,
+		isnull(pc.ganancia_act_sec,0) AS sEGananciaActividadSecundaria,
+		isnull(pc.gastos_familiares,0) AS sETotalGastosFamiliares,
+		isnull(pc.ganancia_neta,0) +
+		(isnull(pc.otros_ingresos,0) / 2) +
+		isnull(pc.ganancia_act_sec,0) -
+		isnull(pc.gastos_familiares,0) AS sEDisponibleCalculado,
+		isnull(p.ingreso_cp,0) AS sEMontoDeclarado,
+		0 AS sESuperavitCuotaMonto,
+		0 AS sESuperavitCuotaDisponible,
+		(isnull(pc.monto_inventario,0) + isnull(pc.monto_mobiliario_equipo,0)) AS sETotalDeclaradoNegocio
+		FROM solicitudes_finsol sf
+		INNER JOIN solicitud_integrantes sfi ON sfi.solicitud = sf.solicitud
+		INNER JOIN personas p ON p.persona = sfi.cliente
+		INNER JOIN relacion_clave_finsol rcf ON rcf.persona = p.persona
+		LEFT JOIN persona_complemento pc ON pc.persona = p.persona
+		LEFT JOIN codigos codigo_edo_civil ON codigo_edo_civil.tipo_codigo =
+		'ECIV' AND codigo_edo_civil.codigo = p.edo_civil
+		LEFT JOIN codigos codigo_tipo_domicilio ON
+		codigo_tipo_domicilio.tipo_codigo = 'VIVI' AND
+		codigo_tipo_domicilio.codigo = p.tipo_vivienda
+		LEFT JOIN codigos codigo_destino_credito ON
+		codigo_destino_credito.tipo_codigo = 'CDCS' AND
+		codigo_destino_credito.codigo = sfi.codigo_destino_credito
+		LEFT JOIN codigos codigo_tipo_negocio ON codigo_tipo_negocio.tipo_codigo =
+		'TIPN' AND codigo_tipo_negocio.codigo = p.tipo_establecimiento
+		WHERE sf.solicitud = #{solicitud}
+		AND sfi.status != 'X'
+		AND sf.status != 'X'
+
+	</select>
+
+	<select id="obtenerDatosCabeceraPlanillaAprobacion"
+		parameterType="java.lang.String"
+		resultType="utilitario.mensajes.solicitudes.CabeceraPlanillaAprobacionOV">
+		SELECT sf.solicitud,
+		sf.oficina AS sucursal,
+		s.nombre as nombreSucursal,
+		per.nombre AS nombreGrupo,
+		sf.plazo AS plazo,
+		sf.frecuencia_pago AS frecuencia,
+		case
+		WHEN sf.frecuencia_pago = 'S' THEN 'Semanas'
+		WHEN sf.frecuencia_pago = 'C' THEN 'Catorcenas'
+		END AS descFrecuencia,
+		sf.efectivo_solicitado AS montoSolicitado,
+		sf.tasa AS tasa,
+		sf.ciclo,
+		sf.codigo_producto AS codigoProducto,
+		p.descripcion AS descProducto,
+		isnull(sf.campana, '') AS codigoCampana,
+		isnull(co3.descripcion, 'SIN CAMPAÑA') AS campana,
+		sti.valor_tipificacion AS nivelRestriccion,
+		co.descripcion AS descNivelRestriccion,
+		sti2.valor_tipificacion AS tipoSucursal,
+		co2.descripcion AS descTipoSucursal,
+		CASE
+		WHEN bvf.estatus_verificacion = 'SOLICITUD_VALIDA' THEN 'Aprobado'
+		WHEN bvf.estatus_verificacion = null THEN 'Rechazado'
+		ELSE 'Rechazado'
+		END AS verificacionTelefonica,
+		CASE
+		WHEN sbg.resultado = 'CUMPLE REQUISITOS BURO' THEN 'Aprobado'
+		WHEN sbg.resultado = null THEN 'Rechazado'
+		ELSE 'Rechazado'
+		END AS verificacionBuroCredito,
+		sf.status as status
+		FROM solicitudes_finsol sf
+		INNER JOIN personas per ON
+		per.persona = sf.cliente
+		INNER JOIN sucursales s ON sf.oficina =
+		s.sucursal
+		INNER JOIN productos p ON p.producto = sf.codigo_producto
+		INNER JOIN sucursales_tipificaciones sti ON sf.oficina = sti.sucursal
+		AND sti.tipificacion = 'TFNR'
+		INNER JOIN sucursales_tipificaciones sti2
+		ON sf.oficina = sti2.sucursal AND sti2.tipificacion = 'TFTS'
+		INNER JOIN
+		codigos co ON sti.valor_tipificacion = co.codigo
+		INNER JOIN codigos co2
+		ON sti2.valor_tipificacion = co2.codigo
+		LEFT JOIN codigos co3 ON
+		sf.campana = co3.codigo
+		LEFT JOIN bitacora_verificacion_finsol bvf ON
+		sf.solicitud = bvf.solicitud
+		LEFT JOIN solicitud_buro_general sbg ON
+		sf.solicitud = sbg.solicitud
+		AND sbg.fecha = (SELECT max(fecha) FROM solicitud_buro_general WHERE
+		solicitud = sf.solicitud)
+		WHERE sf.solicitud = #{solicitud}
+	</select>
+
+	<update id="registroInicioGestionCEC" parameterType="java.util.HashMap">
+		update
+		tareas_evaluacion_credito SET fecha_inicio_gestion = getdate()
+		WHERE
+		id_tarea = #{idTarea}
+		AND fecha_inicio_gestion IS NULL
+	</update>
+
+	<select id="obtenerMensajExcepcion" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT TOP 1 motivo_excepcion FROM
+		tareas_excepcion_documental ted
+		INNER JOIN buzon_tareas bt ON
+		bt.id_tarea = ted.id_tarea
+		WHERE ted.solicitud = #{1}
+		ORDER BY
+		ted.fecha_asignacion_pool DESC
+	</select>
+
+	<update id="actualizarFechAsignacionDocumental" parameterType="java.lang.String">
+		UPDATE solicitudes_finsol SET
+		fecha_asigna_documental = getdate()
+		WHERE solicitud = #{1}
+	</update>
+
+
+	<!-- fase2: automatizacion de buro -->
+	<insert id="insertaBuzonTareaExcepcionGarantia" parameterType="java.util.HashMap"
+		keyProperty="idTarea">
+
+		INSERT INTO buzon_tareas
+		(
+		tipo_tarea, sucursal, descripcion,
+		fecha_alta, usuario_alta,
+		fecha_asignacion, fecha_ult_mod,
+		usuario_propietario, fecha_termino,
+		perfil, status, id_tarea_padre
+		)
+		VALUES
+		(
+		#{tipoTarea}, #{sucursal}, #{descripcion}, getdate(),
+		#{usuarioAlta},
+		<if test="fechaAsignacion == null">
+			NULL,
+		</if>
+		<if test="fechaAsignacion != null">
+			getdate(),
+		</if>
+		getdate(),
+		<if test="usuarioPropietario == null">
+			NULL,
+		</if>
+		<if test="usuarioPropietario != null">
+			#{usuarioPropietario},
+		</if>
+		NULL, #{perfil}, #{status},
+
+		<if test="idTareaPadre == null">
+			NULL
+		</if>
+		<if test="idTareaPadre != null">
+			#{idTareaPadre}
+		</if>
+
+		)
+
+		<selectKey resultType="java.lang.Integer" keyProperty="idTarea">
+			SELECT max(id_tarea) as value FROM buzon_tareas
+		</selectKey>
+
+	</insert>
+
+	<insert id="insertaTareaExcepcionCampana" parameterType="java.util.HashMap">
+		INSERT
+		INTO tareas_excepcion_campania
+		(
+		id_tarea, solicitud, tipo_excepcion, justificacion, campana
+		)
+		SELECT
+		#{idTarea}, #{solicitud}, #{tipoException}, #{justificacion},
+		isnull(campana, '') AS campana
+		FROM solicitudes_finsol
+		WHERE solicitud = #{solicitud}
+	</insert>
+
+	<update id="actualizarBuzonTareaCampania" parameterType="java.util.HashMap">
+		UPDATE tareas_excepcion_campania
+		SET
+		<if test="perfilAutoriza == 'REGIONAL'">
+			autoriza_regional = #{personAutoriza},
+			fecha_regional = getdate(),
+		</if>
+		<if test="perfilAutoriza == 'DIVISIONAL'">
+			autoriza_divisional = #{personAutoriza},
+			fecha_divisional = getdate(),
+		</if>
+		<if test="perfilAutoriza == 'RIESGO'">
+			autoriza_riesgos = #{personAutoriza},
+			fecha_riesgos = getdate(),
+		</if>
+		<if test="perfilAutoriza == 'RIESGO' or status == 'RECH' ">
+			codigo_estatus = #{status},
+		</if>
+		<if test="perfilAutoriza == 'REGIONAL'">
+			observaciones = 'REGIONAL:' + #{observaciones} + ' DIVISIONAL:'
+		</if>
+		<if test="perfilAutoriza == 'DIVISIONAL'">
+			observaciones = #{observaciones} + ' RIESGO:'
+		</if>
+		<if test="perfilAutoriza == 'RIESGO'">
+			observaciones = #{observaciones}
+		</if>
+		WHERE id_tarea = #{idTarea}
+		AND solicitud = #{solicitud}
+	</update>
+
+	<update id="actualizarBuzonTarea" parameterType="java.util.HashMap">
+		UPDATE
+		buzon_tareas
+		SET fecha_ult_mod = getdate(),
+		status = #{statusInicial},
+		fecha_termino = getdate()
+		WHERE id_tarea = #{idTarea}
+		AND descripcion= #{solicitud}
+	</update>
+
+	<insert id="insertaEstatusAnalista" parameterType="java.util.HashMap">
+		INSERT INTO
+		analista_estatus_asistencia
+		(
+		persona, fecha_registro, estatus, fecha_inicio, fecha_fin, usuario_registra
+		)
+		VALUES
+		(
+		#{persona}, getdate(), #{estatus}, getdate(), getdate(), #{usuarioMod}
+		)
+	</insert>
+
+	<insert id="eliminaEstatusAnalista" parameterType="java.util.HashMap">
+		DELETE FROM
+		analista_estatus_asistencia
+		WHERE persona= #{persona}
+		AND fecha_registro
+		= getdate()
+		AND estatus != 'PFVA'
+	</insert>
+
+	<update id="actualizaSolicutdReactivadaPrimero" parameterType="java.lang.String">
+		UPDATE dbo.solicitudes_finsol
+		SET reactivacion = 0
+		WHERE solicitud = #{solicitud}
+	</update>
+
+	<update id="actualizaSolicutdReactivada" parameterType="java.util.HashMap">
+		UPDATE
+		dbo.solicitudes_finsol
+		SET reactivacion = #{paramReactivacion}
+		WHERE solicitud = #{solicitud}
+	</update>
+
+	<select id="consultaSolicitudReactivada" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.solicitudes.SolicitudesOV">
+
+		SELECT reactivacion, solicitud_origen
+		FROM solicitudes_finsol
+		WHERE solicitud = #{solicitud}
+
+	</select>
+
+	<select id="obtieneParametroReactivarSolicitudes" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+
+		SELECT ISNULL(reactivacion, 0) AS reactivacion
+		FROM solicitudes_finsol
+		WHERE solicitud = #{solicitud}
+
+	</select>
+
+	<select id="obtieneClienteReactivarSolicitudes" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.solicitudes.ReactivarSolicitudes">
+
+		SELECT solicitud,
+		cliente
+		FROM solicitud_integrantes
+		WHERE solicitud = #{solicitud}
+
+	</select>
+
+	<insert id="insertaReactivarSolicitud" parameterType="java.util.HashMap">
+		INSERT INTO solicitudes_finsol (
+		solicitud, clave_empresa, credito_grupal,
+		numero_integrantes, oficina, segmento,
+		categoria, codigo_producto,
+		cliente, efectivo_solicitado, monto_solicitado,
+		frecuencia_pago,
+		plazo_solicitado, dia_pago, tasa, comision_apertura, cat,
+		oficina_disposicion, plazo, hora_reunion, dia_reunion,
+		numero_familiares_grupo,
+		monto_pago, monto_financiado_cont_ant,
+		contrato_ant, fecha_resolucion, hora_resolucion,
+		efectivo_otorgado,
+		monto_otorgado, contrato, vendedor, vendedor_orig, gte_ventas,
+		grupo_ventas,
+		gte_sucursal, contrato_recomienda, clave_corresponsal,
+		status, ciclo, origen_venta, etapa,
+		tipo_verificacion, fecha_captura,
+		hora_captura, etapa_anterior, motivo_status, fecha_ult_mod,
+		hora_ult_mod, usuario_registra_solicitud, hora_reunion_fin,
+		persona_dom_reunion, excepcion_garantia,
+		autorizacion_garantia,
+		usuario_autorizacion, fecha_autorizacion, seguro, estatus,
+		descripcion, fecha_fin,
+		express, campana, senalamiento_excepcion,
+		asignacion_cec, dt_asignacion_cec, traspaso_garantia,
+		pct_garantia,
+		motivo_cancelacion, aplicar_garantia, aplicar_garantia_desertor,
+		garantia_justificacion,
+		competencia_monto_capital,
+		competencia_total_pagar, competencia_plazo,
+		competencia_total_integrantes,
+		competencia_tasa_anual,
+		fecha_aprobacion_cec, fecha_reg_exp_cm, fecha_asigna_documental,
+		reactivacion, solicitud_origen)
+
+		SELECT #{solicitudFolio}, clave_empresa, credito_grupal, numero_integrantes,
+		oficina, segmento, categoria,
+		codigo_producto, cliente, efectivo_solicitado, monto_solicitado, frecuencia_pago,
+		plazo_solicitado,
+		dia_pago, tasa, comision_apertura, cat, oficina_disposicion, plazo,
+		hora_reunion, dia_reunion,
+		numero_familiares_grupo, monto_pago, monto_financiado_cont_ant, contrato_ant, getdate() as
+		fecha_resolucion,
+		getdate() as hora_resolucion, efectivo_otorgado, monto_otorgado, contrato,
+		vendedor, vendedor_orig, gte_ventas,
+		grupo_ventas, gte_sucursal, contrato_recomienda, clave_corresponsal, 'A' AS status,
+		ciclo, origen_venta,
+		'false' as etapa, tipo_verificacion, getdate() as fecha_captura, getdate() as
+		hora_captura, etapa_anterior, '' AS motivo_status,
+		getdate() as fecha_ult_mod, getdate() as hora_ult_mod,
+		usuario_registra_solicitud, hora_reunion_fin, persona_dom_reunion,
+		excepcion_garantia,
+		autorizacion_garantia, usuario_autorizacion, fecha_autorizacion, seguro, '' AS estatus, ''
+		AS descripcion,
+		fecha_fin, express, campana, senalamiento_excepcion, '' AS asignacion_cec, ''AS
+		dt_asignacion_cec, traspaso_garantia,
+		pct_garantia, '' as motivo_cancelacion, aplicar_garantia,
+		aplicar_garantia_desertor, garantia_justificacion,
+		competencia_monto_capital, competencia_total_pagar, competencia_plazo,
+		competencia_total_integrantes,
+		competencia_tasa_anual, NULL AS fecha_aprobacion_cec, NULL as fecha_reg_exp_cm, NULL AS fecha_asigna_documental,
+		0, #{solicitud}
+		FROM solicitudes_finsol WHERE solicitud = #{solicitud}
+
+	</insert>
+
+	<insert id="insertaReactivarSolicitudCliente" parameterType="java.util.HashMap">
+		INSERT INTO solicitud_integrantes (
+		solicitud, cliente, monto_ahorro, efectivo_solicitado, monto_solicitado,
+		monto_financiado_cont_ant,
+		monto_pago, efectivo_otorgado, monto_otorgado, ingresos, otros_ingresos, egresos,
+		medio_contacto,
+		findep_score, tabla_score, bc_score, codigo_destino_credito,
+		autorizo_consulta_imss, clave_imss,
+		clave_reso_infonavit, clave_reso_imss, cheque_para, monto_seguro, tipo_disposicion,
+		cargo_mesa_directiva,
+		contrato_anterior, monto_contrato_anterior, hit_bc, numero_cuentas_bc,
+		clasificacion_fira, pct_participacion,
+		etapa_anterior, motivo_status, status, etapa, numero_integrante, referencia,
+		aprobado, saldo_actual, seguro,
+		ciclo, campania_iguala, plazo_seguro, seguro_enfermedad, desertor,
+		per_cre_renovar, desertor_garantia_aplicar,
+		desertor_diferencia_pagar, empresa_origen, origen_elimina, usuario_elimina)
+
+		SELECT #{solicitudFolio}, #{cliente}, monto_ahorro, efectivo_solicitado,
+		monto_solicitado, monto_financiado_cont_ant,
+		monto_pago, efectivo_otorgado, monto_otorgado, ingresos, otros_ingresos, egresos,
+		medio_contacto, findep_score,
+		tabla_score, bc_score, codigo_destino_credito, autorizo_consulta_imss, clave_imss,
+		clave_reso_infonavit, clave_reso_imss,
+		cheque_para, monto_seguro, tipo_disposicion, cargo_mesa_directiva,
+		contrato_anterior, monto_contrato_anterior,
+		hit_bc, numero_cuentas_bc, clasificacion_fira, pct_participacion,
+		etapa_anterior, motivo_status, status, etapa,
+		numero_integrante, referencia, aprobado, saldo_actual, seguro, ciclo, campania_iguala,
+		plazo_seguro, seguro_enfermedad,
+		desertor, per_cre_renovar, desertor_garantia_aplicar,
+		desertor_diferencia_pagar, empresa_origen, origen_elimina,
+		usuario_elimina
+		FROM solicitud_integrantes WHERE solicitud = #{solicitud} AND cliente =
+		#{cliente}
+
+	</insert>
+
+	<insert id="insertaBuzonTareaFirmaElectronica" parameterType="java.util.HashMap" keyProperty="idTarea">
+		INSERT INTO buzon_tareas
+		(
+		tipo_tarea, sucursal, descripcion, fecha_alta, usuario_alta,
+		fecha_asignacion, fecha_ult_mod, perfil, status
+		)
+		VALUES
+		(
+		#{tipoTarea}, #{sucursal}, #{descripcion}, getdate(),	#{usuarioAlta},
+		getdate(), getdate(), #{perfil}, #{status}
+		)
+		<selectKey resultType="java.lang.Integer" keyProperty="idTarea">
+			SELECT max(id_tarea) as value FROM buzon_tareas
+		</selectKey>
+	</insert>
+	<insert id="insertaTareaFirmaElectronica" parameterType="java.util.HashMap">
+		INSERT INTO tareas_firma_electronica
+		(
+		id_tarea, solicitud, correo, motivo_CEC, fecha_envio_regional
+		)
+		VALUES
+		(
+		#{idTarea}, #{solicitud}, #{correo}, #{motivoCEC}, getdate()
+		)
+	</insert>
+	<insert id="insertaDetalleTareaFirmaElectronica" parameterType="java.util.HashMap">
+		INSERT INTO detalle_tarea_firma_elec
+		(
+		id_tarea, solicitud, codigo_motivo
+		)
+		VALUES
+		(
+		#{idTarea}, #{solicitud}, #{motivo}
+		)
+	</insert>
+	<update id="actualizaTareaFEBuzon" parameterType="java.util.HashMap">
+		UPDATE dbo.buzon_tareas
+        SET fecha_ult_mod = getdate(),
+	        usuario_propietario = #{usuario},
+	        fecha_termino = getdate(),
+	        status = 'A'
+            WHERE id_tarea = #{idTarea}
+	</update>
+	<update id="actualizaTareaFE" parameterType="java.util.HashMap">
+		UPDATE dbo.tareas_firma_electronica
+        SET
+        <if test="perfilAutoriza == 'REGIONAL'">
+	       	autoriza_regional = #{usuario},
+		    fecha_respuesta_regional = getdate(),
+			codigo_resolucion_regional = #{codigo},
+		    observaciones =  'REGIONAL: ' + #{observacion}
+	    </if>
+
+	    <if test="perfilAutoriza == 'DIVISIONAL' and autoriza == 'Si' ">
+	    	observaciones = #{observaciones},
+        	autoriza_divisional = #{usuario},
+        	fecha_respuesta_divisional = getdate(),
+        	codigo_resolucion_divisional = #{codigo}
+        </if>
+
+         <if test="perfilAutoriza == 'SUBDIRECTOR'  and autoriza == 'Si' ">
+        	observaciones = #{observaciones},
+        	autoriza_subdirector = #{usuario},
+        	fecha_respuesta_subdirector = getdate(),
+        	codigo_resolucion_subdirector = #{codigo}
+        </if>
+
+        <if test="perfilAutoriza == 'DIVISIONAL' and nuevaTarea == 'Si'">
+        	correo = #{correo},
+        	autoriza_divisional = #{usuario},
+        	fecha_envio_divisional = getdate()
+        </if>
+
+        <if test="perfilAutoriza == 'SUBDIRECTOR' and nuevaTarea == 'Si'">
+        	correo = #{correo},
+        	autoriza_subdirector = #{usuario},
+        	fecha_envio_subdirector = getdate()
+        </if>
+
+            WHERE id_tarea = #{idTarea}
+	</update>
+</mapper>

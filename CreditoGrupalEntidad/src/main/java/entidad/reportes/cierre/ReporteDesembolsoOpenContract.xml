@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<!-- Namespace es un nombre cualquiera -->
+<mapper namespace="creditogrupal.entity.reportes.cierre.ibatis">
+
+	<!-- ******************************************************************************************* -->
+	<!-- SECCION PARA DEFINIR LOS RESULT MAPS QUE SERÁN EMPLEADOS POR ALGUN
+		QUERY DESDE ESTE ARCHIVO -->
+	<!-- ******************************************************************************************* -->
+
+	<!-- type sale del archivo ConfigNTx.xml del typeAlias, id= nombre cualquiera
+		para identificar el resultMap generado -->
+
+	<!-- Mapeo para obtener los datos del reporte de contratos activos con mora -->
+	<resultMap id="desembolsoOpenContractId" type="desembolsoOpenContract">
+		<!-- property=campo en mi OV, column=nombre_campo_tabla (en dado caso el
+			que esta despues de AS) -->
+		<result property="numContrato" column="No_Contrato" />
+		<result property="contrato" column="Contrato" />
+		<result property="nombreGrupo" column="Nombre_Grupo" />
+		<result property="producto" column="Producto" />
+		<result property="fechaInicio" column="Fecha_Inicio" />
+
+		<result property="fechaFin" column="Fecha_Fin" />
+		<result property="montoPrestamo" column="Monto_Prestamo" />
+		<result property="montoFinanciado" column="Monto_Financiado" />
+		<result property="comision" column="Comision" />
+		<result property="montoReal" column="Monto_Real" />
+		<result property="estatus" column="Estatus" />
+
+		<result property="periodicidad" column="Periodicidad" />
+		<result property="tasa" column="Tasa" />
+		<result property="numSucursal" column="No_Sucursal" />
+		<result property="sucursal" column="Sucursal" />
+		<result property="asesor" column="Asesor" />
+
+		<result property="nombreAsesor" column="Nombre_Asesor" />
+		<result property="authorizer" column="Authorizer" />
+		<result property="iva" column="IVA" />
+		<result property="claveT24" column="clave_finsol" />
+		<result property="montoDevuelto" column="montoDevuelto" />
+	</resultMap>
+
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR EL NUMERO DE REGISTROS A PROCESAR -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Contamos todos los registros a procesar para el reporte Contratos Activos
+		Mora -->
+	<!--<select id ="obtenerTotalRegistrosReporteCsvCierreOpenContract" parameterType="java.lang.String"
+		resultType="Integer"> SELECT COUNT(*) AS TotalOpenContract FROM contratos
+		c WHERE c.status = 'D' AND c.clave_empresa = '100000003' AND c.fecha_disposicion
+		= #{1} /*Param: fecha cierre, Param prueba: 2007-12-13*/ </select> -->
+
+	<select id="obtenerTotalRegistrosReporteCsvCierreOpenContract"
+		parameterType="java.lang.String" resultType="Integer">
+		SELECT
+		COUNT(*) AS TotalOpenContract
+		FROM contratos c
+		WHERE c.status = 'D'
+		AND c.clave_empresa = '100000003'
+		AND
+		c.fecha_disposicion = #{1}
+	</select>
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR EL NUMERO DE REGISTROS A PROCESAR -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Contamos todos los registros a procesar para el reporte Contratos Activos
+		Mora -->
+	<select id="obtenerTotalRegistrosReporteCierreOpenContract"
+		parameterType="java.util.Map" resultType="Integer">
+		SELECT
+		COUNT(*) AS TotalOpenContract
+		<!-- FROM contratos c -->
+		<!-- WHERE -->
+		<!-- c.status = 'D' -->
+		<!-- AND c.clave_empresa = '100000003' -->
+		<!-- AND c.fecha_disposicion = #{fechaCierre} /*Param: fecha cierre, Param
+			prueba: 2007-12-13*/ -->
+		FROM
+		contratos c, contrato_clave_finsol, personas, productos, sucursales,
+		contrato_grupo, relacion_clave_finsol rcf
+		WHERE
+		contrato_clave_finsol.contrato = c.contrato
+		AND personas.persona = c.cliente
+		AND productos.producto = c.producto
+		AND sucursales.sucursal = c.sucursal
+		AND contrato_grupo.contrato = c.contrato
+		AND rcf.persona = c.cliente
+		AND c.clave_empresa = '100000003'
+		<if test="fechaDisposicionInicio != null">
+			<if test="fechaDisposicionFinal != null">
+			    		<![CDATA[ AND c.fecha_disposicion between #{fechaDisposicionInicio} AND #{fechaDisposicionFinal} ]]>
+			</if>
+		</if>
+		<if test="nombreGrupo != null">
+					<![CDATA[ AND personas.nombre like #{nombreGrupo}||'%'  ]]>
+		</if>
+		<if test="fechaLiquidacionInicio != null">
+			<if test="fechaLiquidacionFinal != null">
+						<![CDATA[ AND c.fecha_esp_liq between #{fechaLiquidacionInicio} AND #{fechaLiquidacionFinal} ]]>
+			</if>
+		</if>
+		<if test="sucursal != null">
+					<![CDATA[ AND c.sucursal = #{sucursal}  ]]>
+		</if>
+		<if test="asesor != null">
+					<![CDATA[ AND contrato_grupo.asesor = #{asesor}  ]]>
+		</if>
+		<if test="contrato != null">
+					<![CDATA[ AND c.contrato = #{contrato}  ]]>
+		</if>
+	</select>
+
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR LOS QUERIES QUE SERÁN EJECUTADOS DESDE ALGUNA
+		CLASE DE JAVA -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Obtenemos el bloque correspondiente de registros (contratosActivosMora) -->
+	<select id="obtenerReporteCierreDesembolsoOpenContract"
+		parameterType="java.lang.String" resultMap="desembolsoOpenContractId">
+		<![CDATA[
+			SELECT  contrato_clave_finsol.contrato_LD               		 AS No_Contrato,
+					contrato_clave_finsol.contrato               		 	 AS Contrato,
+					rcf.clave_finsol                                         AS ClaveT24,
+					personas.nombre                                          AS Nombre_Grupo,
+					productos.descripcion                                    AS Producto,
+					convert(char(10), c.fecha_disposicion, 103)              AS Fecha_Inicio,
+					convert(char(10), c.fecha_esp_liq, 103)                  AS Fecha_Fin,
+					contrato_grupo.monto_otorgado                            AS Monto_Prestamo,
+					c.status												 AS Estatus,
+					c.monto_liq_ctrant                                       AS Monto_Financiado,
+					c.monto                                                  AS Monto_Real,
+					c.frecuencia_pago                                        AS Periodicidad,
+					c.tasa                                                   AS Tasa,  /*Desde el OV (Se debe incrementar el iva y multiplicar por 12)*/
+					c.sucursal                                               AS No_Sucursal,
+					sucursales.nombre                                        AS Sucursal,
+					rtrim(contrato_grupo.asesor)                             AS Asesor,
+					'No encontrado'	                                 		 AS Nombre_Asesor,
+					'Pendiente'                                              AS Authorizer,
+					( SELECT MAX(valor) FROM valores_historicos vh WHERE vh.codigo = 'IVIN' AND vh.sucursal = c.sucursal AND vh.fecha_inicial < #{fechaCierre} /*Param: fecha cierre, Param prueba: 2007-12-13*/) AS IVA,
+										( SELECT isnull(sum(monto_otorgado),0) FROM integrante_grupo WHERE contrato = contrato_clave_finsol.contrato and status = 'I' ) AS montoDevuelto
+			FROM
+			        contratos c, contrato_clave_finsol, personas, productos, sucursales, contrato_grupo, relacion_clave_finsol rcf
+			WHERE
+			        contrato_clave_finsol.contrato = c.contrato
+					AND personas.persona = c.cliente
+					AND productos.producto = c.producto
+					AND sucursales.sucursal = c.sucursal
+					AND contrato_grupo.contrato = c.contrato
+					AND rcf.persona = c.cliente
+				    AND c.clave_empresa = '100000003'
+
+				]]>
+		<if test="fechaDisposicionInicio != null">
+			<if test="fechaDisposicionFinal != null">
+				    		<![CDATA[ AND c.fecha_disposicion between #{fechaDisposicionInicio} AND #{fechaDisposicionFinal} ]]>
+			</if>
+		</if>
+		<if test="nombreGrupo != null">
+						<![CDATA[ AND personas.nombre like #{nombreGrupo}||'%'  ]]>
+		</if>
+		<if test="fechaLiquidacionInicio != null">
+			<if test="fechaLiquidacionFinal != null">
+							<![CDATA[ AND c.fecha_esp_liq between #{fechaLiquidacionInicio} AND #{fechaLiquidacionFinal} ]]>
+			</if>
+		</if>
+		<if test="sucursal != null">
+						<![CDATA[ AND c.sucursal = #{sucursal}  ]]>
+		</if>
+		<if test="asesor != null">
+						<![CDATA[ AND contrato_grupo.asesor = #{asesor}  ]]>
+		</if>
+		<if test="contrato != null">
+					<![CDATA[ AND c.contrato = #{contrato}  ]]>
+		</if>
+			<![CDATA[ ORDER BY c.contrato ]]>
+
+	</select>
+
+	<!-- ******************************************************************************** -->
+	<!-- SECCION PARA DEFINIR LOS QUERIES QUE SERÁN EJECUTADOS DESDE ALGUNA
+		CLASE DE JAVA -->
+	<!-- ******************************************************************************** -->
+
+	<!-- Obtenemos el bloque correspondiente de registros (contratosActivosMora) -->
+	<select id="obtenerReporteCierreCsvDesembolsoOpenContract"
+		parameterType="java.lang.String" resultMap="desembolsoOpenContractId">
+		<![CDATA[
+			SELECT  contrato_clave_finsol.contrato_LD                        AS No_Contrato,
+					rcf.clave_finsol                                         AS ClaveT24,
+					personas.nombre                                          AS Nombre_Grupo,
+					productos.descripcion                                    AS Producto,
+					convert(char(10), c.fecha_disposicion, 103)              AS Fecha_Inicio,
+					convert(char(10), c.fecha_esp_liq, 103)                  AS Fecha_Fin,
+					contrato_grupo.monto_otorgado                            AS Monto_Prestamo,
+					c.monto_liq_ctrant                                       AS Monto_Financiado,
+					c.monto                                                  AS Monto_Real,
+					c.frecuencia_pago                                        AS Periodicidad,
+					c.tasa                                                   AS Tasa,  /*Desde el OV (Se debe incrementar el iva y multiplicar por 12)*/
+					c.sucursal                                               AS No_Sucursal,
+					sucursales.nombre                                        AS Sucursal,
+					rtrim(contrato_grupo.asesor)                             AS Asesor,
+					'Pendiente'		                                 		 AS Nombre_Asesor,
+					'Pendiente'                                              AS Authorizer,
+					( SELECT MAX(valor) FROM valores_historicos vh WHERE vh.codigo = 'IVIN' AND vh.sucursal = c.sucursal AND vh.fecha_inicial < #{1} /*Param: fecha cierre, Param prueba: 2007-12-13*/) AS IVA
+			FROM
+			        contratos c, contrato_clave_finsol, personas, productos, sucursales, contrato_grupo, relacion_clave_finsol rcf
+			WHERE
+			        contrato_clave_finsol.contrato = c.contrato
+					AND personas.persona = c.cliente
+					AND rcf.persona = c.cliente
+					AND productos.producto = c.producto
+					AND sucursales.sucursal = c.sucursal
+					AND contrato_grupo.contrato = c.contrato
+				    AND c.status = 'D'
+					AND c.clave_empresa = '100000003'
+					AND c.fecha_disposicion = #{1} /*Param: fecha cierre, Param prueba: 2007-12-13*/
+			ORDER BY c.contrato
+		]]>
+	</select>
+
+</mapper>

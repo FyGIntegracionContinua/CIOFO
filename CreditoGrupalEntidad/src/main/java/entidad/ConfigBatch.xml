@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+  		"http://localhost:8080/config/ibatis-3-config.dtd">
+<configuration>
+
+	<properties  resource="entidad/config.properties" />
+
+	<settings>
+	    <setting name="aggressiveLazyLoading" value="true"/>
+	    <setting name="defaultStatementTimeout" value="25000"/>
+    </settings>
+
+	<typeAliases>
+ 		<typeAlias type="utilitario.mensajes.reportes.cierre.CarteraActivaOV" alias="carteraActiva" />
+		<typeAlias type="utilitario.mensajes.reportes.cierre.ContratosActivosSaldoFavorOV" alias="contratosActivosSaldoFavor" />
+		<typeAlias type="utilitario.mensajes.reportes.cierre.ContratosActivosMoraOV" alias="contratosActivosMora" />
+		<typeAlias type="utilitario.mensajes.reportes.cierre.DesembolsoOpenContractOV" alias="desembolsoOpenContract" />
+		<typeAlias type="utilitario.mensajes.reportes.cierre.DesembolsoRepaymentsOV" alias="desembolsoRepayments" />
+		<typeAlias type="utilitario.mensajes.reportes.cierre.DesembolsoSEFinsol1OV" alias="desembolsoSEFinsol1" />
+		<typeAlias type="utilitario.mensajes.reportes.cierre.DesembolsoSEFinsol2OV" alias="desembolsoSEFinsol2" />
+		<typeAlias type="utilitario.mensajes.consultas.ReporteDatosCliente" alias="reporteDatosCliente" />
+		 <typeAlias type="utilitario.comun.asesores.AsesorOV" alias="asesorOV" />
+	</typeAliases>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+ 				<property name="driver" value="com.sybase.jdbc4.jdbc.SybDriver"/>
+				<property name="url" value="jdbc:sybase:Tds:${sybase.ip}:${sybase.puerto}/${sybase.instancia}"/>
+				<property name="username" value="${sybase.username}"/>
+				<property name="password" value="${sybase.password}"/>
+			    <property name="poolMaximumActiveConnections" value="300"/>
+	   			<property name="poolMaximumIdleConnections" value="300"/>
+	   			<property name="poolMaximumCheckoutTime" value="500000"/>
+	   			<property name="poolTimeToWait" value="2500000"/>
+	   			<property name="poolPingQuery" value="select getdate()"/>
+	   			<property name="poolPingEnabled" value="true"/>
+	   			<property name="poolPingConnectionsNotUsedFor" value="1"/>
+	   			<property name="loginTimeout" value="1"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="entidad/reportes/cierre/ReporteCarteraActiva.xml"/>
+		<mapper resource="entidad/reportes/cierre/ReporteContratoSaldoFavor.xml"/>
+		<mapper resource="entidad/reportes/cierre/ReporteContratoMora.xml"/>
+		<mapper resource="entidad/reportes/cierre/ReporteDesembolsoOpenContract.xml"/>
+		<mapper resource="entidad/reportes/cierre/ReporteDesembolsoRepayments.xml"/>
+		<mapper resource="entidad/reportes/cierre/ReporteDesembolsoSEFinsol1.xml"/>
+		<mapper resource="entidad/reportes/cierre/ReporteDesembolsoSEFinsol2.xml"/>
+		<mapper resource="entidad/consultas/ConsultasBatch.xml"/>
+		<mapper resource="entidad/operacion/OperacionNTX.xml"/>
+	</mappers>
+</configuration>

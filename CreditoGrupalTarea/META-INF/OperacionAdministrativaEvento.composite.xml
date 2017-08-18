@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+ 		name="OperacionAdministrativaGrupalEvento"
+ 		targetNamespace="urn:independencia.creditogrupal.tarea.operacionadministrativaevento">
+	
+	<channel name="OperacionAdministrativa"/>
+	
+ 	<component name="OperacionAdministrativaGrupalEvento">
+		<implementation.java class="tarea.operacionadministrativa.OperacionAdministrativaEventoImpl"/>
+		<consumer name="cierreFinsol" source="OperacionAdministrativa"/>
+	</component>
+ 	
+</composite>
+

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+		name="BuroCreditoTarea" 
+		targetNamespace="urn:independencia.creditogrupal.tarea.burocredito">
+
+ 	<component name="BuroCreditoTareaImpl">
+		<implementation.java class="tarea.burocredito.BuroCreditoTareaImpl"/>
+		<reference name="solicitudesCredito" target="SolicitudesCreditoTarea"/>
+		<reference name="comun" target="ComunCreditoGrupal"/>
+	</component>
+	
+	<component name="PlanillaAprobacion">
+		<implementation.java class="tarea.burocredito.PlanillaAprobacionImpl"/>
+		<reference name="comun" target="ComunCreditoGrupal"/>	
+	</component>
+ 	
+</composite>

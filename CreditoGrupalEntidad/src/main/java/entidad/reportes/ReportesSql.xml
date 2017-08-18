@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="creditogrupal.entity.reportes.ibatis">
+
+	<select id="consultarMontosCuentas" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.reportes.cierre.ReportesContabilidadOV">
+		<![CDATA[
+			SELECT Account.Acct cuenta,
+				   Descr descripcion,
+				   ROUND(SUM(YtdBal00),2) saldoEnero,
+				   ROUND(SUM(YtdBal01),2) saldoFebrero,
+				   ROUND(SUM(YtdBal02),2) saldoMarzo,
+				   ROUND(SUM(YtdBal03),2) saldoAbril,
+				   ROUND(SUM(YtdBal04),2) saldoMayo,
+				   ROUND(SUM(YtdBal05),2) saldoJunio,
+				   ROUND(SUM(YtdBal06),2) saldoJulio,
+				   ROUND(SUM(YtdBal07),2) saldoAgosto,
+				   ROUND(SUM(YtdBal08),2) saldoSeptiembre,
+				   ROUND(SUM(YtdBal09),2) saldoOctubre,
+				   ROUND(SUM(YtdBal10),2) saldoNoviembre,
+				   ROUND(SUM(YtdBal11),2) saldoDiciembre,
+	   		   	   AcctType tipoCuenta
+			FROM Account, AcctHist
+			WHERE Account.Acct <> '3410100'
+			/*AND cast(Account.Acct as int) between  1110100 and 1129999*/
+			AND Account.Acct  =  AcctHist.Acct
+			AND Account.Acct <> '000000'
+			AND AcctHist.FiscYr = #{year}
+			AND BalanceType = 'A'
+			GROUP BY Account.Acct,  Descr, AcctType
+			ORDER BY Account.Acct
+		]]>
+	</select>
+</mapper>

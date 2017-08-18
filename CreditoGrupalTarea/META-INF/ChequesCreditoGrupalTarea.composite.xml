@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+		name="ChequesCreditoGrupalTarea" 
+		targetNamespace="urn:independencia.creditogrupal.tarea.chequescreditogrupal">
+
+ 	<component name="ChequesCreditoGrupalTareaImpl">
+		<implementation.java class="tarea.chequescreditogrupal.ChequesCreditoGrupalTareaImpl"/>
+	</component>
+ 	
+</composite>

@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.originacion.tx">
+
+	<resultMap type="utilitario.mensajes.persona.PersonaRelacion"
+		id="personaRelacion">
+
+		<result property="idRelacion" column="id_relacion" />
+		<result property="persona" column="persona" />
+		<result property="nombre" column="nombre" />
+		<result property="apellidoPaterno" column="apellido_pat" />
+		<result property="apellidoMaterno" column="apellido_mat" />
+		<result property="codigoRelacion" column="codigo_relacion" />
+
+	</resultMap>
+
+	<select id="buscarClavePersona" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.persona.RelacionClaveFinsolOV">
+		SELECT persona 	FROM relacion_clave_finsol	WHERE persona = #{numeroPersona}
+		UNION
+		SELECT persona 	FROM relacion_clave_finsol	WHERE clave_finsol	= #{claveFinsol}
+	</select>
+
+	<select id="obtenerValorSequenciasPersona" resultType="java.util.HashMap">
+		SELECT * FROM secuencias WHERE tipo IN ( 'PER', 'T24' )
+	</select>
+
+	<update id="actualizarSequenciasPersona">
+		UPDATE secuencias SET
+		actual = actual + incremento WHERE tipo IN ( 'PER', 'T24' )
+	</update>
+
+	<insert id="registrarPersonaSybase" parameterType="utilitario.mensajes.persona.PersonaOV">
+
+		INSERT INTO personas
+		(
+		persona , nombre , apellido_pat , apellido_mat , rfc , no_curp ,
+		tipo_identificacion , numero_identificacion ,
+		fecha_nacimiento , sexo , entidad_lugar_nac , nacionalidad , edo_civil ,
+		no_dependientes , funcionario_publico ,
+		relacion_funcionario , personalidad , origen,
+		fecha_alta , calificacion , operador , fecha_ult_mod ,
+		ciclo , prospecto, tipo_riesgo
+		)
+		VALUES
+		(
+		#{numeroPersona} , #{nombre} , #{apellidoPaterno} , #{apellidoMaterno} , #{rfc} ,
+		#{curp} , #{tipoIdentificacion} , #{numeroIdentificacion} ,
+		#{fechaNacimiento} , #{sexo} , #{entidadLugarNacimiento} ,
+		#{nacionalidad} , #{estadoCivil} , #{numeroDependientes} ,
+		#{funcionarioPublico} ,
+		#{relacionFuncionario} , #{personalidad} , #{origen},
+		#{fechaAlta} , #{calificacion} , #{operador} , #{fechaUltimaModificacion} ,
+		#{ciclo} , #{prospecto} , 'BAJO'
+		)
+
+	</insert>
+
+	<insert id="registrarProspectoSybase" parameterType="utilitario.mensajes.persona.PersonaOV">
+
+		INSERT INTO personas
+		(
+		persona , nombre , apellido_pat , apellido_mat , rfc ,
+		fecha_nacimiento , sexo , edo_civil ,
+		personalidad , origen,
+		fecha_alta , operador , fecha_ult_mod , prospecto , calificacion, tipo_riesgo
+		)
+		VALUES
+		(
+		#{numeroPersona} , #{nombre} , #{apellidoPaterno} , #{apellidoMaterno}
+		, #{rfc} ,
+		#{fechaNacimiento} , #{sexo} , #{estadoCivil} ,
+		#{personalidad} , #{origen},
+		getdate() , #{operador} , getdate() , #{prospecto} , #{calificacion}, 'BAJO'
+		)
+
+	</insert>
+
+	<insert id="registrarComplementoPersonaSybase" parameterType="java.util.HashMap">
+
+		INSERT INTO persona_complemento
+		(
+		persona , apodo , inicia_negocio , ocupacion_pareja ,
+		direccion_ocupacion_pareja , tipo_actividad ,
+		posicion_hogar , experiencia_credito_grupal , ingresos , otros_ingresos , exp_rubro
+		, exp_negocio , monto_ventas ,
+		ganancia_neta , ganancia_act_sec , gastos_familiares , monto_inventario ,
+		monto_mobiliario_equipo , monto_superavit ,
+		num_empleados , ocupacion , horario_loc_dom , pais_nacimiento , asesor, sucursal ,
+		fecha_ult_cap, monto_solicitado, num_hijos, no_firma_electronica, destino_credito
+		)
+		VALUES
+		(
+		#{persona} , #{apodo} , #{inicia_negocio} , #{ocupacion_pareja} ,
+		#{direccion_ocupacion_pareja} , #{tipo_actividad} ,
+		#{posicion_hogar} , #{experiencia_credito_grupal} , #{ingresos} , #{otros_ingresos} ,
+		#{exp_rubro} , #{exp_negocio} , #{monto_ventas} ,
+		#{ganancia_neta} , #{ganancia_act_sec} , #{gastos_familiares} , #{monto_inventario} ,
+		#{monto_mobiliario_equipo} , #{monto_superavit} ,
+		#{num_empleados} , #{ocupacion} , #{horario_loc_dom} , #{pais_nacimiento} , #{asesor},
+		#{sucursal} , getdate(), #{monto_solicitado}, #{num_hijos}, #{no_firma_electronica}, #{destino_credito}
+		)
+
+	</insert>
+
+
+	<insert id="registrarComplementoProspectoSybase" parameterType="java.util.HashMap">
+
+		INSERT INTO persona_complemento ( persona , asesor, sucursal, fecha_ult_cap )
+		VALUES ( #{persona} , #{asesor}, #{sucursal}, getdate() )
+
+	</insert>
+
+	<insert id="registrarComplementoProspectoCaravana" parameterType="java.util.HashMap">
+		INSERT INTO persona_complemento ( persona , asesor, sucursal, fecha_ult_cap,
+		 campana, estatus, experiencia_credito_grupal, fecha_contacto)
+		VALUES ( #{persona} , #{asesor}, #{sucursal}, getdate(), #{campana},
+		 #{estatus}, #{experiencia}, #{fechaContacto})
+
+	</insert>
+
+	<update id="actualizaUsuarioCambioNombre" parameterType="java.util.HashMap">
+
+		UPDATE persona_complemento
+		SET usuario_mod_nombre = #{usuario_mod}, fecha_mod_nombre = getdate()
+		WHERE persona = #{persona}
+
+	</update>
+
+	<select id="obtieneConsecutivoDomicilio" resultType="java.lang.Integer">
+
+		select isnull(max(consecutivo),0) + 1 as id
+		from persona_domicilios
+		where persona = #{persona}
+		and tipo_domicilio = #{tipo_domicilio}
+
+	</select>
+
+	<insert id="registrarDomicilioCredprod" parameterType="java.util.HashMap">
+
+
+		INSERT INTO persona_domicilios
+		( persona , tipo_domicilio ,
+		consecutivo ,
+		<if test="id_relacion != null">
+			id_relacion ,
+		</if>
+		calle , no_exterior , no_interior ,
+		colonia , ciudad , municipio_delegacion , codigo_estado , cp , entre_calles ,
+		tipo_vivienda ,
+		latitud , longitud , horario_localizacion1 , horario_localizacion2 ,
+		dias_localizacion ,
+		fecha_antiguedad_domiciliio , origen , status , fecha_status , fecha_alta , usuario_alta ,
+		fecha_ult_mod , usuario_ult_mod
+		)
+		VALUES
+		( #{persona} , #{tipo_domicilio} ,
+		#{consecutivo} ,
+
+		<if test="id_relacion != null">
+			#{id_relacion} ,
+		</if>
+
+		#{calle} , #{no_exterior} , #{no_interior} ,
+		#{colonia} , #{ciudad} , #{municipio_delegacion} , #{codigo_estado} , #{cp} ,
+		#{entre_calles} , #{tipo_vivienda} ,
+		#{latitud} , #{longitud} , #{horario_localizacion1} , #{horario_localizacion2} ,
+		#{dias_localizacion} ,
+		#{fecha_antiguedad_domiciliio} , #{origen} , #{status} , GETDATE() ,
+		CONVERT(VARCHAR(8),GETDATE(),112) , #{usuario_alta} ,
+		CONVERT(VARCHAR(8),GETDATE(),112) , #{usuario_ult_mod}
+		)
+
+	</insert>
+
+
+	<!-- <insert id="registrarRelacionCredprod" parameterType="java.util.HashMap"
+		keyProperty="id_relacion"> INSERT INTO persona_relaciones ( persona , nombre
+		, apellido_pat, apellido_mat, codigo_relacion ) VALUES ( #{persona} , #{nombre}
+		, #{apellido_pat}, #{apellido_mat}, #{codigo_relacion} ) <selectKey resultType="long"
+		keyProperty="id_relacion"> select @@IDENTITY as value </selectKey> </insert> -->
+
+
+
+	<insert id="registrarRelacionCredprod" parameterType="utilitario.mensajes.persona.PersonaRelacion"
+		keyProperty="idRelacion">
+
+
+		INSERT INTO persona_relaciones
+		(
+		persona , nombre , apellido_pat, apellido_mat, codigo_relacion
+		)
+		VALUES
+		(
+		#{persona} , #{nombre} , #{apellidoPaterno}, #{apellidoMaterno},
+		#{codigoRelacion}
+		)
+
+		<selectKey resultType="long" keyProperty="idRelacion">
+			SELECT max(id_relacion) as value FROM persona_relaciones WHERE
+			persona = #{persona} AND nombre = #{nombre} AND codigo_relacion =
+			#{codigoRelacion}
+			<!-- select @@IDENTITY as value -->
+		</selectKey>
+
+	</insert>
+
+
+	<update id="actualizarRelacionCredprod" parameterType="utilitario.mensajes.persona.PersonaRelacion">
+
+
+		UPDATE persona_relaciones
+		<set>
+			<if test="nombre != null">nombre = #{nombre}</if>
+			<if test="apellidoPaterno != null">, apellido_pat = #{apellidoPaterno}</if>
+			<if test="apellidoMaterno != null">, apellido_mat = #{apellidoMaterno}</if>
+			<if test="codigoRelacion != null">, codigo_relacion = #{codigoRelacion}</if>
+
+		</set>
+		where
+		persona = #{persona}
+		AND id_relacion = #{idRelacion}
+
+	</update>
+
+
+
+
+
+
+
+
+
+
+
+
+	<update id="actualizarDomicilioPersona" parameterType="utilitario.mensajes.persona.DomicilioOV">
+		UPDATE personas
+		<set>
+			fecha_ult_mod_dom = getDate()
+			<if test="pais != null">,pais = #{pais}</if>
+			<if test="codigoEstado != null">, entidad = #{codigoEstado}</if>
+			<if test="municipio != null">, municipio = #{municipio}</if>
+			<if test="ciudad != null">, ciudad = #{ciudad}</if>
+			<if test="colonia != null">, colonia = #{colonia}</if>
+			<if test="cp != null">, cp = convert( INTEGER , #{cp} )</if>
+			<if test="calle != null">,calle = #{calle} + ' ' + #{numeroExterior} + ' ' +
+				#{numeroInterior}</if>
+			<if test="entreCalles != null">, entre_calles = #{entreCalles}</if>
+			<if test="otrasIndicaciones != null">,otras_indicaciones = #{otrasIndicaciones}</if>
+			<if test="fechaDomicilio != null">,fecha_domicilio = #{fechaDomicilio}</if>
+			<if test="diasLocaliza != null">,dias_emp = #{diasLocaliza}</if>
+			<if test="tipoVivienda != null">,tipo_vivienda = #{tipoVivienda}</if>
+		</set>
+		WHERE persona = #{numeroPersona}
+	</update>
+
+
+	<update id="actualizaPersonaDomicilio" parameterType="utilitario.mensajes.persona.DomicilioOV">
+
+		UPDATE persona_domicilios
+		<set>
+			fecha_ult_mod = getDate()
+			<if test="calle != null">,calle = UPPER(#{calle})</if>
+			<if test="numeroExterior != null">, no_exterior = UPPER(#{numeroExterior})</if>
+			<if test="numeroInterior != null">, no_interior = UPPER(#{numeroInterior})</if>
+			<if test="colonia != null">, colonia = UPPER(#{colonia})</if>
+			<if test="ciudad != null">, ciudad = UPPER(#{ciudad})</if>
+			<if test="municipio != null">, municipio_delegacion = UPPER(#{municipio})</if>
+			<if test="codigoEstado != null">, codigo_estado = #{codigoEstado}</if>
+			<if test="cp != null">, cp = #{cp}</if>
+			<if test="entreCalles != null">, entre_calles = UPPER(#{entreCalles})</if>
+			<if test="tipoVivienda != null">, tipo_vivienda = #{tipoVivienda}</if>
+			<if test="horaLocalizaInicial != null">, horario_localizacion1 = #{horaLocalizaInicial} + '-' +
+				#{horaLocalizaFinal}  </if>
+			<if test="diasLocaliza != null">, dias_localizacion = #{diasLocaliza}</if>
+			<if test="fechaDomicilio != null">, fecha_antiguedad_domiciliio = #{fechaDomicilio}</if>
+			<if test="operador != null">, usuario_ult_mod = #{operador}</if>
+		</set>
+		WHERE persona = #{numeroPersona}
+		AND tipo_domicilio = #{tipoDomicilio}
+
+		<if test="idRelacion != null">
+			AND id_relacion = #{idRelacion}
+		</if>
+	</update>
+
+
+	<update id="actualizarSocioeconomicoPersonaSybase"
+		parameterType="java.util.HashMap">
+		UPDATE personas
+		<set>
+			fecha_ult_mod_dom = getDate()
+			<if test="ingreso_cp != null">,ingreso_cp = #{ingreso_cp}</if>
+			<if test="nombre_emp != null">, nombre_emp = #{nombre_emp}</if>
+			<if test="tipo_establecimiento != null">, tipo_establecimiento = #{tipo_establecimiento}</if>
+			<if test="actividad_emp != null">, actividad_emp = #{actividad_emp}</if>
+			<if test="entidad_emp != null">, entidad_emp = #{entidad_emp}</if>
+			<if test="municipio_emp != null">, municipio_emp = #{municipio_emp}</if>
+			<if test="ciudad_emp != null">, ciudad_emp = #{ciudad_emp}</if>
+			<if test="colonia_emp != null">, colonia_emp = #{colonia_emp}</if>
+			<if test="cp_emp != null">, cp_emp = convert( INTEGER , #{cp_emp} )</if>
+			<if test="calle_emp != null">,calle_emp = #{calle_emp}</if>
+			<if test="entre_calle_emp != null">, entre_calle_emp = #{entre_calle_emp}</if>
+		</set>
+		WHERE persona = #{persona}
+	</update>
+
+
+	<update id="actualizarCorreoPersona" parameterType="utilitario.mensajes.persona.DireccionElectronicaOV">
+		UPDATE personas
+		<set>
+			fecha_ult_mod_dom = getDate()
+			<if test="direccionElectronica != null">,correo = #{direccionElectronica}</if>
+		</set>
+		WHERE persona = #{numeroPersona}
+	</update>
+	
+	<update id="actualizarEstatusBuroPersona" parameterType="java.util.HashMap">
+		UPDATE persona_complemento
+		<set>
+			buro = #{estatusBuro}	
+		</set>
+		WHERE persona = #{numeroPersona}
+	</update>
+
+	<insert id="insertarClavesPersona" parameterType="utilitario.mensajes.persona.RelacionClaveFinsolOV">
+		INSERT INTO
+		relacion_clave_finsol ( persona, clave_finsol, clave_cu )
+		VALUES (
+		#{numeroPersona}, #{claveFinsol}, #{numeroPersona} )
+
+	</insert>
+
+	<!-- ********************************************************************************************************** -->
+	<!-- **************************************************actualizacion******************************************* -->
+	<!-- ********************************************************************************************************** -->
+
+	<update id="actualizarDatosPersona" parameterType="utilitario.mensajes.persona.PersonaOV">
+		UPDATE personas
+		<set>
+
+			fecha_ult_mod = getdate()
+
+			<if test="sucursal == 0">
+
+				<if test="nombre != null">,nombre = #{nombre}</if>
+				<if test="apellidoPaterno != null">,apellido_pat = #{apellidoPaterno}</if>
+				<if test="apellidoMaterno != null">,apellido_mat = #{apellidoMaterno}</if>
+				<if test="rfc != null">,rfc = #{rfc}</if>
+				<if test="fechaNacimiento != null">,fecha_nacimiento = #{fechaNacimiento}</if>
+
+			</if>
+
+			<if test="curp != null">,no_curp = #{curp}</if>
+			<if test="tipoIdentificacion  != null">,tipo_identificacion = #{tipoIdentificacion}</if>
+			<if test="numeroIdentificacion  != null">,numero_identificacion = #{numeroIdentificacion}</if>
+			<if test="sexo != null">,sexo = #{sexo}</if>
+			<if test="entidadLugarNacimiento != null">,entidad_lugar_nac = #{entidadLugarNacimiento}</if>
+			<if test="nacionalidad != null">,nacionalidad = #{nacionalidad}</if>
+			<if test="estadoCivil != null">,edo_civil = #{estadoCivil}</if>
+			<if test="numeroDependientes != null">,no_dependientes = #{numeroDependientes}</if>
+			<if test="funcionarioPublico != null">,funcionario_publico = #{funcionarioPublico}</if>
+			<if test="relacionFuncionario != null">,relacion_funcionario = #{relacionFuncionario}</if>
+
+			<!-- <if test="origen != null">,origen = #{origen}</if> -->
+			<if test="calificacion != null">,calificacion = #{calificacion}</if>
+			<if test="operador != null">,operador = #{operador}</if>
+
+			<if test="prospecto != null">,prospecto = #{prospecto}</if>
+
+		</set>
+		WHERE persona = #{numeroPersona}
+	</update>
+
+	<update id="actualizarComplementoPersonaSybase" parameterType="java.util.HashMap">
+		UPDATE persona_complemento
+		<set>
+			fecha_ult_cap = getdate()
+			<if test="pais_nacimiento  != null">,pais_nacimiento = #{pais_nacimiento}</if>
+			<if test="apodo  != null">,apodo = #{apodo}</if>
+			<if test="inicia_negocio  != null">,inicia_negocio = #{inicia_negocio}</if>
+			<if test="ocupacion_pareja  != null">,ocupacion_pareja = #{ocupacion_pareja}</if>
+			<if test="direccion_ocupacion_pareja  != null">,direccion_ocupacion_pareja =
+				#{direccion_ocupacion_pareja}</if>
+			<if test="tipo_actividad  != null">,tipo_actividad = #{tipo_actividad}</if>
+			<if test="posicion_hogar  != null">,posicion_hogar = #{posicion_hogar}</if>
+			<if test="experiencia_credito_grupal  != null">,experiencia_credito_grupal =
+				#{experiencia_credito_grupal}</if>
+			<if test="ingresos  != null">,ingresos = #{ingresos}</if>
+			<if test="otros_ingresos  != null">,otros_ingresos = #{otros_ingresos}</if>
+			<if test="exp_rubro  != null">,exp_rubro = #{exp_rubro}</if>
+			<if test="exp_negocio  != null">,exp_negocio = #{exp_negocio}</if>
+			<if test="monto_ventas  != null">,monto_ventas = #{monto_ventas}</if>
+			<if test="ganancia_neta  != null">,ganancia_neta = #{ganancia_neta}</if>
+			<if test="ganancia_act_sec  != null">,ganancia_act_sec = #{ganancia_act_sec}</if>
+			<if test="gastos_familiares  != null">,gastos_familiares = #{gastos_familiares}</if>
+			<if test="monto_inventario  != null">,monto_inventario = #{monto_inventario}</if>
+			<if test="monto_mobiliario_equipo  != null">,monto_mobiliario_equipo = #{monto_mobiliario_equipo}
+			</if>
+			<if test="monto_superavit  != null">,monto_superavit = #{monto_superavit}</if>
+			<if test="num_empleados  != null">,num_empleados = #{num_empleados}</if>
+			<if test="ocupacion  != null">,ocupacion = #{ocupacion}</if>
+			<if test="horario_loc_dom  != null">,horario_loc_dom = #{horario_loc_dom}</if>
+			<if test="asesor  != null">,asesor = #{asesor}</if>
+			<if test="sucursal  != null">,sucursal = #{sucursal}</if>
+			<if test="monto_solicitado  != null">,monto_solicitado = #{monto_solicitado}</if>
+			<if test="num_hijos  != null">,num_hijos = #{num_hijos}</if>
+			<if test="no_firma_electronica  != null">,no_firma_electronica = #{no_firma_electronica}</if>
+			<if test="destino_credito  != null">,destino_credito = #{destino_credito}</if>
+		</set>
+		WHERE persona = #{persona}
+	</update>
+
+	<delete id="borrarPermisoTemporal" parameterType="utilitario.mensajes.persona.PerfilTemporal">
+
+		DELETE FROM generic_perfil_temporal
+		WHERE  cve_usuario = #{claveUsuario}
+
+	</delete>
+
+	<insert id="registrarPermisoTemporal" parameterType="utilitario.mensajes.persona.PerfilTemporal">
+
+		INSERT INTO generic_perfil_temporal
+			( cve_usuario, id_perfil, id_perfil_temporal, usuario_modifico,  cve_sucursal,
+			  vigencia, fecha_ultima_modificacion, estatus
+			)
+		VALUES
+			(
+			  #{claveUsuario}, #{idPerfil}, #{idPerfilTemporal}, #{usuario},  #{idSucursal},
+			  dateadd(dd,  #{periodo} ,getdate()), getdate() , #{estatus}
+			)
+
+	</insert>
+
+	<insert id="registrarPermisoTemporalHis" parameterType="utilitario.mensajes.persona.PerfilTemporal">
+
+		INSERT INTO generic_perfil_temporal_his
+			( cve_usuario, id_perfil, id_perfil_temporal, usuario_modifico,  cve_sucursal,
+			  vigencia, fecha_ultima_modificacion, estatus
+			)
+		SELECT cve_usuario, id_perfil, id_perfil_temporal, usuario_modifico,  cve_sucursal,
+			   vigencia, fecha_ultima_modificacion, estatus
+		FROM generic_perfil_temporal
+		WHERE cve_usuario =  #{claveUsuario}
+
+	</insert>
+
+	<update id="terminarPermisoTemporal" parameterType="utilitario.mensajes.persona.PerfilTemporal">
+
+		UPDATE generic_perfil_temporal
+		SET estatus = #{estatus}, usuario_modifico =  #{usuario}, fecha_ultima_modificacion =  getdate()
+		WHERE cve_usuario = #{claveUsuario}
+
+	</update>
+
+	<insert id="insertaNuevoPersonaHist" parameterType="java.util.HashMap">
+
+		INSERT INTO persona_hist_cambio_nombre
+		(
+			persona,
+			fecha_mod,
+			nombre_modificacion,
+			usuario_mod
+		)
+		VALUES
+		(
+			#{persona},
+			getdate(),
+			#{nombreModificacion},
+			#{usuario_mod}
+		)
+
+	</insert>
+
+</mapper>

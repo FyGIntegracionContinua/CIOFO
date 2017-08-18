@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contribution xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+              xmlns:utilitario="urn:independencia.creditogrupal.utilitario">
+    <deployable composite="utilitario:CreditoGrupalUtilitario"/>
+    <export.java package="utilitario"/>
+</contribution>

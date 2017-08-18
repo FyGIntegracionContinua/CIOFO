@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" autowire="true"	name="SvcSeguros" targetNamespace="urn:independencia.creditogrupal.negocio">
+
+    <component name="Seguros">
+        <implementation.java class="negocio.seguros.SegurosImpl"/>
+        <service name="Seguros">
+            <binding.ws uri="/CIOF/SvcSeguros"/>
+        </service>
+   	   	<reference multiplicity="1..1" name="seguros" target="SegurosTarea"/>
+   	   	<reference multiplicity="1..1" name="transformador" target="Transformador"/>
+    </component>
+</composite>

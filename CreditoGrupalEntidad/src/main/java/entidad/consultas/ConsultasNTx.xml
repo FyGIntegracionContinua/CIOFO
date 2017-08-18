@@ -1,0 +1,2752 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.consultas.ntx">
+
+	<resultMap type="datosCredito" id="datosCredito">
+		<result property="numeroCredito" column="contrato" />
+		<result property="numeroGrupo" column="numero_grupo" />
+		<result property="nombreGrupo" column="nombre_grupo" />
+		<result property="nombreSucursal" column="sucursal" />
+		<result property="numeroSucursal" column="numero_sucursal" />
+		<result property="montoCredito" column="monto" />
+		<result property="plazo" column="no_pagos" />
+		<result property="tasa" column="tasa" />
+		<result property="fechaInicio" column="fecha_disposicion" />
+		<result property="fechaFin" column="fecha_esp_liq" />
+		<result property="status" column="status" />
+		<result property="asesor" column="asesor" />
+		<result property="diaReunion" column="dia_reunion" />
+		<result property="horaReunion" column="hora_reunion" />
+		<result property="frecuenciaPago" column="frecuencia_pago" />
+		<result property="fechaProxPago" column="fecha_prox_pago" />
+		<result property="cicloGrupo" column="ciclo_grupo" />
+		<result property="producto" column="producto" />
+		<result property="ultimoPago" column="no_ult_pago" />
+		<result property="montoFinanciado" column="monto_liq_ctrant" />
+		<result property="fechaAncla" column="fecha_ancla_pago" />
+		<result property="parcialidad" column="monto_pago" />
+		<result property="pagosVencidos" column="pagosVencidos" />
+		<result property="nombreClienteReunion" column="nombreClienteReunion" />
+		<result property="numeroClienteReunion" column="persona_dom_reunion" />
+		<result property="horaReunionFin" column="hora_reunion_fin" />
+		<result property="competenciaMontoCapital" column="competencia_monto_capital" />
+		<result property="competenciaTotalPagar" column="competencia_total_pagar" />
+		<result property="competenciaPlazo" column="competencia_plazo" />
+		<result property="competenciaTotalIntegrantes" column="competencia_total_integrantes" />
+		<result property="competenciaTasaAnual" column="competencia_tasa_anual" />
+		<result property="campana" column="campana" />
+	</resultMap>
+
+	<resultMap id="creditoSaldo" type="creditoSaldo">
+		<result property="contrato" column="Contrato" />
+		<result property="nombre" column="Nombre" />
+		<result property="estatus" column="Estatus" />
+		<result property="tipoCredito" column="Tipo" />
+		<result property="montoPago" column="Monto Pago" />
+		<result property="disponible" column="Disponible" />
+		<result property="montoPagoAtrasado" column="Monto pago atrasado" />
+		<result property="montoCorriente" column="Monto al corriente" />
+		<result property="saldoLiquidar" column="Saldo para liquidar" />
+		<result property="montoVigente" column="Monto Vigente" />
+		<result property="fechaProximoPago" column="Fecha de proximo pago" />
+		<result property="diasAtraso" column="Dias de atraso" />
+		<result property="fechaUltimoPago" column="Fecha Ultimo pago" />
+		<result property="fechaUltimaDisposicion" column="Fecha Ultima disposicion" />
+		<result property="montoDisposicion" column="Monto Disposicion" />
+		<result property="pagosAtrasados" column="Pagos Atrasados" />
+		<result property="cliente" column="Cliente" />
+		<result property="sucursal" column="Sucursal" />
+		<result property="frecuenciaPago" column="Frecuencia de Pago" />
+		<result property="descripcionFrecuencia" column="Descripcion Frecuencia" />
+		<result property="direccion" column="Direccion" />
+		<result property="direccionEmpleo" column="Direccion Empleo" />
+		<result property="tipoProducto" column="Tipo de Producto" />
+		<result property="afiliacionServicio" column="Afiliacion Servicio" />
+		<result property="producto" column="Producto" />
+		<result property="descripcionProducto" column="Descripcion Producto" />
+		<result property="categoriaProducto" column="Categoria Producto" />
+		<result property="insoluto" column="Capital Insoluto" />
+		<result property="cobranza" column="Status Cobranza" />
+		<result property="numPagoActual" column="num pago actual" />
+
+		<result property="montoPrestamo" column="Monto prestamo" />
+		<result property="plazo" column="Plazo" />
+		<result property="tasa" column="Tasa" />
+		<result property="nombreSucursal" column="Nombre Sucursal" />
+
+	</resultMap>
+
+	<resultMap id="datosPersonaMap" type="java.util.HashMap">
+		<result property="sexo" column="sexo" />
+		<result property="edoCivil" column="edoCivil" />
+		<result property="ciudad" column="ciudad" />
+	</resultMap>
+
+	<resultMap id="datosGrupoHis"
+		type="utilitario.mensajes.consultas.ClientesHistorico">
+		<result property="montoPrestamoGrupal" column="Monto" />
+		<result property="contrato" column="Contrato" />
+		<result property="numContrato" column="numContrato" />
+		<result property="ciclo" column="Ciclo" />
+	</resultMap>
+
+	<resultMap id="mapObtenerDatosCliente" type="utilitario.mensajes.consultas.DatosClienteOV">
+		<result property="nombreCompleto" column="nombreCompleto" />
+		<result property="fechaNacimiento" column="fechaNacimiento" />
+		<result property="rfc" column="rfc" />
+		<result property="curp" column="curp" />
+		<result property="fechaLiquidacion" column="fechaLiquidacion" />
+		<result property="fechaVencimiento" column="fechaVencimiento" />
+		<result property="cicloCliente" column="cicloCliente" />
+		<result property="estatus" column="estatus" />
+		<result property="montoOtorgado" column="montoOtorgado" />
+		<result property="fechaProximoPago" column="fechaProximoPago" />
+		<result property="calle" column="Calle" />
+		<result property="colonia" column="Colonia" />
+		<result property="localidad" column="Localidad" />
+		<result property="estado" column="Estado" />
+		<result property="cp" column="CodigoPostal" />
+		<result property="pais" column="Pais" />
+		<result property="municipio" column="Municipio" />
+		<result property="actividademp" column="actividademp" />
+		<result property="persona" column="Persona" />
+		<result property="estatusDesc" column="estatusDesc" />
+		<result property="tipoLocalidad" column="tipoLocalidad" />
+		<result property="experiencia" column="experiencia" />
+	</resultMap>
+
+	<resultMap id="detalleMovimiento" type="utilitario.mensajes.consultas.MovimientoOV">
+		<result property="idTransaccion" column="idTransaccion" />
+		<result property="fechaContable" column="fechaContable" />
+		<result property="fechaValor" column="fechaValor" />
+		<result property="monto" column="importe" />
+		<result property="medioPago" column="codigo" />
+	</resultMap>
+
+	<resultMap type="actaRecaudacion" id="actaRecaudacion">
+		<id property="contrato" column="contrato" />
+		<result property="contratoLD" column="contrato_LD" />
+		<result property="sucursal" column="sucursal" />
+		<result property="usuarioImprime" column="usuario_imprime" />
+		<result property="numImprime" column="num_impresion" />
+		<result property="fechaImprime" column="fecha_imprime" />
+		<result property="presidenteNombre" column="presidenteNombre" />
+		<result property="presidenteDireccion" column="presidenteDireccion" />
+		<result property="tesoreroNombre" column="tesoreroNombre" />
+		<result property="tesoreroDireccion" column="tesoreroDireccion" />
+		<result property="asesorNombre" column="asesorNombre" />
+		<collection property="parcialidades" ofType="actaRecaudacionParcialidad">
+			<id property="noPago" column="num_pago" />
+			<result property="fechaPactadaPago" column="fecha_pactada_pago" />
+			<result property="personaRecauda" column="persona_recauda" />
+			<result property="observaciones" column="observaciones" />
+			<result property="fechaCaptura" column="fecha_captura" />
+			<result property="usuarioCaptura" column="usuario_captura" />
+			<result property="numeroActualizacion" column="num_actualizacion" />
+			<result property="fechaUltAct" column="fecha_ult_act" />
+			<result property="estatus" column="estatus" />
+			<collection property="clientes" ofType="actaRecaudacionCliente"
+				column="{pago=num_pago,contrato=contrato}" select="datosIntegrantesParcialidad">
+			</collection>
+		</collection>
+	</resultMap>
+
+	<resultMap id="concentradoActasRecaudacion"
+		type="utilitario.mensajes.administracion.contrato.ResumenRecaudacionOV">
+		<result property="claveT24" column="clave_finsol" />
+		<result property="nombreCompleto" column="nombre" />
+		<result property="integrante" column="integrante" />
+		<result property="montoTotal" column="monto_tot_cred" />
+		<result property="pagoRecibido" column="pago_recibido" />
+		<result property="montoSolidario" column="aportacion_solid" />
+		<result property="puntual" column="P" />
+		<result property="inpuntual" column="I" />
+		<result property="noAsistio" column="N" />
+		<result property="envio" column="E" />
+		<result property="pagoPactado" column="monto_pactado" />
+		<result property="saldoTotalSistema" column="saldo_total_sistema" />
+		<result property="saldoTotalActa" column="saldo_total_acta" />
+		<result property="saldoAhorro" column="saldoAhorro" />
+	</resultMap>
+
+	<resultMap id="creditosSinAsignar"
+		type="utilitario.mensajes.consultas.CreditosSinAsignar">
+		<result property="fecha" column="Fecha" />
+		<result property="contrato" column="Contrato" />
+		<result property="contratoCredprod" column="ContratoCredprod" />
+		<result property="grupo" column="Grupo" />
+		<result property="sucursal" column="Sucursal" />
+		<result property="zona" column="Zona" />
+		<result property="fechaDisposicion" column="Fecha_disposicion" />
+	</resultMap>
+
+
+	<!--************************************************************************************** -->
+	<!--*********************************** Consultas **************************************** -->
+	<!--************************************************************************************** -->
+
+	<select id="obtenerDatosContrato" parameterType="java.util.HashMap"
+		resultMap="datosCredito">
+
+	SELECT cc.contrato_LD as contrato,
+				relacion_clave_finsol.clave_finsol as numero_grupo,
+				personas.nombre as nombre_grupo,
+				sucursales.nombre as sucursal,
+				sucursales.sucursal as numero_sucursal,
+				contratos.fecha_disposicion,
+				contratos.fecha_esp_liq,
+				contratos.monto,
+				no_pagos,
+				contratos.tasa,
+				contratos.status,
+				CASE
+					WHEN contratos.status = 'N' THEN 'NUEVO'
+					WHEN contratos.status = 'D' THEN 'DISPUESTO'
+					WHEN contratos.status = 'P' THEN 'LIQUIDADO'
+					WHEN contratos.status = 'X' THEN 'CANCELADO'
+					WHEN contratos.status = 'V' THEN 'VENDIDO'
+					WHEN contratos.status = 'C' THEN 'QUEBRANTO'
+					ELSE contratos.status
+				END statusDesc,
+				contrato_grupo.asesor,
+				isnull(contrato_grupo.dia_reunion, 1) as dia_reunion,
+				contratos.producto,
+				productos.descripcion AS productoDesc,
+				contrato_grupo.hora_reunion,
+				contratos.fecha_prox_pago,
+				contratos.fecha_ancla_pago,
+				contratos.fecha_prim_venc as fechaPrimVenc,
+				contratos.frecuencia_pago,
+				contrato_grupo.ciclo_grupo,
+				contratos.no_ult_pago,
+				ISNULL(contratos.monto_liq_ctrant, 0.00) as monto_liq_ctrant,
+				contratos.monto_pago,
+				contratos.no_pagos_vencidos as pagosVencidos,
+				contratos.monto_ahorro as montoGarantia,
+				contrato_grupo.hora_reunion_fin,
+				contrato_grupo.persona_dom_reunion,
+				pdr.nombre + ' ' + pdr.apellido_pat + ' ' + pdr.apellido_mat AS
+				nombreClienteReunion,
+				contratos.contrato AS numContrato,
+				contratos.monto_seguro  - isnull(convert(NUMERIC,cdc.valor),0.0) AS montoSeguro,
+				isnull(convert(NUMERIC,cdc.valor),0.0) AS montoSeguroEnfermedad,
+				isnull(convert(NUMERIC,cdcpdg.valor),0.0) AS pctGarantia,
+				CASE
+					WHEN cdg.opcion_garantia = NULL THEN ''
+					WHEN cdg.opcion_garantia = 'OGAL' THEN 'S'
+					WHEN cdg.opcion_garantia = 'OGNA' THEN 'N'
+					ELSE cdg.opcion_garantia
+				END AS opcionGarantia,
+				isnull(cdg.saldo_garantia,0.0) AS saldoGarantia,
+				(SELECT sum(isnull(cmdg.importe,0.0)) FROM contrato_movimientos_dg cmdg WHERE  cmdg.contrato = #{contrato} AND cmdg.codigo = 'DGTR' AND  cmdg.status = 'A') AS garantiaTraspasada,
+				isnull(contratos.solicitud, ' ') AS solicitud,
+			    (SELECT sum(isnull(ig.monto_ahorro,0.0))
+			    FROM integrante_grupo ig
+				WHERE ig.contrato = #{contrato}
+				AND ig.status = 'A') AS garantiaADepositar,
+				isnull(SF.competencia_monto_capital,0) as competenciaMontoCapital,
+				isnull(SF.competencia_total_pagar,0) as competenciaTotalPagar,
+				isnull(SF.competencia_plazo,0) as competenciaPlazo,
+				isnull(SF.competencia_total_integrantes,0) as competenciaTotalIntegrantes,
+				isnull(SF.competencia_tasa_anual,0) as competenciaTasaAnual,
+				isnull(SF.campana,'CE00') as campana,
+				isnull(convert(NUMERIC, contratos.efectivo), 0.0) AS montoSinSeguro
+				FROM contratos
+				JOIN personas ON contratos.cliente = personas.persona
+				JOIN sucursales ON contratos.sucursal = sucursales.sucursal
+				JOIN contrato_grupo ON contrato_grupo.contrato = contratos.contrato
+				JOIN relacion_clave_finsol ON relacion_clave_finsol.persona = personas.persona
+				JOIN contrato_clave_finsol cc ON cc.contrato =	contratos.contrato
+				JOIN productos ON productos.producto = contratos.producto
+				LEFT JOIN solicitudes_finsol SF ON cc.contrato = SF.contrato
+				LEFT JOIN personas pdr ON pdr.persona = contrato_grupo.persona_dom_reunion
+				LEFT JOIN condiciones_contrato cdc ON cdc.contrato = contratos.contrato AND cdc.clave_condicion = 'SEGURO_ENFERMEDAD'
+				LEFT JOIN condiciones_contrato cdcpdg ON cdcpdg.contrato = contratos.contrato AND cdcpdg.clave_condicion = 'PCT_DEP_GARANTIA'
+				LEFT JOIN contrato_deposito_garantia cdg ON cdg.contrato = contratos.contrato
+			WHERE contratos.contrato = #{contrato}
+			<if test="sucursal != null">
+				AND contratos.sucursal = #{sucursal}
+			</if>
+
+	</select>
+
+	<select id="obtenerDatosIntegrante" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.DatosIntegranteResumenOV">
+		SELECT
+				ig.integrante as cliente,
+				personas.nombre,
+				personas.apellido_pat as paterno,
+				isnull(personas.apellido_mat,'') as materno,
+				ig.monto_otorgado as monto,
+				ig.rol as rol,
+				p.producto as producto,
+				isnull(ig.destino_credito, ' ') as objetivo,
+				relacion_clave_finsol.clave_finsol as claveT24,
+				ig.monto_liq_ctrant as montoLiq,
+				ig.cheque as folioCheque,
+				CASE WHEN personas.sexo = 'M' THEN 'Masculino'
+				WHEN personas.sexo = 'F' THEN 'Femenino'
+				END AS sexo,
+				CONVERT ( CHAR( 20 ),personas.fecha_nacimiento, 103) AS fechaNacimiento,
+				ig.pct_participacion AS porcentajeParticipacion,
+				CASE WHEN ig.monto_seguro_vida > 0 THEN 'S'
+				WHEN ig.monto_seguro_vida = 0 THEN 'N'
+				WHEN ig.monto_seguro_vida is NULL THEN 'N'
+				END AS seguro,
+				CASE WHEN ig.monto_seguro_enfermedad > 0 THEN 'S'
+				WHEN ig.monto_seguro_enfermedad = 0 THEN 'N'
+				WHEN ig.monto_seguro_enfermedad is NULL THEN 'N'
+				END AS seguroEnfermedad,
+				ISNULL(personas.no_curp,'') AS curp,
+				ISNULL(cdg.saldo_garantia * (ig.pct_participacion / 100), 0) AS saldoGarantia,
+				ISNULL(ig.monto_otorgado,0)  - ISNULL(ig.monto_liq_ctrant, 0) montoCheque,
+				ISNULL(cdg.medio_pago,'') AS medioPago,
+				ISNULL(ig.monto_ahorro, 0) as montoAhorro,
+				ISNULL(ig.ciclo_integrante, 0) as cicloIntegrante,
+				ISNULL(ig.monto_seguro, 0) as montoSeguro,
+				isnull(SI.empresa_origen, ' ') as empresaOrigen,
+			    isnull(ce.descripcion, ' ') as empresaOrigenDesc
+			FROM
+				contratos
+			INNER JOIN integrante_grupo ig ON contratos.contrato = ig.contrato
+			INNER JOIN solicitudes_finsol SF ON SF.contrato = ig.contrato
+			INNER JOIN personas ON ig.integrante = personas.persona
+			INNER JOIN productos p ON contratos.producto = p.producto
+			INNER JOIN relacion_clave_finsol ON relacion_clave_finsol.persona=personas.persona
+			LEFT JOIN solicitud_integrantes SI ON SI.cliente = ig.integrante AND SI.solicitud = SF.solicitud
+			LEFT JOIN contrato_deposito_garantia cdg ON contratos.contrato = cdg.contrato
+			LEFT JOIN codigos ce ON ce.codigo = SI.empresa_origen AND ce.tipo_codigo = 'CEOR'
+			WHERE contratos.contrato =#{contrato}
+				AND ig.status = 'A'
+				AND ig.integrante = personas.persona
+				AND contratos.producto = p.producto
+	</select>
+
+	<select id="obtenerSaldoFavor" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.SaldoAFavorVO">
+		SELECT f.contrato_LD as contratoLD,
+		p.nombre as grupo,
+		(SELECT max(m.fecha_contable) FROM movimientos m WHERE m.contrato =
+		c.contrato AND m.codigo = 'PSAF' AND m.status IS NULL) AS fechaSaldo,
+		c.capital_insoluto as saldoAFavor,
+		c.contrato as contrato,
+		rcf.clave_finsol as codigoGrupo,
+		s.sucursal as sucursal,
+		s.nombre as nombreSucursal
+		FROM contratos c
+		JOIN contrato_clave_finsol f ON c.contrato = f.contrato
+		JOIN personas p ON p.persona = c.cliente
+		JOIN relacion_clave_finsol rcf ON p.persona = rcf.persona
+		JOIN sucursales s ON s.sucursal = c.sucursal
+			<![CDATA[WHERE c.capital_insoluto < 0 ]]>
+		<if test="contrato != null"> AND f.contrato = #{contrato} </if>
+		<if test="sucursal != null"> AND c.sucursal = #{sucursal} </if>
+		ORDER BY f.contrato_LD
+	</select>
+
+	<select id="obtenerMedioPago" parameterType="java.util.HashMap"
+		resultType="java.lang.String">
+		SELECT top 1 referencia
+		FROM movimientos
+		WHERE contrato=#{contrato}
+		AND fecha_hora>#{fechaSaldo}
+		AND codigo='PREF'
+	</select>
+
+	<select id="obtenerSaldoFv" statementType="CALLABLE" useCache="false"
+		flushCache="true" parameterType="java.util.HashMap" resultMap="creditoSaldo">
+		set nocount on { call sp_consulta_saldos_fv( #{contrato}, #{fechaActual}
+		)}
+	</select>
+
+	<select id="datosPersona" statementType="CALLABLE" useCache="false"
+		flushCache="true" parameterType="map" resultMap="datosPersonaMap">
+
+		SELECT P.sexo AS sexo,
+		P.edo_civil as edoCivil,
+		P.ciudad as ciudad
+		FROM personas P
+		WHERE persona =#{1}
+	</select>
+
+	<select id="direccionSucursal" statementType="CALLABLE"
+		useCache="false" flushCache="true" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		SELECT
+		S.calle + ' Colonia' + S.colonia +', Código Postal ' + (CAST(S.cp as
+		VARCHAR(10))) +','+ S.ciudad + ', ' + E.estado
+		FROM
+		sucursales S
+		LEFT JOIN estados E ON E.codigo_financiera = S.entidad
+		WHERE
+		S.sucursal =#{1}
+	</select>
+
+	<select id="obtenerUltimoLD" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT top 1 ( CCF.contrato ) FROM integrante_grupo i
+		JOIN contratos c on c.contrato=i.contrato
+		JOIN contrato_clave_finsol CCF ON CCF.contrato = i.contrato
+		JOIN productos P ON P.producto = c.producto AND P.categoria NOT LIKE
+		'OPO%'
+		WHERE i.integrante = #{persona}
+		AND c.status != 'X'
+		AND i.status = 'A'
+		ORDER BY c.fecha_contrato DESC
+
+
+
+	</select>
+
+	<select id="consultaCreditoOportunidad" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT categoria from productos P
+		INNER JOIN contratos C ON P.producto = C.producto
+		INNER JOIN contrato_clave_finsol CCF ON CCF.contrato = C.contrato
+		WHERE contrato_LD=#{contrato}
+	</select>
+
+
+	<select id="dsObtenerUltimoLD" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT contrato FROM contrato_clave_finsol WHERE
+		contrato_LD=#{1}
+	</select>
+
+	<select id="contratoValido" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT ccf.contrato_LD FROM contratos c
+		JOIN contrato_clave_finsol ccf ON ccf.contrato = c.contrato
+		WHERE cliente=#{1}
+	</select>
+
+	<select id="obtenerDatosCliente" parameterType="java.util.HashMap"
+		resultMap="mapObtenerDatosCliente">
+		SELECT
+		ISNULL(P.nombre + ' ' + P.apellido_pat + ' ' + P.apellido_mat,'') as nombreCompleto,
+		ISNULL(P.fecha_nacimiento,'') as fechaNacimiento,
+		ISNULL(P.rfc,'') as rfc,
+		ISNULL(P.no_curp,'') as curp,
+		ISNULL(CO.fecha_liq,'') as fechaLiquidacion,
+		CO.fecha_esp_liq as fechaVencimiento,
+		ISNULL(P.ciclo,0) as cicloCliente,
+		ISNULL(CO.status,'') as estatus,
+		CASE
+					WHEN CO.status = 'N' THEN 'NUEVO'
+					WHEN CO.status = 'D' THEN 'DISPUESTO'
+					WHEN CO.status = 'P' THEN 'LIQUIDADO'
+					WHEN CO.status = 'X' THEN 'CANCELADO'
+					WHEN CO.status = 'V' THEN 'VENDIDO'
+					WHEN CO.status = 'C' THEN 'QUEBRANTO'
+					ELSE CO.status
+		END estatusDesc,
+		ISNULL(I.monto_otorgado,0) as montoOtorgado,
+		CO.fecha_prox_pago as fechaProximoPago,
+		P.calle as Calle,
+		P.colonia as Colonia,
+		P.ciudad as Localidad,
+		P.cp as CodigoPostal,
+		P.municipio as Municipio,
+		P.pais as Pais,
+		E.estado as Estado,
+		P.actividad_emp as actividademp,
+		P.persona as Persona,
+		I.clasificacion_fira AS tipoLocalidad,
+		CASE
+			WHEN perc.experiencia_credito_grupal = 'S'
+				 OR perc.experiencia_credito_grupal = '1' THEN '1'
+			ELSE '0'
+		END	AS experiencia
+		FROM personas P
+		INNER JOIN integrante_grupo I on I.integrante=P.persona
+		INNER JOIN contratos CO on CO.contrato=I.contrato
+		INNER JOIN estados E ON P.entidad = E.codigo_financiera
+		LEFT OUTER JOIN persona_complemento perc ON perc.persona = P.persona
+		WHERE P.persona=#{persona}
+		AND CO.contrato=#{contrato}
+	</select>
+
+	<select id="obtenerDatosPersona" parameterType="java.lang.String"
+		resultMap="mapObtenerDatosCliente">
+
+		SELECT
+		ISNULL(P.nombre + ' ' + P.apellido_pat + ' ' + P.apellido_mat,'') as nombreCompleto,
+		ISNULL(P.fecha_nacimiento,'') as fechaNacimiento,
+		ISNULL(P.rfc,'') as rfc,
+		ISNULL(P.no_curp, '') AS curp,
+		ISNULL(P.ciclo,0) as cicloCliente,
+		P.calle as Calle,
+		P.colonia as Colonia,
+		P.ciudad as Localidad,
+		P.cp as CodigoPostal,
+		P.municipio as Municipio,
+		P.pais as Pais,
+		E.estado as Estado,
+		P.actividad_emp as actividademp,
+		P.persona as Persona,
+		CASE
+			WHEN perc.experiencia_credito_grupal = 'S'
+				 OR perc.experiencia_credito_grupal = '1' THEN '1'
+			ELSE '0'
+		END	AS experiencia
+		FROM personas P
+		LEFT JOIN persona_complemento perc ON perc.persona = P.persona
+		INNER JOIN estados E ON P.entidad = E.codigo_financiera
+		WHERE P.persona=#{persona}
+	</select>
+
+
+
+	<select id="obtenerContratoClientePorPersona" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT top 1 ( i.contrato)
+		FROM integrante_grupo i
+		JOIN contratos c ON c.contrato = i.contrato
+		WHERE i.integrante = #{1}
+		AND c.status IN ('D', 'P', 'N', 'V' )
+		AND c.producto != 'GOS1'
+		AND i.status = 'A'
+		ORDER BY c.fecha_contrato DESC
+	</select>
+
+
+	<select id="obtenerDatosultimocontrato" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT
+		C.sucursal as sucursal,
+		RC.clave_finsol as CodigoGrupo,
+		P.nombre as NombreGrupo,
+		IG.monto_otorgado as montoOtorgado,
+		IG.status as estatus
+
+		FROM contratos C
+		JOIN integrante_grupo IG ON C.contrato = IG.contrato
+		JOIN personas P ON P.persona = C.cliente AND P.personalidad='G'
+		JOIN relacion_clave_finsol RC ON RC.persona = C.cliente
+		WHERE C.contrato = #{contrato}
+		AND IG.integrante= #{persona}
+	</select>
+
+	<select id="obtenerDatosGrupo" parameterType="String"
+		resultType="java.util.HashMap">
+		SELECT RC.clave_finsol as CodigoGrupo,
+		P.nombre as NombreGrupo
+		FROM personas P
+		JOIN contratos CO ON CO.cliente=P.persona
+		JOIN relacion_clave_finsol RC ON RC.persona = CO.cliente
+		WHERE P.personalidad='G' and contrato=#{1}
+	</select>
+
+	<select id="obtenerDatosGrupoHistorico" parameterType="String"
+		resultMap="datosGrupoHis">
+		SELECT c.monto as Monto,
+	   		   ccf.contrato_LD as Contrato,
+	   		   ccf.contrato AS numContrato,
+	           ig.ciclo_integrante as Ciclo
+		FROM integrante_grupo ig
+		JOIN contrato_clave_finsol ccf ON
+		ccf.contrato = ig.contrato
+		JOIN contratos c ON c.contrato = ig.contrato
+		JOIN relacion_clave_finsol rcf ON rcf.persona = ig.integrante
+		WHERE
+			rcf.clave_finsol= #{1}
+		UNION
+		SELECT c.monto as Monto,
+	   		   ccf.contrato_LD as Contrato,
+	   		   ccf.contrato AS numContrato,
+	           ig.ciclo_integrante as Ciclo
+		FROM integrante_grupo ig
+		JOIN contrato_clave_finsol ccf ON
+		ccf.contrato = ig.contrato
+		JOIN contratos c ON c.contrato = ig.contrato
+		JOIN relacion_clave_finsol rcf ON rcf.persona = ig.integrante
+		WHERE
+			rcf.persona = #{1}
+		UNION
+		SELECT c.monto as Monto,
+	   		   ccf.contrato_LD as Contrato,
+	   		   ccf.contrato AS numContrato,
+	           ig.ciclo_integrante as Ciclo
+		FROM integrante_grupo ig
+		JOIN contrato_clave_finsol ccf ON
+		ccf.contrato = ig.contrato
+		JOIN contratos c ON c.contrato = ig.contrato
+		JOIN relacion_clave_finsol rcf ON rcf.persona = ig.integrante
+		WHERE
+			rcf.clave_cu = #{1}
+		ORDER BY ig.ciclo_integrante
+	</select>
+
+	<select id="ultimoLDGrupo" parameterType="String" resultType="java.lang.String">
+		SELECT MAX(CCF.contrato_LD) as ultimoLD
+		FROM contrato_grupo cg
+		INNER JOIN contrato_clave_finsol CCF ON CCF.contrato = cg.contrato
+		INNER JOIN contratos c on CCF.contrato= c.contrato
+		INNER JOIN productos P ON P.producto = c.producto AND P.categoria NOT LIKE
+		'OPO%'
+		INNER JOIN relacion_clave_finsol rcf ON rcf.persona = c.cliente
+		WHERE c.status != 'X'
+		and rcf.clave_finsol =#{1}
+		UNION
+		SELECT MAX(CCF.contrato_LD) as ultimoLD
+		FROM contrato_grupo cg
+		INNER JOIN contrato_clave_finsol CCF ON CCF.contrato = cg.contrato
+		INNER JOIN contratos c on CCF.contrato= c.contrato
+		INNER JOIN productos P ON P.producto = c.producto AND P.categoria NOT LIKE
+		'OPO%'
+		INNER JOIN relacion_clave_finsol rcf ON rcf.persona = c.cliente
+		WHERE c.status != 'X'
+		and rcf.persona =#{1}
+		UNION
+		SELECT MAX(CCF.contrato_LD) as ultimoLD
+		FROM contrato_grupo cg
+		INNER JOIN contrato_clave_finsol CCF ON CCF.contrato = cg.contrato
+		INNER JOIN contratos c on CCF.contrato= c.contrato
+		INNER JOIN productos P ON P.producto = c.producto AND P.categoria NOT LIKE
+		'OPO%'
+		INNER JOIN relacion_clave_finsol rcf ON rcf.persona = c.cliente
+		WHERE c.status != 'X'
+		and rcf.clave_cu =#{1}
+	</select>
+
+	<select id="obtenerClavesEstados" resultType="java.util.HashMap">
+		SELECT codigo_financiera, estado FROM estados order by estado
+	</select>
+
+	<select id="consultarCAT" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT count(contrato)
+		FROM condiciones_contrato
+		WHERE contrato = #{contrato} AND clave_condicion = 'COSTO_ANUAL_TOTAL'
+	</select>
+
+	<update id="actualizarCAT" parameterType="java.util.HashMap">
+		UPDATE
+		condiciones_contrato SET valor = #{valor}
+		WHERE contrato = #{contrato}
+		AND clave_condicion = 'COSTO_ANUAL_TOTAL'
+	</update>
+
+	<select id="consultarMovimientos" parameterType="java.util.HashMap"
+		resultMap="detalleMovimiento">
+		SELECT m.fecha_contable AS fechaContable, m.id_trx_caja AS
+		idTransaccion,
+		m.fecha_valor AS fechaValor, sum(m.monto_capital) *-1 AS 'importe',
+		m.codigo_servicio AS codigo
+		FROM movimientos m JOIN codigos_caja cc ON m.codigo = cc.codigo
+		WHERE m.contrato = #{contrato}
+		AND m.status IS NULL /* Movtos Activos */
+		AND
+		cc.tipo_codigo = 'ABO'
+		AND cc.tipo_operacion = #{tipoOperacion} /* Para
+		Pagos= 'PAGO' , Condonaciones = 'BONI' */
+		AND cc.codigo NOT IN
+		('CATA','CPGA','CSVA', 'CTCO','LCSM','LFTA','PGVA' , /* Movtos de
+		liquidación por castigo,venta, saldo min, invalidez */
+		'MCTA', 'MMTA' ) /* Movimientos migración */
+		GROUP BY m.fecha_contable,
+		m.id_trx_caja, m.fecha_valor, m.codigo_servicio
+		ORDER BY m.fecha_contable, m.fecha_valor
+	</select>
+
+	<select id="consultarReasignaciones" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.ReasignacionOV">
+		SELECT su.nombre AS sucursalOriginal,
+		s.nombre AS sucursalReasignada,
+		re.nombre AS zonaOriginal,
+		r.nombre AS zonaReasignada,
+		rc.persona_asig_ant AS nombreAsesorOriginal,
+		rc.persona_asig_nva AS nombreAsesorReasignado,
+		p.nombre AS grupo,
+		ccf.contrato_LD AS contratoLD,
+		ccf.contrato AS contrato,
+		( SELECT descripcion FROM codigos WHERE codigo = rc.motivo_reasigna AND
+		tipo_codigo = 'MREC' ) AS motivo,
+		rc.saldo_capital AS saldoCapital,
+		c.monto AS saldoTotal,
+		(SELECT count(contrato) FROM reasigna_contrato WHERE contrato = rc.contrato)
+		AS numeroReasignaciones
+		FROM reasigna_contrato rc
+		JOIN contratos c ON
+		c.contrato = rc.contrato
+		JOIN contrato_clave_finsol ccf ON ccf.contrato
+		= c.contrato
+		JOIN personas p ON p.persona = c.cliente
+		JOIN sucursales s
+		ON s.sucursal = rc.sucursal_asig_nva
+		JOIN regiones r ON r.region =
+		s.region
+		JOIN sucursales su ON su.sucursal = rc.sucursal_asig_ant
+		JOIN
+		regiones re ON re.region = su.region
+		<where>
+			<if test="asesor != null">
+				AND rc.persona_asig_nva = #{asesor}
+			</if>
+			<if test="sucursal != null">
+				AND rc.sucursal_asig_nva = #{sucursal}
+			</if>
+			<if test="zona != null">
+				AND s.region = #{zona}
+			</if>
+			<if test="fechaInicio != null">
+				<if test="fechaFin != null">
+					<![CDATA[ AND rc.fecha_autoriza >= #{fechaInicio} AND rc.fecha_autoriza <= #{fechaFin} ]]>
+				</if>
+			</if>
+		</where>
+	</select>
+
+
+	<select id="consultarReasignacionesContrato" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.ReasignacionContratoOV">
+		SELECT rc.fecha_autoriza AS fechaReasignacion,
+		ccf.contrato_LD AS contratoLD,
+		ccf.contrato AS contrato,
+		rc.persona_asig_ant AS nombreAsesorOriginal,
+		rc.persona_asig_nva AS nombreAsesorReasignado,
+		su.nombre AS sucursalOriginal,
+		re.nombre AS zonaOriginal,
+		s.nombre AS sucursalReasignada,
+		r.nombre AS zonaReasignada,
+		rc.dias_vencidos AS diasMoraReasignacion,
+		rc.saldo_capital AS saldoCapital,
+		c.monto AS saldoTotal
+		FROM reasigna_contrato rc
+		JOIN contrato_clave_finsol ccf
+		ON rc.contrato = ccf.contrato
+		JOIN contratos c ON c.contrato =
+		ccf.contrato
+		JOIN sucursales s ON s.sucursal = rc.sucursal_asig_nva
+		JOIN regiones r ON r.region = s.region
+		JOIN sucursales su ON
+		su.sucursal = rc.sucursal_asig_ant
+		JOIN regiones re ON re.region =
+		su.region
+		WHERE ccf.contrato = #{contrato}
+		ORDER BY folio_reasigna
+	</select>
+
+	<select id="consultarCreditosAsignados" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.CreditosAsignadosOV">
+		SELECT contratos.contrato AS contrato,
+		cc.contrato_LD AS contratoLD,
+		relacion_clave_finsol.clave_finsol AS codigoGrupo,
+		personas.nombre AS nombreGrupo,
+		contratos.capital_insoluto AS monto,
+		( SELECT COUNT(ig.integrante) FROM integrante_grupo ig WHERE
+		ig.contrato = contratos.contrato AND ig.status = 'A') AS integrantes
+		FROM contratos JOIN personas on contratos.cliente = personas.persona
+		JOIN contrato_grupo ON contrato_grupo.contrato = contratos.contrato
+		JOIN relacion_clave_finsol ON relacion_clave_finsol.persona =
+		personas.persona
+		JOIN contrato_clave_finsol cc ON cc.contrato = contratos.contrato
+		WHERE
+		contratos.status = 'D'
+		AND contratos.propietario = '000002011'
+		<if test="sucursal != null">
+			<if test="sucursal != 0">
+				AND contratos.sucursal = #{sucursal}
+			</if>
+		</if>
+		<if test="asesor != null">
+			AND contrato_grupo.asesor = #{asesor}
+		</if>
+	</select>
+
+	<select id="consolidadoCreditosAsignados" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.ConsolidadoCreditosAsignadosOV">
+		SELECT
+		SUM(contratos.capital_insoluto) AS montoAsociado,
+		COUNT(*) AS creditosAsignados
+		FROM
+		contratos,
+		personas,
+		contrato_grupo,
+		relacion_clave_finsol,
+		contrato_clave_finsol cc
+		WHERE contratos.cliente = personas.persona
+		AND contrato_grupo.contrato =
+		contratos.contrato
+		AND relacion_clave_finsol.persona = personas.persona
+		AND cc.contrato = contratos.contrato
+		AND contratos.status = 'D'
+		AND
+		contratos.propietario = '000002011'
+		<if test="sucursal != null">
+			<if test="sucursal != 0">
+				AND contratos.sucursal = #{sucursal}
+			</if>
+		</if>
+		<if test="asesor != null">
+			AND contrato_grupo.asesor = #{asesor}
+		</if>
+		GROUP BY contrato_grupo.asesor
+	</select>
+
+	<select id="consolidadoCreditosAsignadosClientes" parameterType="java.util.HashMap"
+		resultType="Integer">
+		SELECT
+		COUNT(*) AS clientes
+		FROM
+		contratos,
+		contrato_grupo,
+		contrato_clave_finsol cc,
+		integrante_grupo
+		WHERE contrato_grupo.contrato = contratos.contrato
+		AND cc.contrato =
+		contratos.contrato
+		AND contratos.status = 'D'
+		AND
+		integrante_grupo.contrato = contratos.contrato
+		AND
+		integrante_grupo.status = 'A'
+		AND contratos.propietario = '000002011'
+		<if test="sucursal != null">
+			<if test="sucursal != 0">
+				AND contratos.sucursal = #{sucursal}
+			</if>
+		</if>
+		<if test="asesor != null">
+			AND contrato_grupo.asesor = #{asesor}
+		</if>
+		GROUP BY contrato_grupo.asesor
+	</select>
+
+	<select id="generaActarecaudacion" parameterType="java.util.HashMap"
+		resultMap="actaRecaudacion">
+		SELECT
+		/** Acta de Recaudación. */
+		ccf.contrato_LD,
+		ac.contrato,
+		ac.sucursal,
+		ac.usuario_imprime,
+		ac.num_impresion,
+		ac.fecha_imprime,
+		p_p.nombre + ' ' + p_p.apellido_pat + ' ' + p_p.apellido_mat as presidenteNombre,
+		p_p.calle + ', ' + p_p.colonia + ', ' + p_p.ciudad + ', ' +
+		p_p.entidad as presidenteDireccion,
+		p_t.nombre + ' ' + p_t.apellido_pat + ' ' + p_t.apellido_mat as tesoreroNombre,
+		p_t.calle + ', ' + p_t.colonia + ', ' + p_t.ciudad + ', ' +
+		p_t.entidad as tesoreroDireccion,
+		p_a.nombre + ' ' + p_a.apellido_pat + ' ' + p_a.apellido_mat as asesorNombre,
+		/** Parcialidad. */
+		ac.num_pago,
+		ac.fecha_pactada_pago,
+		ac.persona_recauda,
+		ac.observaciones,
+		ac.fecha_captura,
+		ac.usuario_captura,
+		ac.num_actualizacion,
+		ac.fecha_ult_act,
+		'Guardada' as estatus
+
+		/** Cliente. */
+		FROM acta_recaudacion ac
+		JOIN contratos c
+		ON c.contrato = ac.contrato
+		JOIN contrato_clave_finsol ccf
+		ON ccf.contrato = ac.contrato
+		JOIN contrato_grupo cg
+		ON cg.contrato = ac.contrato
+		LEFT JOIN personas p_a
+		ON p_a.persona = cg.asesor
+		LEFT JOIN integrante_grupo ig_p
+		ON ig_p.contrato = ac.contrato
+		AND ig_p.rol = 'PRES'
+		LEFT JOIN personas p_p
+		ON p_p.persona = ig_p.integrante
+		LEFT JOIN integrante_grupo ig_t
+		ON ig_t.contrato = ac.contrato
+		AND ig_t.rol = 'TESO'
+		LEFT JOIN personas p_t
+		ON p_t.persona = ig_t.integrante
+		WHERE ac.contrato = #{contrato}
+		<if test="noPago != null"> and ac.num_pago = #{noPago} </if>
+		<if test="contratoLD != null"> and ccf.contrato_LD = #{contratoLD}</if>
+		<if test="sucursal != null"> and ac.sucursal = #{sucursal}</if>
+		<if test="usuarioImprime != null"> and ac.usuario_imprime = #{usuarioImprime}</if>
+		<if test="numImprime != null"> and ac.num_impresion = #{numImprime}</if>
+		<if test="fechaImprime != null"> and ac.fecha_imprime = #{fechaImprime}</if>
+		<if test="fechaPactadaPago != null"> and ac.fecha_pactada_pago = #{fechaPactadaPago}</if>
+		<if test="personaRecauda != null"> and ac.persona_recauda = #{personaRecauda}</if>
+		<if test="observaciones != null"> and ac.observaciones = #{observaciones}</if>
+		<if test="fechaCaptura != null"> and ac.fecha_captura = #{fechaCaptura}</if>
+		<if test="usuarioCaptura != null"> and ac.usuario_captura = #{usuarioCaptura}</if>
+		<if test="numeroActualizacion != null"> and ac.num_actualizacion = #{numeroActualizacion}</if>
+		<if test="fechaUltAct != null"> and ac.fecha_ult_act = #{fechaUltAct}</if>
+		<if test="integrante != null"> and ac.integrante = #{integrante}</if>
+		<if test="nombre != null"> and p_i.nombre = #{nombre}</if>
+		<if test="apellidoPaterno != null"> and p_i.apellido_pat = #{apellidoPaterno}</if>
+		<if test="apellidoMaterno != null"> and p_i.apellido_mat = #{apellidoMaterno}</if>
+		<if test="montoTotal != null"> and c.monto = #{montoTotal}</if>
+		<if test="montoPago != null"> and ac.monto_pago = #{montoPago}</if>
+		<if test="montoRecibido != null"> and ac.monto_recibido = #{montoRecibido}</if>
+		<if test="montoSolidario != null"> and ac.monto_solidario = #{montoSolidario}</if>
+		<if test="asistenciaIntegrante != null"> and ac.asistencia_integrante = #{asistenciaIntegrante}
+		</if>
+	</select>
+
+	<select id="datosIntegrantesParcialidad" parameterType="map"
+		resultType="actaRecaudacionCliente">
+		SELECT
+		ig.integrante,
+		<if test="pago == 1">p_i.nombre as nombre,</if>
+		<if test="pago == 1">p_i.apellido_pat as apellidoPaterno,</if>
+		<if test="pago == 1">p_i.apellido_mat as apellidoMaterno,</if>
+		<if test="pago == 1">( round((((c.monto + c.interes_total +
+			c.iva_interes_total)) * (ig.pct_participacion / 100)),2)) as
+			montoTotal,</if>
+		<if test="pago == 1">( round((((c.monto + c.interes_total +
+			c.iva_interes_total) / c.no_pagos) * (ig.pct_participacion /
+			100)),2)) as montoPago,</if>
+		ac.monto_recibido as montoRecibido,
+		ac.monto_solidario as montoSolidario,
+		ac.asistencia_integrante as asistenciaIntegrante,
+		rcf.clave_finsol as claveT24
+		<if test="pago == 1">,ig.monto_ahorro as saldoAhorro</if>
+		<if test="pago == 1">,( SELECT SUM (acr.monto_solidario) from acta_recaudacion
+			acr where acr.integrante = ac.integrante AND ac.contrato =
+			acr.contrato) as saldoSolidario</if>
+		<if test="pago == 1">, ig.monto_otorgado as montoEntregado</if>
+		<if test="pago == 1">, ig.pct_participacion as saldoTotalSistema</if>
+		FROM acta_recaudacion ac
+		JOIN contratos c
+		ON c.contrato = ac.contrato
+		JOIN integrante_grupo ig
+		ON ac.integrante = ig.integrante
+		AND ac.contrato = ig.contrato
+		AND ig.status = 'A'
+		JOIN personas p_i
+		ON p_i.persona = ig.integrante
+		JOIN relacion_clave_finsol rcf
+		ON p_i.persona = rcf.persona
+		WHERE ac.contrato = #{contrato}
+		AND ac.num_pago = #{pago}
+		ORDER BY ig.integrante
+	</select>
+
+	<select id="obtenResumenActasRecaudacion" parameterType="java.util.HashMap"
+		resultMap="concentradoActasRecaudacion">
+		SELECT consolidado.contrato , consolidado.clave_finsol,
+		consolidado.nombre,
+		consolidado.integrante,
+		round((c.monto + c.interes_total + c.iva_interes_total) *
+		(ig.pct_participacion/100),2) monto_tot_cred,
+		consolidado.pago_recibido, consolidado.aportacion_solid,
+		isnull(asistencia_P.P,0) P, isnull(asistencia_I.I,0) I,
+		isnull(asistencia_N.N,0) N, isnull(asistencia_E.E,0) E,
+		round((isnull(c.no_ult_pago,0) + isnull(c.no_pagos_vencidos,0)) *
+		c.monto_pago * (ig.pct_participacion/100),2) monto_pactado,
+		round((ig.pct_participacion * #{saldo_fv})/100 ,2)
+		saldo_total_sistema,
+		round( (c.monto + c.interes_total + c.iva_interes_total) *
+		(ig.pct_participacion/100),2) - round(consolidado.pago_recibido,2)
+		saldo_total_acta,
+		isnull(ig.monto_ahorro,0) AS saldoAhorro
+		FROM ( SELECT ccf.contrato, rcf.clave_finsol, p.nombre
+		+ ' ' + p.apellido_pat + ' ' + p.apellido_mat nombre,
+		ig.integrante , isnull(sum(ar.monto_recibido),0) pago_recibido,
+		isnull(sum(ar.monto_solidario),0) aportacion_solid
+		FROM contrato_clave_finsol ccf
+		INNER JOIN integrante_grupo ig on ccf.contrato = ig.contrato AND ig.status
+		= 'A'
+		INNER JOIN relacion_clave_finsol rcf ON ig.integrante = rcf.persona
+		INNER JOIN personas p ON ig.integrante = p.persona
+		left JOIN acta_recaudacion ar ON ar.contrato = ccf.contrato AND
+		ar.integrante = ig.integrante
+		WHERE ccf.contrato = #{contrato}
+		GROUP BY ccf.contrato, rcf.clave_finsol, p.nombre + ' ' + p.apellido_pat +
+		' ' + p.apellido_mat, ig.integrante
+		) consolidado
+		LEFT JOIN (SELECT integrante, count(*) P FROM
+		acta_recaudacion ar
+		INNER JOIN contrato_clave_finsol ccf ON ar.contrato = ccf.contrato
+		WHERE ar.contrato = #{contrato}
+		AND asistencia_integrante = 'P'
+		GROUP BY integrante, asistencia_integrante) asistencia_P ON
+		asistencia_P.integrante = consolidado.integrante
+		LEFT JOIN (SELECT
+		integrante, count(*) I FROM acta_recaudacion ar
+		INNER JOIN contrato_clave_finsol ccf ON ar.contrato = ccf.contrato
+		WHERE ar.contrato = #{contrato}
+		AND asistencia_integrante = 'I'
+		GROUP BY integrante, asistencia_integrante) asistencia_I ON
+		asistencia_I.integrante = consolidado.integrante
+		LEFT JOIN (SELECT
+		integrante, count(*) N FROM acta_recaudacion ar
+		INNER JOIN contrato_clave_finsol ccf ON ar.contrato = ccf.contrato
+		WHERE ar.contrato = #{contrato}
+		AND asistencia_integrante = 'N'
+		GROUP BY integrante, asistencia_integrante) asistencia_N ON
+		asistencia_N.integrante = consolidado.integrante
+		LEFT JOIN (SELECT
+		integrante, count(*) E FROM acta_recaudacion ar
+		INNER JOIN contrato_clave_finsol ccf ON ar.contrato = ccf.contrato
+		WHERE ar.contrato = #{contrato}
+		AND asistencia_integrante = 'E'
+		GROUP BY integrante, asistencia_integrante) asistencia_E ON
+		asistencia_E.integrante = consolidado.integrante
+		INNER JOIN contratos c
+		ON consolidado.contrato = c.contrato
+		INNER JOIN integrante_grupo ig ON
+		consolidado.contrato = ig.contrato AND ig.integrante =
+		consolidado.integrante
+		ORDER BY consolidado.integrante
+	</select>
+
+	<select id="existenParcialidades" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT COUNT(contrato)
+		FROM acta_recaudacion
+		WHERE contrato = #{contrato}
+	</select>
+
+	<select id="obtenerPresidenteTesorero" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+		SELECT pt.persona as tesorero,
+		pp.persona as presidente,
+		pt.nombre + ' ' + pt.apellido_pat + ' ' + pt.apellido_mat as nombreTesorero,
+		pp.nombre + ' ' + pp.apellido_pat + ' ' + pp.apellido_mat as
+		nombrePresidente,
+		pt.calle + ', ' + pt.colonia + ', ' + pt.ciudad + ', ' + pt.entidad as
+		direccionTesorero,
+		pp.calle + ', ' + pp.colonia + ', ' + pp.ciudad + ', ' + pp.entidad as
+		direccionPresidente
+		FROM contratos c
+		JOIN integrante_grupo igt
+		ON c.contrato = igt.contrato
+		AND igt.rol = 'TESO'
+		JOIN personas pt
+		ON pt.persona = igt.integrante
+		JOIN integrante_grupo igp
+		ON c.contrato = igp.contrato
+		AND igp.rol = 'PRES'
+		JOIN personas pp
+		ON pp.persona = igp.integrante
+		WHERE c.contrato = #{contrato}
+	</select>
+
+	<select id="obtenerCodigoServicioSaldoFavor" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT TOP 1 codigo_servicio AS codigo
+		FROM movimientos
+		WHERE contrato = #{contrato}
+		AND codigo = 'PSAF'
+		ORDER BY fecha_hora DESC
+	</select>
+
+	<select id="consultarReasignacionesMultiples" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.ReasignacionMultipleOV">
+		SELECT ccf.contrato_LD AS contratoLD,
+		ccf.contrato AS contrato,
+		p.nombre AS nombreGrupo,
+		(SELECT count(contrato) FROM reasigna_contrato rec WHERE rec.contrato =
+		rc.contrato) AS numeroReasignaciones
+		FROM reasigna_contrato rc
+		JOIN
+		contratos c
+		ON rc.contrato = c.contrato
+		JOIN personas p
+		ON p.persona = c.cliente
+		JOIN contrato_clave_finsol ccf
+		ON ccf.contrato = c.contrato
+		JOIN sucursales s
+		ON s.sucursal = c.sucursal
+		WHERE 1 = 1
+		<if test="sucursal != null">AND c.sucursal = #{sucursal}</if>
+		<if test="zona != null">AND s.region = #{zona}</if>
+		GROUP BY rc.contrato, ccf.contrato_LD, p.nombre
+		HAVING SUM(
+		rc.folio_reasigna ) > 1
+	</select>
+
+	<select id="consultarSolicitudesPendientesReasignacion"
+		parameterType="java.util.HashMap" resultType="utilitario.mensajes.consultas.SolicitudReasignacionOV">
+		SELECT src.fecha_envio AS fechaEnvio,
+		src.folio_solicitud AS folioSolicitud,
+		s.nombre AS sucursal,
+		s.region AS zona,
+		p.nombre + ' ' + p.apellido_pat + ' ' + p.apellido_mat AS usuarioAutoriza,
+		src.status AS estatus
+		FROM solicitud_reasigna_contrato src
+		JOIN
+		sucursales s
+		ON s.sucursal = src.sucursal_solicitud
+		LEFT JOIN personas p
+		ON p.persona = src.usuario_resolucion
+		WHERE src.status IN ('E')
+		<if test="sucursal != null">AND s.sucursal = #{sucursal}</if>
+		<if test="zona != null">AND s.region = #{zona}</if>
+	</select>
+
+	<select id="creditosSinAsignar" parameterType="java.util.HashMap"
+		resultMap="creditosSinAsignar">
+		SELECT ccf.contrato_LD as Contrato,
+		ccf.contrato as ContratoCredprod,
+		s.nombre as Sucursal,
+		s.region as Zona,
+		p.nombre as Grupo,
+		c.fecha_disposicion as Fecha_disposicion,
+		MAX(rc.fecha_autoriza) as Fecha
+		FROM contratos c
+		JOIN contrato_clave_finsol ccf ON ccf.contrato = c.contrato
+		JOIN sucursales s on c.sucursal = s.sucursal
+		JOIN personas p on p.persona = c.cliente
+		LEFT JOIN reasigna_contrato rc on c.contrato = rc.contrato
+		WHERE c.vendedor = '000999998'
+		AND c.status IN ('D','N')
+
+		<if test="zona != -1">
+			AND s.region = #{zona}
+		</if>
+		<if test="sucursal != 0">
+			AND s.sucursal = #{sucursal}
+		</if>
+
+		GROUP BY ccf.contrato_LD, s.nombre, s.region, p.nombre,
+		c.fecha_disposicion
+		ORDER BY s.nombre
+
+	</select>
+
+	<select id="obtenerClavePersonaAsesor" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT persona from red_operativa WHERE no_DAO = CONVERT(
+		INT, #{claveAsesor} )
+	</select>
+
+	<select id="obtenerDatosSolicitudReasignacion" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT src.fecha_solicitud AS fechaSolicitud
+		FROM
+		solicitud_reasigna_contrato src
+		WHERE src.folio_solicitud =
+		#{folioSolicitud}
+	</select>
+
+
+	<select id="obtenerDatosUltimoLD" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+		SELECT top 1 CCF.contrato_LD,
+		CCF.contrato,
+		C.sucursal as sucursal,
+		RC.clave_finsol as CodigoGrupo,
+		PE.nombre as NombreGrupo,
+		I.monto_otorgado as montoOtorgado,
+		I.status as estatus
+		FROM integrante_grupo I
+		JOIN contratos C on C.contrato=I.contrato
+		JOIN contrato_clave_finsol CCF ON CCF.contrato = I.contrato
+		JOIN productos P ON P.producto = C.producto AND P.categoria NOT LIKE
+		'OPO%'
+		JOIN personas PE ON PE.persona = C.cliente AND PE.personalidad='G'
+		JOIN relacion_clave_finsol RC ON RC.persona = C.cliente
+		WHERE I.integrante
+		= #{cliente}
+		AND C.status != 'X'
+		AND I.status = 'A'
+		ORDER BY C.fecha_contrato DESC
+	</select>
+
+
+	<select id="consultarCreditosSaldoAFavorAjustados"
+		parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.SaldoAFavorCreditoVigenteVO">
+
+
+		SELECT m.fecha_valor AS fechaAplicacion,
+		ccf.contrato_LD AS contrato,
+		ccf.contrato AS contratoCredprod,
+		p.nombre AS nombreGrupo,
+		m.monto_capital AS importeAplicado,
+		s.nombre AS sucursal
+		FROM movimientos m
+		INNER JOIN contrato_clave_finsol ccf ON m.contrato = ccf.contrato
+		INNER JOIN contratos c ON c.contrato = ccf.contrato
+		INNER JOIN sucursales s ON s.sucursal = c.sucursal
+		INNER JOIN personas p ON p.persona = c.cliente
+		WHERE m.codigo = 'RING'
+		AND m.status is null
+		<if test="sucursal != 0">
+			AND c.sucursal = #{sucursal}
+		</if>
+		<if test="fechaInicio != null">
+					<![CDATA[	AND m.fecha_valor >= #{fechaInicio} ]]>
+		</if>
+		<if test="fechaFin != null">
+					<![CDATA[	AND m.fecha_valor <= #{fechaFin} ]]>
+		</if>
+
+
+	</select>
+
+	<select id="universoSaldosAFavor" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+       <![CDATA[
+		SELECT capital_insoluto *-1 AS saldoFavor, contrato,sucursal, no_ult_pago FROM contratos
+		WHERE capital_insoluto < 0
+		AND capital_insoluto >= #{monto}
+		]]>
+	</select>
+
+
+
+	<select id="algoritmo21" statementType="CALLABLE" parameterType="java.util.HashMap"
+		resultType="java.lang.String">
+
+		{call dv_mod10_fp2_1 (1, #{referencia}, null)}
+
+	</select>
+
+
+	<select id="consultaInicioOperacion" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT ac.fecha_operacion as fechaInicioOperacion,
+		ac.fecha_contable as fechaContable,
+		ac.cajera || '-' || p.nombre || ' ' || p.apellido_pat || ' ' || p.apellido_mat
+		as usuario,
+		ac.sucursal as sucursal,
+		s.nombre as nombreSucursal
+		FROM auditoria_cajas ac
+		INNER JOIN sucursales s ON s.sucursal = ac.sucursal
+		LEFT JOIN personas p ON p.persona = ac.cajera
+		WHERE codigo_op = 'APER'
+
+		<if test="sucursal != 0">
+			AND ac.sucursal = #{sucursal}
+		</if>
+		<if test="fechaInicio != null">
+					<![CDATA[	AND ac.fecha_contable >= #{fechaInicio} ]]>
+		</if>
+		<if test="fechaFin != null">
+					<![CDATA[	AND ac.fecha_contable <= #{fechaFin} ]]>
+		</if>
+
+		order by s.sucursal, ac.fecha_contable
+
+
+	</select>
+
+
+	<select id="consultaAsentamientos" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsentamientoOV">
+		SELECT a.id_asentamiento AS idAsentamiento,
+		a.cve_estado AS idEstado,
+		lf.estado_finsol AS estado,
+		e.codigo_financiera AS cveEstado,
+		a.cve_mnpio AS idMunicipio,
+		a.municipio AS municipio,
+		a.ciudad AS ciudad,
+		a.clave_municipio_fira AS idMunicipioFira,
+		lf.municipio_finsol AS municipioFira,
+		a.clave_localidad_fira AS idLocalidadFira,
+		lf.localidad_finsol AS localidadFira,
+		str_replace(str_replace(str_replace(str_replace(str_replace(upper(a.asentamiento),'Á','A'),'É','E'),'Í','I'),'Ó','O'),'Ú','U') AS nombre,
+		a.cp AS cp,
+		lf.clasificacion AS tipoLocalidad,
+		a.tipo_asentamiento AS tipoEstablecimiento
+		FROM credprod..asentamiento_finsol a
+		INNER JOIN credprod_finsol..localidades_fira lf ON
+		( a.cve_estado = lf.clave_entidad AND
+		a.clave_municipio_fira = lf.clave_municipio AND
+		a.clave_localidad_fira = lf.clave_localidad )
+		INNER JOIN estados e ON a.cve_estado = e.id_estado
+		WHERE a.cp = #{cp}
+		ORDER BY a.asentamiento
+	</select>
+
+	<select id="validaIntegranteContrato" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select contrato , integrante , capital_insoluto, pct_participacion from
+		integrante_grupo
+		where contrato = #{contrato} AND integrante = #{integrante} AND status in
+		('A','C')
+	</select>
+
+	<select id="obtieneReferencia" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT  nn_consecutivo, referencia_3, monto, fecha_contable, contrato, clave_prod
+		 	FROM auditoria_cajas
+		WHERE referencia_3 = #{referencia} <!--AND id_trx_caja = ${autorizacion}-->
+	</select>
+
+	<select id="obtieneDatosConvenio" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select numero_convenio , status , monto_pago_convenio ,
+		monto_bonifica_convenio ,
+		monto_total_convenio , porcentaje_bonifica , plazo_convenio , frecuencia ,
+		fecha_inicio , fecha_fin , fecha_modificacion , usuario_captura, gestor
+		from convenio_integrante
+		where contrato = #{contrato}
+		AND integrante = #{integrante}
+
+		<if test="status != null">
+			AND status = #{status}
+		</if>
+
+		<if test="numero_convenio != null">
+			AND numero_convenio = #{numero_convenio}
+		</if>
+
+	</select>
+
+	<select id="obtieneDatosContratoConvenio" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+
+
+
+		SELECT monto_otorgado,
+		p.nombre || ' ' || p.apellido_pat || ' ' || p.apellido_mat AS nombre_cliente,
+		pg.nombre AS nombre_grupo,
+		saldos.saldo_capital,
+		saldos.saldo_interes,
+		saldos.saldo_moratorios,
+		ig.pct_participacion / 100 AS pct_participacion,
+		round(saldos.saldo_capital * (ig.pct_participacion / 100),2) saldo_capital_ind,
+		round(saldos.saldo_interes * (ig.pct_participacion / 100),2)
+		saldo_interes_ind,
+		round(saldos.saldo_moratorios * (ig.pct_participacion / 100),2) saldo_moratorios_ind
+		FROM
+		integrante_grupo ig
+		INNER JOIN personas p ON ig.integrante = p.persona
+		INNER JOIN contratos c ON ig.contrato = c.contrato
+		INNER JOIN personas
+		pg ON c.cliente = pg.persona
+		INNER JOIN (
+		SELECT
+		contrato,sum(abono_capital) saldo_capital,
+		sum(int_periodo) + sum(iva_int_periodo) saldo_interes,
+		sum(moratorios) + sum(iva_moratorios) saldo_moratorios
+		FROM desglose_pagos_cobranza
+		WHERE contrato = #{contrato}
+		GROUP BY contrato
+		) saldos ON saldos.contrato = ig.contrato
+		WHERE ig.contrato
+		= #{contrato}
+		AND ig.integrante = #{integrante}
+
+	</select>
+
+	<select id="obtieneDatosPagosConvenio" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select numero_pago , status , monto_pago , monto_pagado ,
+		monto_bonifica , fecha_pactada_pago , fecha_pago , usuario_pago ,
+		observaciones
+		from convenio_pagos
+		where numero_convenio = #{numero_convenio}
+		order by numero_pago
+
+	</select>
+
+	<select id="obtieneNumeroPagosConvenio" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		select count(*)
+		from convenio_pagos
+		where numero_convenio = #{numero_convenio}
+
+		<if test="status != null">
+			AND status = #{status}
+		</if>
+
+	</select>
+
+	<select id="obtenerAsignacionSucursales" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionOV">
+
+		SELECT convert(varchar(12), cg.hora_reunion, 18) AS horaReunion,
+		isnull(cg.dia_reunion,0) AS diaReunion ,
+		count(*) AS numContratos
+		FROM contratos c
+		INNER JOIN contrato_grupo cg ON c.contrato = cg.contrato
+		WHERE 1 = 1
+		AND c.status IN ('D','N')
+		AND c.sucursal = #{numeroSucursal}
+		AND c.fecha_esp_liq > #{fechaContable}
+		AND c.producto != 'GOS1'
+		AND (gestor = '000000000' OR gestor IS NULL OR gestor = '')
+		GROUP BY convert(varchar(12), cg.hora_reunion, 18), cg.dia_reunion
+		ORDER BY dia_reunion , convert(varchar(12), cg.hora_reunion, 18)
+
+	</select>
+
+	<select id="obtenerAsignacionDetalle" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionDetalleOV">
+		SELECT ccf.contrato_LD AS contratoLD,
+		c.contrato AS contrato,
+		pg.nombre AS nombreGrupo,
+		cg.ciclo_grupo AS cicloGrupo,
+		c.vendedor AS numeroAsesor,
+		pa.nombre + ' '+
+		pa.apellido_pat + ' '+
+		pa.apellido_mat AS nombreAsesor,
+		(SELECT COUNT(*) FROM integrante_grupo WHERE contrato = c.contrato)
+		totalIntegrantes,
+		c.producto AS producto,
+		p.descripcion AS descProd,
+		c.fecha_disposicion AS fechaInicio,
+		c.fecha_esp_liq AS fechaFin,
+		c.no_pagos AS numeroPagos,
+		c.no_ult_pago AS pagosRestantes,
+		case
+		when datediff( dd, c.fecha_prox_pago, #{fechaContable}) <![CDATA[<]]>
+		0 THEN 0
+		ELSE datediff( dd, c.fecha_prox_pago, #{fechaContable})
+		END diasMora,
+		c.capital_insoluto AS saldoTotal,
+		convert(varchar(12), cg.hora_reunion, 18) AS horaReunionInicio,
+		convert(varchar(12), cg.hora_reunion_fin, 18) AS horaReunionFin,
+		isnull(cg.dia_reunion,0) AS diaReunion,
+		c.frecuencia_pago AS frecuencia,
+		'RECAUDACION' as tipoActividad,
+		c.monto_pago AS parcialidad
+		FROM contratos c
+		INNER JOIN contrato_clave_finsol ccf ON ccf.contrato = c.contrato
+		INNER JOIN contrato_grupo cg ON c.contrato = cg.contrato
+		INNER JOIN productos p ON p.producto = c.producto
+		LEFT JOIN personas pg ON pg.persona = c.cliente
+		LEFT JOIN personas pa ON pa.persona = c.vendedor
+		WHERE 1 = 1
+		AND c.status IN ('D','N')
+		<if test="numeroSucursal != null">
+			AND c.sucursal = #{numeroSucursal}
+		</if>
+		AND c.fecha_esp_liq > #{fechaVariable}
+		AND c.producto != 'GOS1'
+		<if test="diaReunion != null">
+			AND isnull(cg.dia_reunion,0) = #{diaReunion}
+		</if>
+		<if test="horaReunion != null">
+			AND convert(varchar(12), cg.hora_reunion, 18) =
+			#{horaReunion}
+		</if>
+		<if test="vendedor != null">
+			AND c.vendedor = #{vendedor}
+		</if>
+		AND (gestor = '000000000' OR gestor IS NULL OR gestor = '')
+		ORDER BY ccf.contrato_LD
+	</select>
+
+	<select id="obtenDAOApartirPersona" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionDetalleOV">
+		SELECT sucursal as numeroSucursal,
+		no_DAO as numeroAsesor
+		FROM red_operativa
+		WHERE persona = #{vendedor}
+		AND status = 'A'
+		<if test="numeroSucursal != null">
+			AND sucursal = #{numeroSucursal}
+		</if>
+	</select>
+
+	<select id="buscaDiaAsesor" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionDetalleOV">
+		SELECT ccf.contrato_LD AS contratoLD,
+		c.contrato AS contrato,
+		c.vendedor AS numeroAsesor,
+		convert(varchar(12), cg.hora_reunion, 18) AS horaReunionInicio,
+		convert(varchar(12), cg.hora_reunion_fin, 18) AS horaReunionFin,
+		isnull(cg.dia_reunion,0) AS diaReunion
+		FROM contratos c
+		INNER JOIN contrato_clave_finsol ccf ON
+		ccf.contrato = c.contrato
+		INNER JOIN contrato_grupo cg ON c.contrato =
+		cg.contrato
+		WHERE c.contrato = #{contrato}
+	</select>
+
+	<select id="obtenerClienteDeContrato" parameterType="java.util.HashMap"
+		resultType="java.lang.String">
+		SELECT cliente FROM contratos WHERE contrato =  #{contrato}
+	</select>
+
+	<select id="obtenerNumeroAsignacion"
+		resultType="utilitario.mensajes.consultas.AsignacionesPendientesOV">
+		SELECT MAX(numAsig) AS numeroAsignacion
+		FROM asignaciones_pendientes
+	</select>
+
+	<select id="obtenerBuzonTareas" parameterType="java.util.HashMap"
+		resultType="utilitario.buzon.TareaOV">
+
+		SELECT bt.id_tarea AS idTarea,
+			(SELECT tfem.id_tarea FROM buzon_tareas btm,tareas_firma_electronica tfem 
+				where btm.descripcion = bt.descripcion and tfem.id_tarea = btm.id_tarea) AS idTareaFirmaElec,
+			bt.tipo_tarea AS tipoTarea,
+			bt.tipo_tarea AS tipoTarea,
+			CASE
+				WHEN bt.tipo_tarea = 'TECR' THEN 'Evaluacion Credito'
+				WHEN bt.tipo_tarea = 'TOEG' THEN 'Excepcion Garantia'
+				ELSE bt.tipo_tarea
+			END nombreTarea,
+			co.descripcion AS descripcionTipoTarea,
+			bt.descripcion AS descripcion,
+			d.division AS region,
+			d.nombre AS nombreRegion,
+			r.region AS zona,
+			r.nombre AS nombreZona,
+			bt.sucursal AS sucursal,
+			s.nombre AS nombreSucursal,
+			isnull(bt.usuario_propietario,'') AS propietario,
+			p.nombre + ' '+
+			p.apellido_pat + ' '+
+			p.apellido_mat AS nombrePropietario,
+			CONVERT (VARCHAR(20),bt.fecha_alta, 103) || ' ' || CONVERT (VARCHAR(20),bt.fecha_alta, 108) AS fechaAlta,
+			CONVERT (VARCHAR(20),bt.fecha_asignacion,103) || ' ' || CONVERT (VARCHAR(20),bt.fecha_asignacion, 108) AS fechaAsignacion,
+			CONVERT (VARCHAR(20),bt.fecha_termino,103) || ' ' || CONVERT (VARCHAR(20),bt.fecha_termino, 108) AS fechaTermino,
+			bt.status AS status,
+			bt.perfil AS perfil,
+			CASE
+				WHEN a.codigo_resolucion IS NULL OR a.codigo_resolucion = ' ' then
+					sol.estatus
+				ELSE
+					sol.estatus || ' - ' || a.codigo_resolucion
+			END AS estatusSolicitud,
+			sol.estatus AS estatus,
+			sol.descripcion  AS codigoResolucion,
+			sol.ciclo AS ciclo,
+			sol.codigo_producto AS codigoProducto,
+			isnull(sol.categoria,'ORD') AS categoria,
+			isnull(sol.express,'N') AS express,
+			isnull(coca.descripcion,'') AS campana,
+			pg.nombre AS nombreGrupo,
+			( SELECT isnull(cod.descripcion, ' ') FROM sucursales_tipificaciones sti
+				INNER JOIN codigos cod ON cod.tipo_codigo = 'TFNR' AND cod.codigo = sti.valor_tipificacion
+				WHERE sti.sucursal = bt.sucursal ) AS nivelSucursal,
+			( SELECT isnull(cod.descripcion, ' ') FROM sucursales_tipificaciones sti
+				INNER JOIN codigos cod ON cod.tipo_codigo = 'TFTS' AND cod.codigo = sti.valor_tipificacion
+				WHERE sti.sucursal = bt.sucursal ) AS tipoSucursal,
+			sol.tasa AS tasa,
+			sol.plazo AS plazo,
+			sol.efectivo_solicitado  AS montoSolicitado,
+			sol.campana AS codigoCampana,
+			tec.fecha_inicio_gestion AS fechaInicioGestion,
+			(SELECT isnull(tfem.codigo_resolucion_regional, 'ENVI') 
+			   FROM buzon_tareas btm,tareas_firma_electronica tfem 
+			  WHERE btm.descripcion = bt.descripcion 
+			    AND btm.tipo_tarea = 'TFIE' 
+			    AND tfem.id_tarea = btm.id_tarea) as resolucionRegional,
+			(SELECT isnull(tfem.codigo_resolucion_divisional, 'ENVI') 
+			   FROM buzon_tareas btm,tareas_firma_electronica tfem 
+			  WHERE btm.descripcion = bt.descripcion 
+			    AND btm.tipo_tarea = 'TFIE' 
+			    AND tfem.id_tarea = btm.id_tarea) as resolucionDivisional,
+			(SELECT isnull(tfem.codigo_resolucion_subdirector, 'ENVI') 
+			   FROM buzon_tareas btm,tareas_firma_electronica tfem 
+			  WHERE btm.descripcion = bt.descripcion 
+			    AND btm.tipo_tarea = 'TFIE' 
+			    AND tfem.id_tarea = btm.id_tarea) as resolucionSubdirector,
+			'white' AS resolucionFIE,
+			CASE 
+				WHEN(SELECT btm.tipo_tarea FROM buzon_tareas btm,tareas_firma_electronica tfem 
+				where btm.descripcion = bt.descripcion and tfem.id_tarea = btm.id_tarea) = 'TFIE' THEN 'true'
+				ELSE 'false'  
+			END AS esFirmaElectronica
+		FROM buzon_tareas bt
+		INNER JOIN sucursales s ON bt.sucursal = s.sucursal
+		INNER JOIN regiones r ON	r.region = s.region
+		INNER JOIN divisiones d ON d.division = r.division
+		INNER JOIN codigos co ON co.tipo_codigo = 'TBFS' AND bt.tipo_tarea = co.codigo
+		LEFT JOIN personas p ON p.persona = bt.usuario_propietario
+		LEFT JOIN solicitudes_finsol sol ON sol.solicitud = bt.descripcion
+		LEFT JOIN codigos coca ON coca.tipo_codigo = 'CECG' AND sol.campana = coca.codigo
+		LEFT JOIN atomos a ON a.solicitud = bt.descripcion  AND a.proceso = sol.estatus
+							  AND a.hora_registro = (SELECT MAX(hora_registro) FROM atomos WHERE solicitud = bt.descripcion AND a.proceso = sol.estatus)
+		LEFT JOIN personas pg ON pg.persona = sol.cliente
+		LEFT JOIN tareas_evaluacion_credito tec ON tec.id_tarea = bt.id_tarea
+		WHERE
+		1 = 1
+
+
+		<if test="tipo_tarea != null">
+			and bt.tipo_tarea = #{tipo_tarea}
+		</if>
+		<if test="perfil != null">
+			and bt.perfil = #{perfil}
+		</if>
+		<if test="status != null">
+			and bt.status = #{status}
+		</if>
+		<if test="sucursal != 0">
+			and bt.sucursal = #{sucursal}
+		</if>
+
+		<choose>
+			<when  test="tipo_tarea == 'TECR' and perfil == 'PCEC'">
+				AND  usuario_propietario =	#{usuario_propietario}
+			</when>
+			<when  test="tipo_tarea == 'TREC' and perfil == 'PCEC'">
+				AND  usuario_propietario =	#{usuario_propietario}
+			</when>
+			<when test="usuario_propietario != null">
+				AND (bt.usuario_propietario IS NULL
+						or usuario_propietario = #{usuario_propietario})
+			</when>
+		</choose>
+
+		order by bt.tipo_tarea, bt.id_tarea
+
+	</select>
+
+	<select id="obtenerBuzonTareasAnalistaDocumental" parameterType="java.util.HashMap"
+		resultType="utilitario.buzon.TareaOV">
+
+		SELECT bt.id_tarea AS idTarea,
+			bt.tipo_tarea AS tipoTarea,
+
+			CASE
+				WHEN bt.tipo_tarea = 'TECR' THEN 'Evaluacion Credito'
+				WHEN bt.tipo_tarea = 'TOEG' THEN 'Excepcion Garantia'
+				ELSE bt.tipo_tarea
+			END nombreTarea,
+
+			co.descripcion AS descripcionTipoTarea,
+			bt.descripcion AS descripcion,
+			d.division AS region,
+			d.nombre AS nombreRegion,
+			r.region AS zona,
+			r.nombre AS nombreZona,
+			bt.sucursal AS sucursal,
+			s.nombre AS nombreSucursal,
+			isnull(bt.usuario_propietario,'') AS propietario,
+			p.nombre + ' '+
+			p.apellido_pat + ' '+
+			p.apellido_mat AS nombrePropietario,
+			CONVERT (VARCHAR(20),bt.fecha_alta, 103) || ' ' || CONVERT (VARCHAR(20),bt.fecha_alta, 108) AS fechaAlta,
+			CONVERT (VARCHAR(20),bt.fecha_asignacion,103) || ' ' || CONVERT (VARCHAR(20),bt.fecha_asignacion, 108) AS fechaAsignacion,
+			CONVERT (VARCHAR(20),bt.fecha_termino,103) || ' ' || CONVERT (VARCHAR(20),bt.fecha_termino, 108) AS fechaTermino,
+			bt.status AS status,
+			bt.perfil AS perfil,
+			CASE
+				WHEN a.codigo_resolucion IS NULL OR a.codigo_resolucion = ' ' then
+					sol.estatus
+				ELSE
+					sol.estatus || ' - ' || a.codigo_resolucion
+
+			END AS estatusSolicitud,
+			sol.estatus AS estatus,
+			sol.descripcion  AS codigoResolucion,
+			sol.ciclo AS ciclo,
+			sol.codigo_producto AS codigoProducto,
+			isnull(sol.categoria,'ORD') AS categoria,
+			isnull(sol.express,'N') AS express,
+			isnull(coca.descripcion,'') AS campana,
+			pg.nombre AS nombreGrupo,
+
+			( SELECT isnull(cod.descripcion, ' ') FROM sucursales_tipificaciones sti
+				INNER JOIN codigos cod ON cod.tipo_codigo = 'TFNR' AND cod.codigo = sti.valor_tipificacion
+				WHERE sti.sucursal = bt.sucursal ) AS nivelSucursal,
+			( SELECT isnull(cod.descripcion, ' ') FROM sucursales_tipificaciones sti
+				INNER JOIN codigos cod ON cod.tipo_codigo = 'TFTS' AND cod.codigo = sti.valor_tipificacion
+				WHERE sti.sucursal = bt.sucursal ) AS tipoSucursal,
+			sol.tasa AS tasa,
+			sol.plazo AS plazo,
+			sol.efectivo_solicitado  AS montoSolicitado,
+			tec.fecha_inicio_gestion AS fechaInicioGestion,
+			datediff(mi, bt.fecha_asignacion , getdate()) AS espera,
+			co1.descripcion AS nivelRestriccion
+
+		FROM buzon_tareas bt
+		INNER JOIN sucursales s ON bt.sucursal = s.sucursal
+		INNER JOIN regiones r ON	r.region = s.region
+		INNER JOIN divisiones d ON d.division = r.division
+		INNER JOIN codigos co ON co.tipo_codigo = 'TBFS' AND bt.tipo_tarea = co.codigo
+		INNER JOIN sucursales_tipificaciones st ON bt.sucursal = st.sucursal
+		INNER JOIN codigos co1 ON co1.tipo_codigo = 'TFNR' AND st.valor_tipificacion = co1.codigo
+		LEFT JOIN personas p ON p.persona = bt.usuario_propietario
+		LEFT JOIN solicitudes_finsol sol ON sol.solicitud = bt.descripcion
+		LEFT JOIN codigos coca ON coca.tipo_codigo = 'CECG' AND sol.campana = coca.codigo
+		LEFT JOIN atomos a ON a.solicitud = bt.descripcion  AND a.proceso = sol.estatus
+							  AND a.hora_registro = (SELECT MAX(hora_registro) FROM atomos WHERE solicitud = bt.descripcion AND a.proceso = sol.estatus)
+		LEFT JOIN personas pg ON pg.persona = sol.cliente
+		LEFT JOIN tareas_evaluacion_credito tec ON tec.id_tarea = bt.id_tarea
+		WHERE
+		1 = 1
+
+
+		<if test="tipo_tarea != null">
+			and bt.tipo_tarea = #{tipo_tarea}
+		</if>
+		<if test="perfil != null">
+			and bt.perfil = #{perfil}
+		</if>
+		<if test="status != null">
+			and bt.status = #{status}
+		</if>
+		<if test="sucursal != 0">
+			and bt.sucursal = #{sucursal}
+		</if>
+
+		<choose>
+			<when  test="tipo_tarea == 'TRED' and perfil == 'PDOC'">
+				AND  usuario_propietario =	#{usuario_propietario}
+			</when>
+
+			<when test="usuario_propietario != null">
+				AND (bt.usuario_propietario IS NULL
+						or usuario_propietario = #{usuario_propietario})
+			</when>
+		</choose>
+
+		order by bt.tipo_tarea, bt.id_tarea
+
+	</select>
+
+	<select id="obtenerBuzonTareasExPorTipoTarea" parameterType="java.util.HashMap"
+		resultType="utilitario.buzon.TareaOV">
+
+		SELECT bt.id_tarea AS idTarea,
+			bt.tipo_tarea AS tipoTarea,
+			'Excepcion Garantia' AS nombreTarea,
+			'Originacion Excepcion Garantia' AS descripcionTipoTarea,
+			bt.descripcion AS descripcion,
+			d.division AS region,
+			d.nombre AS nombreRegion,
+			r.region AS zona,
+			r.nombre AS nombreZona,
+			bt.sucursal AS sucursal,
+			s.nombre AS nombreSucursal,
+
+			tex.codigo_estatus_autorizacion AS estatusAuth,
+			sol.contrato  AS contrato,
+			tex.justificacion AS justificacion,
+			tex.observaciones AS observaciones,
+
+			isnull(bt.usuario_propietario,'') AS propietario,
+			p.nombre + ' '+
+			p.apellido_pat + ' '+
+			p.apellido_mat AS nombrePropietario,
+			CONVERT (VARCHAR(20),bt.fecha_alta, 103) AS fechaAlta,
+			CONVERT (VARCHAR(20),bt.fecha_asignacion,103) AS fechaAsignacion,
+			CONVERT (VARCHAR(20),bt.fecha_termino,103) AS fechaTermino,
+
+			CONVERT(varchar(10), tex.fecha_autorizacion, 103) AS fechaAutorizacion,
+			CONVERT(varchar(10), sol.fecha_captura, 103) AS fechaCaptura,
+			CONVERT(varchar(10), bt.fecha_alta, 103) AS fechaIngreso,
+			bt.status AS status,
+			bt.perfil AS perfil,
+			' ' AS estatusSolicitud,
+			sol.estatus AS estatus,
+			' ' AS codigoResolucion,
+			sol.ciclo AS ciclo,
+			sol.codigo_producto AS codigoProducto,
+			isnull(sol.categoria,'ORD') AS categoria,
+			isnull(sol.express,'N') AS express,
+			isnull(coca.descripcion,'') AS campana,
+			pg.nombre AS nombreGrupo,
+			' ' AS nivelSucursal,
+			' ' AS tipoSucursal,
+			sol.tasa AS tasa,
+			sol.plazo AS plazo,
+			sol.efectivo_solicitado  AS montoSolicitado,
+
+			sol.contrato AS contrato,
+			tex.justificacion AS justificacion,
+			datediff(mi, bt.fecha_alta , getdate()) AS espera,
+			tex.observaciones AS observaciones,
+			bt.descripcion AS solicitud
+
+		FROM buzon_tareas bt
+		INNER JOIN tareas_excepcion_garantia tex ON tex.id_tarea = bt.id_tarea_padre
+		INNER JOIN sucursales s ON bt.sucursal = s.sucursal
+		INNER JOIN regiones r ON	r.region = s.region
+		INNER JOIN divisiones d ON d.division = r.division
+		INNER JOIN solicitudes_finsol sol ON sol.solicitud = bt.descripcion
+		INNER JOIN personas pg ON pg.persona = sol.cliente
+		LEFT JOIN personas p ON p.persona = bt.usuario_propietario
+		LEFT JOIN codigos coca ON coca.tipo_codigo = 'CECG' AND sol.campana = coca.codigo
+		WHERE
+		1 = 1
+		and bt.tipo_tarea = 'TOEG'
+	    AND  bt.perfil = 'PSUC'
+		AND  bt.status = 'P'
+
+		<if test="sucursal != 0">
+			and bt.sucursal = #{sucursal}
+		</if>
+
+		<if test="usuario_propietario != null">
+			AND (bt.usuario_propietario IS NULL or usuario_propietario =
+			#{usuario_propietario})
+		</if>
+
+	</select>
+
+	<select id="consultaTareaBuzon" parameterType="java.util.HashMap"
+		resultType="utilitario.buzon.TareaOV">
+
+		SELECT bt.id_tarea AS idTarea,
+		bt.tipo_tarea AS tipoTarea,
+		bt.descripcion AS descripcion,
+		bt.sucursal AS sucursal,
+		isnull(bt.usuario_propietario,'') AS propietario,
+		'' AS nombrePropietario,
+		bt.fecha_alta AS fechaAlta,
+		bt.fecha_asignacion AS fechaAsignacion,
+		bt.fecha_termino AS fechaTermino,
+		bt.status AS status,
+		bt.perfil AS perfil
+		FROM buzon_tareas bt
+		WHERE 1 = 1
+		<if test="id_tarea != null">
+			and bt.id_tarea = #{id_tarea}
+		</if>
+
+	</select>
+
+	<select id="obtenerTareasReasignacion" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionDetalleOV">
+		SELECT trc.id_tarea AS idTarea,
+		trc.motivo_reasigna AS motivoReasignacion,
+		trc.contrato AS contrato,
+		trc.dia_reunion_nuevo AS diaReunion,
+		convert(varchar(12), trc.hora_reunion_nuevo, 18) AS horaReunionInicio,
+		convert(varchar(12), trc.hora_reunion_fin_nuevo, 18) AS
+		horaReunionFin,
+		trc.vendedor_nuevo AS numeroAsesor
+		FROM tareas_reasignacion_cartera trc
+		INNER JOIN buzon_tareas bt ON bt.id_tarea = trc.id_tarea
+		WHERE trc.vendedor_nuevo = #{asesor}
+		AND bt.status = 'P'
+	</select>
+
+	<select id="obtenerTareasReasignacionContrato" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionDetalleOV">
+		SELECT convert(varchar(10),trc.id_tarea) +'-'+ bt.descripcion AS
+		contratoLD,
+		trc.motivo_reasigna AS motivoReasignacion,
+		trc.contrato AS contrato,
+		trc.dia_reunion_nuevo AS diaReunion,
+		convert(varchar(12), trc.hora_reunion_nuevo, 18) AS horaReunionInicio,
+		convert(varchar(12), trc.hora_reunion_fin_nuevo, 18) AS
+		horaReunionFin,
+		trc.vendedor_nuevo AS numeroAsesor,
+
+		pg.nombre AS nombreGrupo,
+		cg.ciclo_grupo AS cicloGrupo,
+		pa.nombre + ' '+
+		pa.apellido_pat + ' '+
+		pa.apellido_mat AS nombreAsesor,
+		(SELECT COUNT(*) FROM integrante_grupo WHERE contrato = c.contrato)
+		totalIntegrantes,
+		c.producto AS producto,
+		p.descripcion AS descProd,
+		c.fecha_disposicion AS fechaInicio,
+		c.fecha_esp_liq AS fechaFin,
+		c.no_pagos AS numeroPagos,
+		c.no_ult_pago AS pagosRestantes,
+		case
+		when datediff( dd, c.fecha_prox_pago, #{fechaContable}) <![CDATA[<]]>
+		0 THEN 0
+		ELSE datediff( dd, c.fecha_prox_pago, #{fechaContable})
+		END diasMora,
+		c.capital_insoluto AS saldoTotal,
+		c.frecuencia_pago AS frecuencia,
+		'REASIGNACION' as tipoActividad,
+		0.0 AS parcialidad
+		FROM tareas_reasignacion_cartera trc
+		INNER JOIN buzon_tareas bt ON bt.id_tarea = trc.id_tarea
+		INNER JOIN contratos c ON c.contrato = trc.contrato
+		INNER JOIN contrato_clave_finsol ccf ON ccf.contrato = trc.contrato
+		INNER JOIN contrato_grupo cg ON cg.contrato = trc.contrato
+		INNER JOIN productos p ON p.producto = c.producto
+		LEFT JOIN personas pg ON pg.persona = c.cliente
+		LEFT JOIN personas pa ON pa.persona = trc.vendedor_nuevo
+		WHERE trc.vendedor_nuevo = #{asesor}
+		AND bt.status = 'P'
+	</select>
+
+
+	<select id="obtenerAsignacionDetalleContrato" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionDetalleOV">
+
+
+		SELECT c.sucursal AS numeroSucursal,
+		s.nombre AS nomSucursal,
+		ccf.contrato_LD AS contratoLD,
+		c.contrato AS contrato,
+		c.fecha_disposicion AS fechaInicio,
+		pg.nombre AS nombreGrupo,
+		cg.ciclo_grupo AS cicloGrupo,
+		( SELECT count(*) FROM integrante_grupo
+		WHERE contrato = c.contrato ) AS miembros,
+
+		c.vendedor AS numeroAsesor,
+		pa.nombre + ' '+
+		pa.apellido_pat + ' '+
+		pa.apellido_mat AS nombreAsesor,
+		isnull(cg.dia_reunion,0) AS diaReunion,
+		convert(varchar(12), cg.hora_reunion, 18) AS horaReunionInicio,
+		convert(varchar(12), cg.hora_reunion_fin, 18) AS horaReunionFin,
+
+		trc.vendedor_nuevo AS numeroAsesorNuevo,
+		pan.nombre + ' '+
+		pan.apellido_pat + ' '+
+		pan.apellido_mat AS nombreAsesorNuevo,
+		trc.dia_reunion_nuevo AS diaReunionNuevo,
+		convert(varchar(12), trc.hora_reunion_nuevo, 18) AS horaReunionInicioNuevo,
+		convert(varchar(12), trc.hora_reunion_fin_nuevo, 18) AS
+		horaReunionFinNuevo,
+
+		isnull(cod.descripcion,'NO APLICA') AS motivoReasignacion
+
+		FROM contratos c
+		INNER JOIN contrato_clave_finsol ccf ON ccf.contrato = c.contrato
+		INNER JOIN contrato_grupo cg ON c.contrato = cg.contrato
+		INNER JOIN sucursales s ON s.sucursal = c.sucursal
+		INNER JOIN tareas_reasignacion_cartera trc ON c.contrato = trc.contrato
+		LEFT JOIN personas pg ON pg.persona = c.cliente
+		LEFT JOIN personas pa ON pa.persona = c.vendedor
+		LEFT JOIN personas pan ON pan.persona = trc.vendedor_nuevo
+		LEFT JOIN codigos cod ON cod.tipo_codigo = 'MREC' AND cod.codigo =
+		trc.motivo_reasigna
+		WHERE 1 = 1
+		AND c.status IN ('D','N')
+		AND c.producto != 'GOS1'
+		AND trc.id_tarea = #{idTarea}
+
+	</select>
+
+	<select id="validaAsignacionExiste" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionDetalleOV">
+		SELECT trc.id_tarea AS idTarea,
+		trc.motivo_reasigna AS motivoReasignacion,
+		trc.contrato AS contrato,
+		trc.dia_reunion_nuevo AS diaReunion,
+		convert(varchar(12), trc.hora_reunion_nuevo, 18) AS horaReunionInicio,
+		convert(varchar(12), trc.hora_reunion_fin_nuevo, 18) AS
+		horaReunionFin,
+		trc.vendedor_nuevo AS numeroAsesor,
+		bt.status AS status
+		FROM tareas_reasignacion_cartera trc
+		INNER JOIN buzon_tareas bt ON bt.id_tarea = trc.id_tarea
+		WHERE 1 = 1
+		<if test="asesor != null">
+			AND trc.vendedor_actual = #{asesor}
+		</if>
+		<if test="contrato != null">
+			AND trc.contrato = #{contrato}
+		</if>
+		<if test="idTarea != null">
+			AND trc.id_tarea = #{idTarea}
+		</if>
+		AND bt.status = 'P'
+	</select>
+
+
+	<select id="obtenerTipoProductosCredito" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.TipoProductosOV">
+		SELECT c.contrato,
+		c.fecha_disposicion AS fechaInicio,
+		p.categoria,
+		p.producto,
+		c.frecuencia_pago AS frecuencia,
+		p.dias_periodo AS diasPeriodo,
+		p.descripcion
+		FROM contratos c
+		INNER JOIN productos p ON p.producto = c.producto
+		WHERE c.contrato = #{contrato}
+		AND tipo_producto = 'GRUP'
+
+	</select>
+
+	<!--<select id="obtenerPersonaApartirDAO" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.AsignacionDetalleOV"> SELECT sucursal
+		as numeroSucursal, persona as numeroAsesor FROM red_operativa WHERE no_DAO
+		= #{asesor} AND status = 'A' </select> -->
+
+	<select id="obtenerDatosIntegranteCompleto" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.consultas.DatosIntegranteResumenOV">
+		SELECT
+		ig.integrante as cliente,
+		personas.nombre,
+		personas.apellido_pat as paterno,
+		personas.apellido_mat as materno,
+		monto_otorgado as monto,
+		ig.rol as rol,
+		p.producto as producto,
+		  isnull(CASE
+        	WHEN len(isnull(ig.destino_credito,'')) = 4
+        	THEN (  SELECT descripcion
+        			FROM codigos
+        			WHERE tipo_codigo = 'CDCS'
+        			AND codigo = ig.destino_credito
+        		 )
+        	ELSE ig.destino_credito
+        END,ig.destino_credito) as objetivo,
+		relacion_clave_finsol.clave_finsol as claveT24,
+		ig.monto_liq_ctrant as montoLiq,
+		CASE WHEN personas.sexo = 'M' THEN 'Masculino'
+		WHEN personas.sexo = 'F' THEN 'Femenino'
+		END AS sexo,
+		CONVERT ( CHAR( 20 ),personas.fecha_nacimiento, 103) AS fechaNacimiento,
+		ig.pct_participacion AS porcentajeParticipacion,
+		CASE WHEN ig.monto_seguro > 0 THEN 'S'
+		WHEN ig.monto_seguro = 0 THEN 'N'
+		WHEN ig.monto_seguro is NULL THEN 'N'
+		END AS seguro,
+		ig.status as estatus,
+		CASE
+		WHEN contratos.status = 'X' THEN 'INACTIVO'
+		WHEN ig.status = 'A' THEN 'ACTIVO'
+		WHEN ig.status = 'I' THEN 'INACTIVO'
+		WHEN ig.status = 'C' THEN 'CONVENIO'
+		WHEN ig.status = 'P' THEN 'PAGADO'
+		WHEN ig.status = 'R' THEN 'REESTRUCTURADO'
+		ELSE ig.status
+		END AS desEstatus
+		FROM
+		contratos, integrante_grupo ig, personas, productos p,relacion_clave_finsol
+		WHERE
+		contratos.contrato = ig.contrato
+		AND ig.integrante = personas.persona
+		AND contratos.producto = p.producto
+		AND contratos.contrato =#{contrato}
+		AND relacion_clave_finsol.persona=personas.persona
+
+	</select>
+
+	<select id="obtenerBuzonTareaPerfil" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT perfil FROM buzon_tarea_perfil
+		where id_perfil = #{idPerfil}
+		and estatus = 'A'
+	</select>
+
+	<select id="generaRFC" statementType="CALLABLE" useCache="false"
+		flushCache="true" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+
+		<choose>
+			<when test="dbEntorno == 'DESARROLLO'">
+				set nocount on { call D_Independencia..SP_CALCULA_RFC (#{nombre}, #{apPaterno}, #{apMaterno},  #{fechaNacimiento}
+				)}
+			</when>
+			<otherwise>
+				set nocount on { call P_Independencia..SP_CALCULA_RFC (#{nombre}, #{apPaterno}, #{apMaterno},  #{fechaNacimiento}
+				)}
+			</otherwise>
+		</choose>
+
+	</select>
+
+
+	<select id="obtenerDatosImagenesMonitor" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.DatosImagenesMonitorOV">
+		select 	dd.nn_consecutivo AS id,
+				dd.cg_observacion as solicitud,
+				dd.sc_sucursal AS sucursal,
+				s.nombre AS nombreSucursal,
+		   		dd.cg_nombre_img as imagen,
+		   		dd.dt_alta as fechaAlta,
+		   		datediff(hour, dd.dt_alta, getDate()) AS diferencia,
+		   	  	sf.asignacion_cec AS asignacionCec,
+		   	  	sf.dt_asignacion_cec AS fechaUltimoIntento,
+		   	  	c.descripcion AS descripcionCodigo
+		from
+				<choose>
+					<when test="dbEntorno == 'DESARROLLO'">
+						D_Independencia..digint_datos dd
+					</when>
+					<otherwise>
+						P_Independencia..digint_datos dd
+					</otherwise>
+				</choose>
+		LEFT JOIN sucursales s ON s.sucursal = dd.sc_sucursal
+		LEFT JOIN solicitudes_finsol sf ON sf.solicitud = dd.cg_observacion
+		LEFT JOIN codigos c ON c.tipo_codigo = 'ASSF'  AND c.codigo = sf.asignacion_cec
+		WHERE dd.cc_servicio = 'SOFI'
+ 		AND sf.status != 'X'
+		AND ((
+				datediff(hour, dd.dt_alta, getDate())   >= ${horasMax}
+			    and dd.dt_llegada_foto is null
+			)
+			OR
+			(
+				sf.asignacion_cec != 'ASOK'
+			))
+	</select>
+
+	<select  id="obtenerPromediosMonitorImagenes" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.DatosPromediosMonitorOV">
+
+		SELECT
+		 (SELECT Avg(diferencia + 0.0)
+		    FROM (
+			select datediff(minute, dd.dt_alta,dt_llegada_foto) AS diferencia
+			from
+			<choose>
+				<when test="dbEntorno == 'DESARROLLO'">
+					D_Independencia..digint_datos dd
+				</when>
+				<otherwise>
+					P_Independencia..digint_datos dd
+				</otherwise>
+			</choose>
+			WHERE dd.cc_servicio = 'SOFI'
+		    AND dt_llegada_foto is NOT null
+		    AND dt_alta > CONVERT(VARCHAR, GETDATE(), 112)
+		     ) img_success
+		)  AS promedioDiario,
+		( SELECT Avg(diferencia + 0.0)
+		    FROM (
+			select datediff(minute, dd.dt_alta,dt_llegada_foto) AS diferencia
+				from
+				<choose>
+					<when test="dbEntorno == 'DESARROLLO'">
+						D_Independencia..digint_datos dd
+					</when>
+					<otherwise>
+						P_Independencia..digint_datos dd
+					</otherwise>
+				</choose>
+				WHERE dd.cc_servicio = 'SOFI'
+		        AND dt_alta BETWEEN
+		        dateadd(month, -1, getdate())
+		        AND getdate()
+			    AND dd.dt_llegada_foto is NOT null
+		     ) img_success
+		)  AS promedioMes,
+		(SELECT Avg(diferencia + 0.0)
+		    FROM (
+				select datediff(minute, dd.dt_alta,dt_llegada_foto) AS diferencia
+				from
+				<choose>
+					<when test="dbEntorno == 'DESARROLLO'">
+						D_Independencia..digint_datos dd
+					</when>
+					<otherwise>
+						P_Independencia..digint_datos dd
+					</otherwise>
+				</choose>
+				WHERE dd.cc_servicio = 'SOFI'
+		        AND dt_alta BETWEEN
+		        dateadd(month, -6, getdate())
+		        AND getdate()
+			    AND dd.dt_llegada_foto IS NOT null
+		     ) img_success
+		     )AS promedioSemestral,
+			(SELECT  count(1)
+				from
+					<choose>
+						<when test="dbEntorno == 'DESARROLLO'">
+							D_Independencia..digint_datos dd
+						</when>
+						<otherwise>
+							P_Independencia..digint_datos dd
+						</otherwise>
+					</choose>
+				WHERE dd.cc_servicio = 'SOFI'
+			    AND dt_llegada_foto is NOT null
+			    AND dt_alta > CONVERT(VARCHAR, GETDATE(), 112)
+			     ) AS numArchEnvDiario,
+			     (SELECT  count(*)/(datediff(day, dateadd(month, -1, getdate()), getDate()) + 0.0)
+				    FROM (
+				   	select  *
+					from
+					<choose>
+						<when test="dbEntorno == 'DESARROLLO'">
+							D_Independencia..digint_datos dd
+						</when>
+						<otherwise>
+							P_Independencia..digint_datos dd
+						</otherwise>
+					</choose>
+					WHERE dd.cc_servicio = 'SOFI'
+			        AND dd.dt_alta BETWEEN
+			        dateadd(month, -1, getdate())
+			        AND getdate()
+					AND dd.dt_llegada_foto IS NOT null
+				     ) img_success
+			     ) AS numArchEnvMes,
+			     (SELECT count(*)/ (datediff(day, dateadd(month, -6, getdate()), getDate()) + 0.0) AS numArchEnvHist
+					    FROM (
+					select  *
+					from
+					<choose>
+						<when test="dbEntorno == 'DESARROLLO'">
+							D_Independencia..digint_datos dd
+						</when>
+						<otherwise>
+							P_Independencia..digint_datos dd
+						</otherwise>
+					</choose>
+					WHERE dd.cc_servicio = 'SOFI'
+			        AND dd.dt_alta BETWEEN
+			        dateadd(month, -6, getdate())
+			        AND getdate()
+					AND dd.dt_llegada_foto IS NOT null
+					     ) img_success
+				     ) AS numArchEnvHist,
+					(SELECT count(*) AS numArchError
+					    FROM (
+						select 	*
+						from
+						<choose>
+							<when test="dbEntorno == 'DESARROLLO'">
+								D_Independencia..digint_datos dd
+							</when>
+							<otherwise>
+								P_Independencia..digint_datos dd
+							</otherwise>
+						</choose>
+						LEFT JOIN sucursales s ON s.sucursal = dd.sc_sucursal
+						LEFT JOIN solicitudes_finsol sf ON sf.solicitud = dd.cg_observacion
+						LEFT JOIN codigos c ON c.tipo_codigo = 'ASSF'
+						--AND c.codigo = sf.asignacion_cec
+						WHERE dd.cc_servicio = 'SOFI'
+						AND datediff(hour, dd.dt_alta, getDate())  >= ${horasMax}
+						and dd.dt_llegada_foto is null
+						AND sf.status != 'X'
+					     ) img_success
+				     ) AS numArchError
+
+			</select>
+
+	<select id="validarRelacionPersonaContrato" parameterType="java.util.HashMap"
+		resultType="Integer">
+		SELECT count(1) FROM integrante_grupo
+		WHERE integrante = '${persona}'
+		AND contrato = '${contrato}'
+		AND status != 'I'
+	</select>
+
+	<select id="verificarClientesActivos" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT count(*) AS activos FROM integrante_grupo
+			WHERE contrato = #{contrato}
+			AND status != 'I'
+	</select>
+
+	<select id="existePersonaPersonas" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT
+		count(*)
+		FROM
+		personas
+		WHERE
+		persona = #{1}
+	</select>
+
+	<select id="obtenerMaxContratoReportePagos" parameterType="java.lang.String"
+		resultType="java.lang.String">
+			SELECT max(contrato) AS contrato FROM integrante_grupo WHERE integrante = #{persona}
+	</select>
+
+	<select id="obtenerDatosReportePagos" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.reportes.comun.PagoImportado">
+			SELECT c.contrato AS contrato,
+					ccf.contrato_LD,
+					c.sucursal AS sucursal,
+					s.nombre AS descSucursal,
+					c.status
+			FROM contratos c
+			INNER JOIN contrato_clave_finsol ccf ON ccf.contrato = c.contrato
+			INNER JOIN sucursales s ON s.sucursal = c.sucursal
+			WHERE c.contrato = #{contrato}
+	</select>
+
+	<select id="obtenerDatosContratoRenovacion" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.originacion.consulta.ContratoRenovacionRespuesta">
+
+		SELECT c.contrato AS contrato,
+			   ccf.contrato_LD AS contratoLD,
+			   g.nombre AS nombreGrupo,
+			   g.ciclo AS ciclo,
+			   c.producto AS codigoProducto,
+			   p.descripcion AS producto,
+			   p.categoria AS categoria,
+			   convert(VARCHAR(10),c.fecha_disposicion, 103) AS fechaDesembolso,
+			   convert(VARCHAR(10),c.fecha_estimada_liq, 103) AS fechaEstimadaLiq,
+			   convert(VARCHAR(10),c.fecha_esp_liq, 103) AS fechaFin,
+			   convert(VARCHAR(10),c.fecha_prox_pago, 103) AS fechaProxPago,
+			   CASE
+			   		WHEN c.status = 'P'  THEN 0
+			   		ELSE
+				       datediff(dd,c.fecha_prox_pago, #{fechaActual})
+			   END AS diasMora,
+		       c.capital_insoluto AS saldoCapital,
+		       isnull(c.maximo_retraso, 0) AS diasMaximoAtraso,
+		       c.sucursal AS sucursal,
+		       datediff(dd,#{fechaActual}, c.fecha_estimada_liq) AS diasFaltantesLiquidacion,
+		       s.nombre_gerente AS  nombreGerenteSucursal,
+		       s.gte_sucursal AS numeroGerenteSucursal,
+		       preg.nombre + ' ' + preg.apellido_pat + ' ' + preg.apellido_mat AS nombreGerenteRegional,
+		       preg.persona AS numeroGerenteRegional,
+		       ase.nombre + ' ' + ase.apellido_pat + ' ' + ase.apellido_mat AS nombreAsesorCredito,
+		       ase.persona AS numeroAsesor
+
+		FROM contratos c
+		INNER JOIN solicitudes_finsol solfi ON c.solicitud = solfi.solicitud
+		INNER JOIN personas ase ON ase.persona = solfi.vendedor
+		INNER JOIN contrato_clave_finsol ccf ON ccf.contrato = c.contrato
+		INNER JOIN personas g ON g.persona = c.cliente
+		INNER JOIN productos p ON p.producto = c.producto
+		INNER JOIN sucursales s ON c.sucursal = s.sucursal
+		INNER JOIN regiones r ON s.region = r.region
+        LEFT  JOIN personas preg ON preg.persona = r.coordinador
+		WHERE c.contrato = #{contrato}
+		AND c.status IN ('D','P')
+		AND c.producto != 'GOS1'
+
+	</select>
+
+	<!-- SRH simplificacion Renovacion fase 2 -->
+	<select id="validarDatosContratoSimplificacion" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.originacion.consulta.ContratoRenovacionRespuesta">
+
+		SELECT c.contrato AS contrato,
+			   ccf.contrato_LD AS contratoLD,
+			   g.nombre AS nombreGrupo,
+			   g.ciclo AS ciclo,
+			   c.producto AS codigoProducto,
+			   p.descripcion AS producto,
+			   p.categoria AS categoria,
+			   convert(VARCHAR(10),c.fecha_disposicion, 103) AS fechaDesembolso,
+			   convert(VARCHAR(10),c.fecha_estimada_liq, 103) AS fechaEstimadaLiq,
+			   convert(VARCHAR(10),c.fecha_esp_liq, 103) AS fechaFin,
+			   convert(VARCHAR(10),c.fecha_prox_pago, 103) AS fechaProxPago,
+			   CASE
+			   		WHEN c.status = 'P'  THEN 0
+			   		ELSE
+				       datediff(dd,c.fecha_prox_pago, #{fechaActual})
+			   END AS diasMora,
+		       c.capital_insoluto AS saldoCapital,
+		       isnull(c.maximo_retraso, 0) AS diasMaximoAtraso,
+		       c.sucursal AS sucursal,
+		       datediff(dd,#{fechaActual}, c.fecha_estimada_liq) AS diasFaltantesLiquidacion,
+		       s.nombre_gerente AS  nombreGerenteSucursal,
+		       s.gte_sucursal AS numeroGerenteSucursal,
+		       preg.nombre + ' ' + preg.apellido_pat + ' ' + preg.apellido_mat AS nombreGerenteRegional,
+		       preg.persona AS numeroGerenteRegional,
+		       ase.nombre + ' ' + ase.apellido_pat + ' ' + ase.apellido_mat AS nombreAsesorCredito,
+		       ase.persona AS numeroAsesor
+
+		FROM contratos c
+		INNER JOIN solicitudes_finsol solfi ON c.solicitud = solfi.solicitud
+		INNER JOIN personas ase ON ase.persona = solfi.vendedor
+		INNER JOIN contrato_clave_finsol ccf ON ccf.contrato = c.contrato
+		INNER JOIN personas g ON g.persona = c.cliente
+		INNER JOIN productos p ON p.producto = c.producto
+		INNER JOIN sucursales s ON c.sucursal = s.sucursal
+		INNER JOIN regiones r ON s.region = r.region
+        LEFT  JOIN personas preg ON preg.persona = r.coordinador
+		WHERE c.contrato = #{contrato}
+		<if test="oportunidad == true">
+		AND c.status IN ('D')
+		</if>
+
+	</select>
+
+	<select id="obtenerDatosSolicitudDeCredito" parameterType="java.util.HashMap"
+	resultType="utilitario.mensajes.originacion.consulta.ImpresionFormatos">
+	SELECT     p.categoria As categoriaProducto,
+	           c.producto AS tipoProducto,
+	           pg.persona AS codigoGrupo,
+	           s.sucursal AS numeroSucursal,
+	           s.nombre AS sucursal,
+	           pg.nombre AS nombreGrupo,
+               cg.ciclo_grupo AS ciclo,
+		       c.no_pagos AS plazo,
+		       CASE
+			     WHEN c.frecuencia_pago = 'S' THEN 'SEMANAL'
+			     WHEN c.frecuencia_pago = 'C' THEN 'CATORCENAL'
+			     WHEN c.frecuencia_pago = 'M' THEN 'MENSUAL'
+			   ELSE c.frecuencia_pago
+		       END AS frecuenciaPago,
+		      round(convert(DECIMAL(10,2),c.tasa * 12 * 1.16), 2) AS tasaInteresAnual,
+		      ccf.contrato_LD AS contratoLD,
+		      c.contrato AS contrato,
+		      c.monto AS montoGrupalAprobado,
+		      CASE
+                WHEN datepart(cdw,c.fecha_ancla_pago) = 1 THEN 'Lunes'
+                WHEN datepart(cdw,c.fecha_ancla_pago) = 2 THEN 'Martes'
+                WHEN datepart(cdw,c.fecha_ancla_pago) = 3 THEN 'Miércoles'
+                WHEN datepart(cdw,c.fecha_ancla_pago) = 4 THEN 'Jueves'
+                WHEN datepart(cdw,c.fecha_ancla_pago) = 5 THEN 'Viernes'
+                WHEN datepart(cdw,c.fecha_ancla_pago) = 6 THEN 'Sábado'
+                WHEN datepart(cdw,c.fecha_ancla_pago) = 7 THEN 'Domingo'
+              END AS diaPago,
+              c.fecha_disposicion AS fechaActual,
+              datepart(dd,c.fecha_disposicion) AS dia,
+              CASE
+                WHEN datepart(mm,c.fecha_disposicion) = 1 THEN 'ENERO'
+                WHEN datepart(mm,c.fecha_disposicion) = 2 THEN 'FEBRERO'
+                WHEN datepart(mm,c.fecha_disposicion) = 3 THEN 'MARZO'
+                WHEN datepart(mm,c.fecha_disposicion) = 4 THEN 'ABRIL'
+                WHEN datepart(mm,c.fecha_disposicion) = 5 THEN 'MAYO'
+                WHEN datepart(mm,c.fecha_disposicion) = 6 THEN 'JUNIO'
+                WHEN datepart(mm,c.fecha_disposicion) = 7 THEN 'JULIO'
+                WHEN datepart(mm,c.fecha_disposicion) = 8 THEN 'AGOSTO'
+                WHEN datepart(mm,c.fecha_disposicion) = 9 THEN 'SEPTIEMBRE'
+                WHEN datepart(mm,c.fecha_disposicion) = 10 THEN 'OCTUBRE'
+                WHEN datepart(mm,c.fecha_disposicion) = 11 THEN 'NOVIEMBRE'
+                WHEN datepart(mm,c.fecha_disposicion) = 12 THEN 'DICIEMBRE'
+              END AS mes,
+              datepart(yy,c.fecha_disposicion) AS anio,
+              c.fecha_esp_liq AS fechaFin,
+	          ' ' AS nombreAsesorCredito,
+		      s.nombre_gerente As nombreGerenteSucursal,
+		      preg.nombre + ' ' + preg.apellido_pat + ' ' + preg.apellido_mat AS nombreGerenteRegional
+         FROM contratos c
+         INNER JOIN productos p ON p.producto = c.producto
+         INNER JOIN sucursales s ON s.sucursal = c.sucursal
+         INNER JOIN personas pg ON pg.persona = c.cliente
+         INNER JOIN contrato_grupo cg ON cg.contrato = c.contrato
+         INNER JOIN contrato_clave_finsol ccf ON ccf.contrato = c.contrato
+         INNER JOIN personas pa ON pa.persona = c.vendedor
+         INNER JOIN regiones r ON r.region = s.region
+         LEFT  JOIN personas preg ON preg.persona = r.coordinador
+         WHERE c.contrato = #{contrato}
+	</select>
+
+	<select id="integrantesSolicitudDeCredito" parameterType="java.util.HashMap"
+	resultType="utilitario.mensajes.originacion.consulta.ClientesGrupo">
+	SELECT ig.integrante AS numPersonaClienteGrupo,
+         pi.apellido_pat + ' ' + pi.apellido_mat + ' ' + pi.nombre AS nombreClienteGrupo,
+         ' ' AS c1ClienteGrupo,
+         'A' AS e2ClienteGrupo,
+         ' ' AS r3ClienteGrupo,
+         ig.ciclo_integrante AS cicloClienteGrupo ,
+         'C' AS destinoCreditoClienteGrupo,
+         ig.monto_otorgado AS creditoVigenteClienteGrupo,
+         0 AS creditoPreAprobadoClienteGrupo,
+         CASE
+			WHEN ig.rol = 'PRES' THEN 'PRESIDENTA'
+			WHEN ig.rol = 'SECR' THEN 'SECRETARIA'
+			WHEN ig.rol = 'TESO' THEN 'TESORERA'
+			WHEN ig.rol = 'SUPE' THEN 'COORDINADOR'
+		  ELSE ig.rol
+		  END AS rolIntegrante
+   FROM  integrante_grupo ig
+   INNER JOIN personas pi ON pi.persona = ig.integrante
+   WHERE ig.status != 'I'
+   AND ig.contrato = #{contrato}
+   		<if test="listaPersonas != null">
+			AND ig.integrante IN
+			<foreach item="item" index="index" collection="listaPersonas"
+				open="(" separator="," close=")">
+				#{item, jdbcType=VARCHAR }
+			</foreach>
+		</if>
+	</select>
+
+	<select id="obtenerDatosTasaIncremento" parameterType="java.util.HashMap"
+	resultType="utilitario.mensajes.originacion.consulta.ImpresionFormatos">
+		SELECT     cg.ciclo_grupo AS ciclo,
+		   isnull(c.maximo_retraso, 0) AS maximoAtraso,
+		   round(convert(DECIMAL(10,2),c.tasa * 12 * 1.16), 2) AS tasaInteresAnual
+         FROM contratos c
+         INNER JOIN contrato_grupo cg ON cg.contrato = c.contrato
+         WHERE c.contrato = #{contrato}
+	</select>
+
+	<select id="obtenerDocumentosContratoRenovacion" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.originacion.consulta.DocumentosKit">
+		SELECT c.codigo AS codigo, c.descripcion AS documento, pcf.seleccionado AS seleccionado
+		FROM codigos c
+		INNER JOIN producto_categoria_formato pcf ON pcf.codigo = c.codigo AND pcf.status = 'A'
+		WHERE c.tipo_codigo = 'FOIM'
+		<if test="categoria != null">
+			AND pcf.categoria =  #{categoria}
+		</if>
+		ORDER BY pcf.orden
+	</select>
+
+	<select id="obtenerIntegrantesContratoRenovacion" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.originacion.consulta.IntegrantesKit">
+		SELECT ig.integrante AS persona,
+			   p.nombre + ' ' + p.apellido_pat + ' ' + p.apellido_mat AS nombre,
+			   ig.monto_otorgado AS monto,
+			   convert(VARCHAR(10), pc.fecha_ult_cap, 103)  AS fechaUltimaActualizacion,
+			   CASE
+			   	  when  datediff(day, fecha_ult_cap, getdate())	> (365 - #{dias}) THEN 1
+			   	  ELSE 0
+			   END AS obligatorio
+		FROM integrante_grupo ig
+		INNER JOIN personas p ON p.persona = ig.integrante
+		LEFT JOIN persona_complemento pc ON pc.persona = p.persona
+		WHERE ig.contrato = #{contrato}
+		AND ig.status != 'I'
+	</select>
+
+	<select id="validarIntegrantesContratoSimplificacion" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.originacion.consulta.IntegrantesKit">
+		SELECT ig.integrante AS persona,
+			   p.nombre + ' ' + p.apellido_pat + ' ' + p.apellido_mat AS nombre,
+			   ig.ciclo_integrante AS cicloClienteGrupo
+		FROM integrante_grupo ig
+		INNER JOIN personas p ON p.persona = ig.integrante
+		LEFT JOIN persona_complemento pc ON pc.persona = p.persona
+		WHERE ig.contrato = #{contrato}
+		AND ig.status != 'I'
+	</select>
+
+	<select id="obtenCatalogoAnalistas" parameterType="java.util.HashMap"
+	         resultType="utilitario.mensajes.comun.CatalogosOV">
+		SELECT ppf.tipo_perfil AS tipoPerfil,
+ 	   		   per.nombre + ' ' + per.apellido_pat + ' ' + per.apellido_mat AS descripcion,
+ 	   		   ppf.persona as codigo
+		FROM pool_personas_finsol  ppf
+		INNER JOIN personas per ON ppf.persona = per.persona
+		WHERE ppf.pool_perfil = #{codigo}
+		<!-- AND ppf.tipo_perfil = #{perfil}-->
+	</select>
+
+
+	<select id="consultaReporteAsistencia" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.consultas.AnalistasCEC">
+
+		SELECT
+		   p.persona,
+		   p.nombre,
+		   p.apellido_pat as apellidoPaterno,
+		   p.apellido_mat as apellidoMaterno,
+		   convert(VARCHAR(2),datepart(cdw,roa.fecha_inicio_operacion)) AS dia,
+		   convert(VARCHAR(2),datepart(dd,roa.fecha_inicio_operacion)) AS diaMes,
+		   convert(VARCHAR(2),datepart(mm,roa.fecha_inicio_operacion)) AS mes
+		FROM registro_operacion_analista roa
+		INNER JOIN personas p ON p.persona = roa.persona
+		WHERE datepart(month, roa.fecha_inicio_operacion) = datepart(month, #{fechaPeticion}) AND
+			  datepart(year,  roa.fecha_inicio_operacion) = datepart(year, #{fechaPeticion})
+		ORDER BY roa.persona, roa.fecha_inicio_operacion, diaMes
+
+	</select>
+
+	<select id="consultaReporteAsistenciaEstatus" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.consultas.AnalistasCEC">
+
+		SELECT
+		   p.persona,
+		   p.nombre,
+		   p.apellido_pat as apellidoPaterno,
+		   p.apellido_mat as apellidoMaterno,
+		   c.codigo,
+		   c.descripcion,
+		   convert(VARCHAR(2),datepart(cdw,aea.fecha_registro)) AS dia,
+		   convert(VARCHAR(2),datepart(dd,aea.fecha_registro)) AS diaMes,
+		   convert(VARCHAR(2),datepart(mm,aea.fecha_registro)) AS mes
+		FROM analista_estatus_asistencia aea
+		INNER JOIN personas p ON p.persona = aea.persona
+		INNER JOIN codigos c ON c.codigo = aea.estatus
+		WHERE datepart(month, aea.fecha_registro) = datepart(month, #{fechaPeticion}) AND
+			  datepart(year,  aea.fecha_registro) = datepart(year,  #{fechaPeticion})
+		ORDER BY aea.persona, aea.fecha_registro, diaMes
+
+	</select>
+
+	<select id="consultaReporteAsistenciaContingencia" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.consultas.AnalistasCEC">
+
+		SELECT
+		   p.persona,
+		   p.nombre,
+		   p.apellido_pat as apellidoPaterno,
+		   p.apellido_mat as apellidoMaterno,
+		   convert(VARCHAR(2),datepart(cdw,ac.fecha_contingencia)) AS dia,
+		   convert(VARCHAR(2),datepart(dd,ac.fecha_contingencia)) AS diaMes,
+		   convert(VARCHAR(2),datepart(mm,ac.fecha_contingencia)) AS mes
+		FROM analista_contingencia ac
+		INNER JOIN personas p ON p.persona = ac.usuario_registra
+		WHERE datepart(month, ac.fecha_contingencia) = datepart(month, #{fechaPeticion}) AND
+			  datepart(year,  ac.fecha_contingencia) = datepart(year, #{fechaPeticion})
+		ORDER BY ac.fecha_contingencia
+
+	</select>
+
+	<select id = "existeRegistroEntradaHoy" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.consultas.AnalistasCEC">
+	     SELECT persona FROM dbo.registro_operacion_analista
+                        WHERE persona = #{1}
+                        AND fecha_inicio_operacion = getdate()
+	</select>
+
+	<select id = "existeRegistroSalidaHoy" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.consultas.AnalistasCEC">
+	     SELECT persona FROM dbo.registro_operacion_analista
+         WHERE persona = #{1}
+         AND fecha_inicio_operacion = getdate()
+         AND fecha_fin_operacion != NULL
+
+	</select>
+
+	<select id = "obtenerSolicitudesConObservacion" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+	    SELECT isnull(max(id_tarea),0) FROM buzon_tareas bt
+               INNER JOIN solicitudes_finsol sf ON bt.descripcion = sf.solicitud
+               AND sf.estatus = 'ASIGNACION_CEC'
+               AND sf.descripcion = 'SUCU_CORRE'
+        WHERE bt.usuario_propietario = #{numeroPersona}
+        AND bt.perfil='PCEC'
+        AND bt.status ='P'
+        <if test="listaTareas != null">
+			AND bt.tipo_tarea IN
+			<foreach item="item" index="index" collection="listaTareas"
+				open="(" separator="," close=")">
+				#{item, jdbcType=VARCHAR }
+			</foreach>
+		</if>
+
+	</select>
+
+	<select id = "obtenerReferencias" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.Referencias">
+
+		SELECT contrato, persona,
+			   tipo_producto AS tipoProducto,
+			   clave_cte AS claveCliente,
+			   referencia AS referencia,
+			   fecha_hora AS fechaHora, status
+		FROM referencias
+			WHERE referencia = #{referencia}
+			<if test="contrato != null">
+			  	AND contrato = #{contrato}
+			</if>
+			<if test="persona != null">
+			  	AND persona = #{persona}
+			</if>
+	</select>
+
+	<select id = "obtenerReferenciasPaybin" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.Referencias">
+
+		SELECT contrato, persona,
+			   tipo_producto AS tipoProducto,
+			   clave_cte AS claveCliente,
+			   referencia AS referencia,
+			   fecha_hora AS fechaHora, status
+		FROM referencias
+			WHERE clave_cte = 28
+			<if test="contrato != null">
+			  	AND contrato = #{contrato}
+			</if>
+			<if test="persona != null">
+			  	AND persona = #{persona}
+			</if>
+	</select>
+
+	<select id="obtenerCorreoRegional" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		SELECT TOP 1
+               roReg.emial
+        FROM sucursales s
+        INNER JOIN regiones r ON r.region = s.region
+        INNER JOIN red_operativa roReg ON roReg.persona = r.coordinador
+        WHERE s.sucursal = #{1}
+        AND roReg.status = 'A'
+	</select>
+	<select id="obtenerCorreoDivisional" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		SELECT TOP 1
+               roDiv.emial
+        FROM sucursales s
+        INNER JOIN regiones r ON r.region = s.region
+        INNER JOIN divisiones d ON d.division = r.division
+        INNER JOIN red_operativa roDiv ON roDiv.persona = d.coordinador
+        WHERE s.sucursal = #{1}
+        AND roDiv.status = 'A'
+	</select>
+	<select id="obtenerCorreoDivisionalEscalamiento" parameterType="java.lang.Integer"
+		resultType="utilitario.mensajes.solicitudes.SolicitudFirmaElectronica">
+		SELECT TOP 1
+	       d.coordinador AS personaDivisional,
+       		roDiv.emial AS correoDivisional
+        FROM sucursales s
+		INNER JOIN regiones r ON r.region = s.region
+		INNER  JOIN divisiones d ON d.division = r.division
+		INNER JOIN red_operativa roDiv ON roDiv.persona = d.coordinador
+		WHERE s.sucursal = (SELECT oficina FROM solicitudes_finsol WHERE solicitud = #{1} )
+        AND roDiv.status = 'A'
+	</select>
+	<select id="consultaContratosCargaPagosEnLinea" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.operacion.ContratoPagosLineaOV">
+		SELECT
+			c.contrato AS contrato,
+			ccf.contrato_LD AS contratoLd,
+			pg.nombre AS nombreGrupo,
+			c.no_pagos AS noPagos,
+			isnull(c.no_ult_pago,0) + 1 AS noPago,
+			c.monto_pago AS parcialidad,
+			c.fecha_prox_pago AS fechaProxPago,
+			0 AS montoCorriente,
+			0 AS montoTotal,
+			c.status AS estatus
+		FROM contratos c
+		INNER JOIN contrato_clave_finsol ccf ON ccf.contrato = c.contrato
+		INNER JOIN personas pg ON pg.persona = c.cliente
+		WHERE c.fecha_ult_mov >= dateadd(day, -1, #{fechaActual})
+
+	</select>
+	<select id="consultaInicialContratosCargaPagosEnLinea" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.operacion.ContratoPagosLineaOV">
+		SELECT
+			c.contrato AS contrato,
+			ccf.contrato_LD AS contratoLd,
+			pg.nombre AS nombreGrupo,
+			c.no_pagos AS noPagos,
+			isnull(c.no_ult_pago,0) + 1 AS noPago,
+			c.monto_pago AS parcialidad,
+			c.fecha_prox_pago AS fechaProxPago,
+			0 AS montoCorriente,
+			0 AS montoTotal,
+			c.status AS estatus
+		FROM contratos c
+		INNER JOIN contrato_clave_finsol ccf ON ccf.contrato = c.contrato
+		INNER JOIN personas pg ON pg.persona = c.cliente
+		WHERE c.fecha_disposicion BETWEEN  #{fechaInicio} AND #{fechaFin}
+		AND c.status in ('D','P','N')
+
+	</select>
+	
+	<select id="consultaAnalistaPorSucursal" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.ConsultaAnalista">
+	    SELECT emp.cc_persona AS numeroPersona, 
+	           emp.cc_puesto AS clavePuesto, 
+	           emp.cg_nombre + ' ' + emp.cg_apellido_pat + ' ' + emp.cg_apellido_mat AS nombreCompleto,
+			   emp.cc_email AS correo
+			   FROM
+			   <choose>
+					<when test="dbEntorno == 'DESARROLLO'">
+						D_Independencia..rys_empleado emp
+						INNER JOIN D_Independencia.. rys_candidato can ON emp.cc_candidato = can.cc_candidato
+						INNER JOIN D_Independencia..ryscat_direccion d ON emp.sc_direccion= d.sc_direccion
+					</when>
+					<otherwise>
+						 P_Independencia..rys_empleado emp 
+						 INNER JOIN P_Independencia.. rys_candidato can ON emp.cc_candidato = can.cc_candidato 
+						 INNER JOIN P_Independencia..ryscat_direccion d ON emp.sc_direccion= d.sc_direccion 
+					</otherwise>
+		        </choose>
+			   WHERE  emp.sc_centro_costo = 18 
+			   AND emp.sc_activo IN (1,3)
+			   <if test="listaPuestos != null"> 
+			      AND emp.cc_puesto IN 
+			      <foreach item="item" index="index" collection="listaPuestos"
+				           open="(" separator="," close=")">
+				          #{item, jdbcType=VARCHAR }
+			      </foreach>
+		       </if>    
+			   AND d.sc_sic = #{sucursal}
+	</select>
+
+	<select id="consultaAsesorPorSucursal" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.consultas.ConsultaAnalista">
+	    SELECT ro.persona AS numeroPersona,
+               ro.nivel AS clavePuesto,
+               p.nombre + ' ' + p.apellido_pat + ' ' + p.apellido_mat AS nombreCompleto
+        FROM red_operativa ro
+        INNER JOIN personas p ON p.persona = ro.persona 
+        WHERE sucursal =  #{sucursal}
+        AND ro.status = 'A'
+        AND ro.nivel = 'ASES'
+        AND ro.persona != '000999998'
+	</select>
+	
+	<select id="listaMotivosCECFE" parameterType="java.lang.Integer"
+		resultType="utilitario.mensajes.solicitudes.ExcepcionGarantiaPeticion">
+		SELECT id_tarea AS idTarea, solicitud, codigo_motivo AS justificacion
+		FROM detalle_tarea_firma_elec
+		WHERE id_tarea = #{1}
+	</select>
+</mapper>

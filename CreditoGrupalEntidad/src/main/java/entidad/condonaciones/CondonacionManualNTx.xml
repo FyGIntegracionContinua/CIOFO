@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="creditogrupal.entity.condonacionesManuales.ibatis">
+
+
+
+
+
+
+	<resultMap id="saldoVencido" type="saldoVencido">
+		<result property="capital" column="Monto al corriente" />
+		<result property="interes" column="Interes Vencido" />
+		<result property="moratorio" column="Moratorio" />
+	</resultMap>
+
+	<!-- <select id="registraInventario" statementType="CALLABLE" resultMap="fechaContableResult">
+		{caja_inventario()} </select> <select id="registrarOperacion" statementType="CALLABLE"
+		resultMap="fechaContableResult"> {caja_registra_operacion()} </select> -->
+
+
+
+
+	<!-- select id="obtenerSaldoV" statementType="CALLABLE" useCache="false"
+		flushCache="true" parameterType="map" resultMap="saldoVencido"> set nocount
+		on { call sp_consulta_saldos_fv('34500060', '20110720' )} </select -->
+
+	<select id="obtenerSaldoV" statementType="CALLABLE" useCache="false"
+		flushCache="true" parameterType="map" resultType="map">
+		set nocount on { call
+		sp_consulta_saldos_fv(#{contrato}, #{fechaActual}
+		)}
+	</select>
+
+</mapper>

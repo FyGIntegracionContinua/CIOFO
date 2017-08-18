@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.burocredito.BuroCreditoNTx">
+
+	<select id="consultaGetInformacionCliente" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.burocredito.BuroCreditoCliente">
+		SELECT
+		TOP 1
+		pers.nombre +' '+ pers.apellido_pat +' '+ pers.apellido_mat AS nombre,
+		CONVERT(INT,DATEDIFF(DAY, pers.fecha_nacimiento, GETDATE())/365.25) AS edad,
+		isnull(pers.ingreso_cp, 0) AS monPagSem,
+		DATEDIFF(year, isnull(pers.fecha_domicilio, dateadd(year, -1, getdate())),
+		getdate()) AS tiempoDomicilio,
+		isnull(pers.no_dependientes, 0) AS numeroDependientes,
+		'' AS estatus,
+		CASE
+		WHEN percom.experiencia_credito_grupal = 'S'
+		OR percom.experiencia_credito_grupal = '1' THEN '1'
+		ELSE '0'
+		END
+     	AS experienciaCrediticia,
+		ISNULL(cod1.descripcion, 'SOLTERO') AS estadoCivil,
+		isnull(cod2.descripcion, 'Otra') AS tipoDomicilio,
+		0 AS gananciaSistema,
+		0 AS gastosOpeFamilia,
+		'0' AS perEM,
+		0 AS perAJ,
+		0 AS perJS,
+		0 AS perOD,
+		(SELECT isnull(max(inte.ciclo_integrante), 0) FROM integrante_grupo inte
+		where inte.integrante = pers.persona ) AS ciclo,
+		isnull(pers.actividad_emp, 'COMERCIO') AS actividadPrimaria,
+		isnull(percom.ganancia_neta, 0) AS gananciaSemanalNegTA,
+		isnull(percom.ganancia_neta, 0) AS gananciaSemanalNegTB,
+		isnull(percom.otros_ingresos, 0) AS otrasGananciaSemanal,
+		0 AS gastosOperativos,
+		isnull(percom.gastos_familiares, 0) AS gastosFamiliares,
+		isnull(percom.gastos_familiares, 0) AS gastosFamiliaresOperativos,
+		(isnull(percom.ganancia_neta, 0) + isnull(percom.otros_ingresos/2, 0)) -
+		(isnull(percom.gastos_familiares, 0)) AS disponibleTA,
+		(isnull(percom.ganancia_neta, 0) + isnull(percom.otros_ingresos/2, 0))
+		- (isnull(percom.gastos_familiares, 0)) AS disponibleTB,
+		ROUND(isnull (((isnull(percom.ganancia_neta, 0) + isnull(percom.otros_ingresos,
+		0)) - (isnull(percom.gastos_familiares, 0))),0)/ (CASE WHEN
+		isnull(pers.ingreso_cp, 0) > 0 THEN pers.ingreso_cp else 1 END) ,2) AS
+		superavitTA,
+		ROUND(isnull (((isnull(percom.ganancia_neta, 0) + isnull(percom.otros_ingresos,
+		0)) - (isnull(percom.gastos_familiares, 0))),0)/ (CASE WHEN
+		isnull(pers.ingreso_cp, 0) > 0 THEN pers.ingreso_cp else 1 END) ,2) AS
+		superavitTB,
+		(isnull(percom.monto_mobiliario_equipo, 0) + isnull(percom.monto_inventario, 0)) AS totalActivo,
+		(isnull(percom.monto_mobiliario_equipo, 0) +
+		isnull(percom.monto_inventario, 0)) AS totalActivoNegocio,
+		0 AS saldoPasivo,
+		0 AS activoPasivo,
+		isnull(percom.exp_rubro,0) AS experienciaTrabajo,
+		isnull(percom.exp_negocio,0) AS experienciaNegocio,
+		isnull(cod4.descripcion, 'OTRO') AS tipoTrabajo,
+		0 Hogar,
+		isnull(percom.monto_mobiliario_equipo, 0) + isnull(percom.monto_inventario, 0) AS negocio,
+		isnull(perTel.telefono, ' ') AS telefono1,
+		isnull(perTelR1.telefono, ' ') AS telefono2,
+		isnull(perTelR2.telefono, ' ') AS telefono3,
+		isnull(perdom.calle, ' ') AS direccion,
+		isnull(cod5.descripcion, ' ') AS estado,
+		isnull(perdom.municipio_delegacion, ' ') AS delegacionMunicipio,
+		isnull(perdom.colonia, ' ') AS coloniaPoblacion,
+		isnull(percom.localidad, ' ') AS ciudad,
+		perTelR1.nombre + ' '+ perTelR1.apellido_pat + ' ' + perTelR1.apellido_mat AS
+		referencia1,
+		perTelR2.nombre + ' '+ perTelR2.apellido_pat + ' ' + perTelR2.apellido_mat AS
+		referencia2,
+		isnull(percom.monto_ventas,1) AS ventas,
+		isnull(percom.ganancia_act_sec,0) AS gananciaActividadSecundaria
+		FROM personas pers
+		left JOIN persona_complemento percom ON percom.persona = pers.persona
+		left JOIN persona_domicilios perdom ON perdom.persona = pers.persona AND
+		perdom.tipo_domicilio = 'DIRE'
+		LEFT JOIN codigos cod1 ON cod1.tipo_codigo = 'ECIV'
+		AND cod1.codigo = pers.edo_civil
+		LEFT JOIN codigos cod2 ON cod2.tipo_codigo = 'VIVI'
+		AND cod2.codigo = pers.tipo_vivienda
+		LEFT JOIN codigos cod4 ON cod4.tipo_codigo = 'TIPN'
+		AND cod4.codigo = pers.tipo_establecimiento
+		LEFT JOIN codigos cod5 ON cod5.tipo_codigo = 'EFED'
+		AND cod5.codigo = perdom.codigo_estado
+		LEFT JOIN persona_telefono perTel ON perTel.persona = pers.persona AND
+		perTel.tipo_telefono = 'DIRE'
+		LEFT JOIN persona_telefono perTelR1 ON perTelR1.persona = pers.persona AND
+		perTelR1.tipo_telefono = 'REFE' AND perTelR1.consecutivo = 1
+		LEFT JOIN persona_telefono perTelR2 ON perTelR2.persona = pers.persona AND
+		perTelR2.tipo_telefono = 'REFE' AND perTelR2.consecutivo = 2
+		WHERE
+		pers.persona = #{1}
+		ORDER BY
+		perdom.consecutivo DESC
+
+	</select>
+
+
+	<select id="consultaPrGetInformacionCliente" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.burocredito.BuroCreditoCliente">
+
+		SELECT
+		TOP 1
+		rcvf.clave_cu AS rfc,
+		CONVERT(INT,DATEDIFF(DAY, pers.fecha_nacimiento, GETDATE())/365.25) AS edad,
+		cod1.descripcion AS estadoCivil,
+		isnull(cod2.descripcion, ' ') AS tipoDomicilio,
+		DATEDIFF(year, pers.fecha_domicilio, getdate()) AS tiempoDomicilio,
+		'1' estatus,
+		pers.no_dependientes AS numeroDependientes
+		FROM
+		relacion_clave_finsol rcvf
+		INNER JOIN personas pers ON pers.persona = rcvf.persona
+		LEFT JOIN persona_domicilios perdom ON perdom.persona = pers.persona AND
+		perdom.tipo_domicilio = 'DIRE'
+		LEFT JOIN codigos cod1 ON cod1.tipo_codigo = 'ECIV' AND pers.edo_civil =
+		cod1.codigo
+		LEFT JOIN codigos cod2 ON cod2.tipo_codigo = 'VIVI' AND
+		perdom.tipo_domicilio = cod2.codigo
+		WHERE
+		rcvf.clave_finsol = #{1}
+		ORDER BY
+		perdom.consecutivo DESC
+
+	</select>
+
+
+	<select id="consultaPrGetFecha" statementType="CALLABLE"
+		resultType="java.util.Date">
+
+		{ CALL spObtenFechaContable (1, '2013-12-22') }
+
+	</select>
+
+
+	<select id="consultaPrGetHistoriaC"
+		parameterType="utilitario.mensajes.burocredito.BuroCreditoClienteGrupoPeticion"
+		resultType="utilitario.mensajes.burocredito.BuroCreditoClienteGrupo">
+		SELECT
+		CCF.contrato_LD AS bkContract,
+		RCF.clave_finsol AS bkGroup,
+		P.nombre AS bcGroup,
+		S.nombre AS bcBranch,
+		C.producto AS bcProductType,
+		P2.nombre + ' ' + P2.apellido_pat + ' ' + P2.apellido_mat AS bcAccountOfficer,
+		IG.ciclo_integrante AS atCycle,
+		C.no_pagos AS atTerm,
+		((C.tasa /100) * 12) AS atIntRate,
+		CM.monto_pago AS atInstallment,
+		C.monto AS meAmountAproved,
+		C.fecha_contrato AS dtValue,
+		'FINFIN' AS bcEmp,
+		'T24' AS bcSystem
+		FROM
+		integrante_grupo IG
+		INNER JOIN contratos C ON (C.contrato = IG.contrato)
+		INNER JOIN contrato_clave_finsol CCF ON(CCF.contrato = C.contrato)
+		LEFT JOIN contratos_movimientos CM ON(CM.contrato = C.contrato)
+		INNER JOIN relacion_clave_finsol RCF ON(RCF.persona = IG.integrante)
+		INNER JOIN personas P ON(P.persona = C.cliente)
+		INNER JOIN sucursales S ON(S.sucursal = C.sucursal)
+		LEFT JOIN personas P2 ON(P2.persona = C.vendedor)
+		WHERE
+		C.fecha_contrato <![CDATA[<=]]>
+		#{fecha}
+		AND IG.integrante = #{persona}
+		ORDER BY IG.ciclo_integrante
+
+	</select>
+
+
+
+	<select id="consultaPrGetDetalleGrupo" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.burocredito.BuroCreditoClienteDetalleGrupo">
+
+		SELECT
+		CCF.contrato,
+		C.status,
+		CCF.contrato_LD AS bkContract,
+		PE.nombre AS bcGroup,
+		S.nombre AS bcBranch,
+		P.descripcion AS bcProductType,
+		PE1.nombre + ' ' + PE1.apellido_pat + ' ' + PE1.apellido_mat AS
+		bcAccountOfficer,
+		CONVERT(varchar(10), C.fecha_contrato, 103) AS dtValue,
+		CONVERT(varchar(10), C.fecha_esp_liq, 103) AS dtMatuarity,
+		C.no_pagos AS atTerm,
+		CG.ciclo_grupo AS atCycle,
+		((tasa /100) * 12) AS atIntRate,
+		C.monto AS meAmountAproved,
+		(C.interes_total + C.iva_interes_total) AS meTotalInterest,
+		(C.interes_total + C.iva_interes_total + C.monto) AS meTotalToPay,
+		C.fecha_liq AS dtLiquidation,
+		0 AS bkStatusRecovery,
+		0 AS mePrincipalBalance,
+		0 AS meInterestBalance,
+		0 AS mePenaltyBalance,
+		0 AS meTotalBalance,
+		0 AS mePrincipalPastDue,
+		0 AS meInterestPastDue,
+		0 AS mePenalty,
+		0 AS meTotalPastDue,
+		0 AS meDaysLoanPastDue,
+		0 AS meDaysPastDueReal,
+		'Saldado' as bcStatus,
+		DATEDIFF(day, C.fecha_esp_liq, C.fecha_liq) AS diasAtra
+
+		FROM
+		contratos C
+		LEFT JOIN contrato_grupo CG ON(CG.contrato = C.contrato)
+		LEFT JOIN personas PE ON (PE.persona = C.cliente)
+		LEFT JOIN personas PE1 ON (PE1.persona = C.vendedor)
+		LEFT JOIN sucursales S ON (S.sucursal = C.sucursal)
+		LEFT JOIN productos P ON (P.producto = C.producto)
+		LEFT JOIN contrato_clave_finsol CCF ON(CCF.contrato = C.contrato)
+		WHERE
+		C.cliente = #{personaGrupo}
+		AND
+		C.status = 'P'
+
+		UNION ALL
+
+		SELECT
+		CCF.contrato,
+		C.status,
+		CCF.contrato_LD AS bkContract,
+		PE.nombre AS bcGroup,
+		S.nombre AS bcBranch,
+		P.descripcion AS bcProductType,
+		PE1.nombre + ' ' + PE1.apellido_pat + ' ' + PE1.apellido_mat AS
+		bcAccountOfficer,
+		CONVERT(varchar(10), C.fecha_contrato, 103) AS dtValue,
+		CONVERT(varchar(10), C.fecha_esp_liq, 103) AS dtMatuarity,
+		C.no_pagos AS atTerm,
+		CG.ciclo_grupo AS atCycle,
+		((tasa /100) * 12) AS atIntRate,
+		C.monto AS meAmountAproved,
+		(C.interes_total + C.iva_interes_total) AS meTotalInterest,
+		(C.interes_total + C.iva_interes_total + C.monto) AS meTotalToPay,
+		C.fecha_liq AS dtLiquidation,
+		0 AS bkStatusRecovery,
+		0.0 AS mePrincipalBalance,
+		0.0 AS meInterestBalance,
+		0.0 AS mePenaltyBalance,
+		0.0 AS meTotalBalance,
+		0.0 AS mePrincipalPastDue,
+		0.0 AS meInterestPastDue,
+		0.0 AS mePenalty,
+		0.0 AS meTotalPastDue,
+		"meDaysLoanPastDue" =
+		CASE
+		WHEN DATEDIFF(day, C.fecha_prox_pago, #{fecha}) <![CDATA[<=]]>
+		0 THEN 0
+		ELSE DATEDIFF(day, C.fecha_prox_pago, #{fecha})
+		END,
+		"meDaysPastDueReal" =
+		CASE
+		WHEN DATEDIFF(day, C.fecha_prox_pago, #{fecha}) <![CDATA[<=]]>
+		0 THEN 0
+		ELSE DATEDIFF(day, C.fecha_prox_pago, #{fecha})
+		END,
+		"bcStatus" =
+		CASE
+		WHEN C.status = 'D' AND C.fecha_prox_pago <![CDATA[>=]]>
+		#{fecha} THEN 'Vigente'
+		WHEN C.status = 'D' AND C.fecha_prox_pago <![CDATA[<]]>
+		#{fecha} AND DATEDIFF(day, C.fecha_prox_pago, #{fecha}) <![CDATA[<=]]>
+		90 THEN 'Vigente con Mora'
+		WHEN C.status = 'D' AND C.fecha_prox_pago <![CDATA[<]]>
+		#{fecha} AND DATEDIFF(day, C.fecha_prox_pago, #{fecha}) <![CDATA[>]]>
+		90 THEN 'Vencido'
+		WHEN C.status = 'P' THEN 'Saldado'
+		WHEN C.status = 'V' THEN 'Vendido'
+		ELSE 'Sin Catalogar'
+		END,
+		0 AS diasAtra
+
+		FROM
+		contratos C
+		LEFT JOIN contrato_grupo CG ON(CG.contrato = C.contrato)
+		LEFT JOIN personas PE ON (PE.persona = C.cliente)
+		LEFT JOIN personas PE1 ON (PE1.persona = C.vendedor)
+		LEFT JOIN sucursales S ON (S.sucursal = C.sucursal)
+		LEFT JOIN productos P ON (P.producto = C.producto)
+		LEFT JOIN contrato_clave_finsol CCF ON(CCF.contrato = C.contrato)
+		WHERE
+		C.cliente = #{personaGrupo}
+		AND
+		C.status != 'P'
+
+		ORDER BY atCycle
+	</select>
+
+
+	<select id="consultaFindCredComunal" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.burocredito.BuroCreditoComunal">
+
+		SELECT
+		prod.producto + '-' + prod.descripcion AS producto,
+		convert(CHAR(8), solf.fecha_resolucion, 112) AS fechaInicio,
+		convert(CHAR(8), solf.fecha_fin , 112) AS fechaTermino,
+		CAST(suc.sucursal AS varchar) + '-' + suc.nombre AS sucursal,
+		ases.persona + '-' + ases.nombre +' '+ ases.apellido_pat +' '+ ases.apellido_mat
+		AS asesor,
+		grup.persona AS grupoID,
+		grup.nombre AS grupo,
+		round(solf.efectivo_solicitado, 2) AS montoAprobado,
+		solf.ciclo AS ciclo,
+		rcvf.clave_finsol AS clienteID,
+		clte.nombre +' '+ clte.apellido_pat +' '+ clte.apellido_mat AS cliente,
+		round(solI.efectivo_solicitado, 2) AS mntSolicitadoActual,
+		convert(CHAR(8), solf.fecha_captura, 112) AS fecha,
+		isnull(dest.descripcion, ' ') AS destinoCreditoActual,
+		round((DATEDIFF(day, solf.fecha_captura, CASE WHEN
+		solf.frecuencia_pago = 'S' THEN DateADD(Week, isnull(solf.plazo, 0),
+		solf.fecha_captura ) ELSE DateADD(Week, isnull(solf.plazo, 0) * 2,
+		solf.fecha_captura ) END) * ((solf.tasa/100)/360) *
+		isnull(solI.efectivo_solicitado,0) +
+		isnull(solI.efectivo_solicitado,0))/ solf.plazo, 2) AS
+		cuotaSemanalActual,
+		--(isnull(solf.tasa, 0) /100) * 12 AS tasa,
+		isnull(solf.tasa, 0) AS tasa,
+		CAST(solf.plazo AS varchar) + ' ' + (CASE WHEN isnull(solf.frecuencia_pago, 'S') =
+		'S' THEN 'Semanas' ELSE 'Catorcenas' END) AS plazo,
+		round((DATEDIFF(day, solf.fecha_captura, CASE WHEN
+		solf.frecuencia_pago = 'S' THEN DateADD(Week, isnull(solf.plazo, 0),
+		solf.fecha_captura ) ELSE DateADD(Week, isnull(solf.plazo, 0) * 2,
+		solf.fecha_captura ) END) * ((solf.tasa/100)/360) *
+		isnull(solI.efectivo_solicitado,0)), 2) AS totalInteres,
+		round((DATEDIFF(day, solf.fecha_captura, CASE WHEN
+		solf.frecuencia_pago = 'S' THEN DateADD(Week, isnull(solf.plazo, 0),
+		solf.fecha_captura ) ELSE DateADD(Week, isnull(solf.plazo, 0) * 2,
+		solf.fecha_captura ) END) * ((solf.tasa/100)/360) *
+		isnull(solI.efectivo_solicitado,0) +
+		isnull(solI.efectivo_solicitado,0)), 2) AS totalPagar,
+		pres.cliente as presidente,
+		teso.cliente as tesorero,
+		secr.cliente as secretario,
+		supe.cliente as supervisor,
+		' ' AS dirSucursal
+		FROM
+		solicitudes_finsol solf
+		INNER JOIN solicitud_integrantes solI ON solI.solicitud = solf.solicitud
+		AND solI.status != 'X'
+		INNER JOIN relacion_clave_finsol rcvf ON rcvf.persona = solI.cliente
+		INNER JOIN personas clte ON solI.cliente = clte.persona
+		LEFT JOIN productos prod ON solf.codigo_producto = prod.producto
+		LEFT JOIN sucursales suc ON solf.oficina = suc.sucursal
+		LEFT JOIN personas ases ON ases.persona = solf.vendedor
+		LEFT JOIN personas grup ON grup.persona = solf.cliente
+		LEFT JOIN solicitud_integrantes pres ON pres.solicitud = solf.solicitud
+		AND pres.cargo_mesa_directiva = 'PRES' AND pres.status != 'X'
+		LEFT JOIN solicitud_integrantes secr ON secr.solicitud = solf.solicitud
+		AND secr.cargo_mesa_directiva = 'SECR' AND secr.status != 'X'
+		LEFT JOIN solicitud_integrantes teso ON teso.solicitud = solf.solicitud
+		AND teso.cargo_mesa_directiva = 'TESO' AND teso.status != 'X'
+		LEFT JOIN solicitud_integrantes supe ON supe.solicitud = solf.solicitud
+		AND supe.cargo_mesa_directiva = 'SUPE' AND supe.status != 'X'
+		LEFT JOIN codigos dest ON dest.codigo = solI.codigo_destino_credito
+		AND dest.tipo_codigo = 'CDCS'
+		WHERE
+		solf.solicitud = #{1}
+		AND
+		(solf.contrato is NULL OR solf.contrato = '')
+
+	</select>
+
+
+
+	<select id="consultaPrGetDetalleHistoriaC"
+		parameterType="utilitario.mensajes.burocredito.BuroCreditoClienteGrupoPeticion"
+		resultType="utilitario.mensajes.burocredito.BuroCreditoClienteGrupo">
+
+		SELECT
+		TOP 4
+		C.contrato,
+		CCF.contrato_LD AS bkContract,
+		IG.ciclo_integrante AS atCycleCustomer,
+		C.monto AS mT,
+		IG.monto_otorgado AS meAproved,
+		IG.pct_participacion AS atPctInParticipation,
+		CONVERT(VARCHAR, C.fecha_disposicion, 103) AS fInicio,
+		CONVERT(VARCHAR, C.fecha_esp_liq, 103) AS fFin,
+		isnull((C.interes_total + C.iva_interes_total),0) AS tI,
+		isnull((C.interes_total + C.iva_interes_total + C.monto),0) AS tA,
+		isnull(CONVERT(VARCHAR, C.fecha_liq, 103), ' ') AS liquidation,
+		"bsStatus" =
+		CASE
+		WHEN C.status = 'D' AND C.fecha_prox_pago <![CDATA[>=]]>
+		#{fecha} THEN 'Vigente'
+		WHEN C.status = 'D' AND C.fecha_prox_pago <![CDATA[<]]>
+		#{fecha} AND DATEDIFF(day, C.fecha_prox_pago, #{fecha}) <![CDATA[<=]]>
+		90 THEN 'Vigente con Mora'
+		WHEN C.status = 'D' AND C.fecha_prox_pago <![CDATA[<]]>
+		#{fecha} AND DATEDIFF(day, C.fecha_prox_pago, #{fecha}) <![CDATA[>]]>
+		90 THEN 'Vencido'
+		WHEN C.status = 'P' THEN 'Saldado'
+		WHEN C.status = 'V' THEN 'Vendido'
+		ELSE 'Sin Catalogar'
+		END,
+		isnull(DATEDIFF(day, C.fecha_esp_liq, C.fecha_liq),0) AS diasAtra,
+		0 AS bkStatusRecovery,
+		0 AS mePrincipalBalance,
+		0 AS meInterestBalance,
+		0 AS mePenaltyBalance,
+		0 AS meTotalBalance,
+		0 AS mePrincipalPastDue,
+		0 AS meInterestPastDue,
+		0 AS mePenalty,
+		0 AS meTotalPastDue,
+		"meDaysLoanPastDue" =
+		CASE
+		WHEN DATEDIFF(day, C.fecha_prox_pago, #{fecha}) <![CDATA[<=]]>
+		0 THEN 0
+		ELSE DATEDIFF(day, C.fecha_prox_pago, #{fecha})
+		END,
+		"meDaysPastDueReal" =
+		CASE
+		WHEN DATEDIFF(day, C.fecha_prox_pago, #{fecha}) <![CDATA[<=]]>
+		0 THEN 0
+		ELSE DATEDIFF(day, C.fecha_prox_pago, #{fecha})
+		END,
+		isnull(C.monto_pago,0) AS atInstallment,
+		"bkStatus" =
+		CASE
+		WHEN C.status = 'P' THEN 2
+		ELSE 1
+		END,
+		C.maximo_retraso AS diasMoraAcumulados,
+		"atRegularity" =
+		CASE
+		WHEN C.frecuencia_pago = 'S' THEN 'W'
+		WHEN C.frecuencia_pago = 'C' THEN 'F'
+		ELSE ''
+		END,
+		C.maximo_retraso AS maxdm,
+		0 AS calf,
+		isnull(C.no_retrasos,0) AS noRetraso,
+		C.cliente AS numeroGrupo
+		FROM
+		integrante_grupo IG
+		INNER JOIN contratos C ON (C.contrato = IG.contrato)
+		INNER JOIN contrato_clave_finsol CCF ON(CCF.contrato = C.contrato)
+		WHERE
+		IG.integrante = #{persona}
+		AND	IG.status != 'I'
+		AND C.status != 'X'
+		ORDER BY IG.ciclo_integrante desc
+
+	</select>
+
+
+	<select id="cuentaMora" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT con.maximo_retraso FROM contratos con WHERE
+		con.contrato = #{contrato}
+	</select>
+
+
+
+	<select id="obtenerPersonaMin" parameterType="java.lang.String"
+		resultType="java.lang.String">
+
+		SELECT persona = MIN (persona)
+		FROM (
+		SELECT persona FROM relacion_clave_finsol WHERE clave_finsol= #{1}
+		UNION
+		SELECT persona FROM relacion_clave_finsol WHERE clave_cu = #{1}
+		UNION
+		SELECT persona FROM relacion_clave_finsol WHERE persona = #{1}
+		) TBL1
+
+	</select>
+
+
+	<select id="consultaGetRFCCliente" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.burocredito.BuroCreditoRFCRespuesta">
+
+		SELECT
+		rcvf.clave_cu AS rfc,
+		rcvf.persona
+
+		FROM
+		relacion_clave_finsol rcvf
+		WHERE
+		rcvf.clave_finsol = #{1}
+
+	</select>
+
+
+	<select id="consultaGetClientbyRFC" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.burocredito.BuroCreditoRFC">
+
+		SELECT
+		RCF.clave_cu AS customerId,
+		P.nombre AS customerName,
+		P.apellido_pat AS secondName,
+		P.apellido_mat AS lastName,
+		CONVERT(VARCHAR, P.fecha_nacimiento, 103) AS birthdate,
+		P.persona
+		FROM
+		relacion_clave_finsol RCF
+		INNER JOIN personas P ON (P.persona = RCF.persona)
+		WHERE
+		RCF.clave_cu LIKE '%'||#{1}||'%'
+		ORDER BY
+		customerId,
+		secondName,
+		lastName,
+		customerName
+
+	</select>
+
+
+	<select id="consultaGetClientBCE" parameterType="java.lang.String"
+		resultType="utilitario.mensajes.burocredito.BuroCreditoBCE">
+
+		SELECT
+		P.rfc AS rfc,
+		rtrim(ltrim(P.nombre)) AS nombres,
+		rtrim(ltrim(isnull(P.apellido_pat, ''))) AS apellidoPaterno,
+		rtrim(ltrim(isnull(P.apellido_mat, ''))) AS apellidoMaterno,
+		CONVERT(VARCHAR, P.fecha_nacimiento, 103) AS fechaNacimiento,
+		CASE
+			 WHEN P.sexo = 'F' THEN 'F'
+			 WHEN P.sexo = 'M' THEN 'M'
+			 ELSE 'F'
+		END as sexo,
+		CASE
+			 WHEN P.edo_civil = 'D' THEN 'D'
+	 		 WHEN P.edo_civil = 'U' THEN 'U'
+			 WHEN P.edo_civil = 'C' THEN 'C'
+			 WHEN P.edo_civil = 'S' THEN 'S'
+			 WHEN P.edo_civil = 'V' THEN 'V'
+			 ELSE 'S'
+		END as estadoCivil,
+		isnull(PD.calle,'') AS direccion,
+		isnull(PD.colonia,'') AS coloniaPoblacion,
+		isnull(PD.municipio_delegacion,'') as delegacionMunicipio,
+		isnull(PD.ciudad,'') as ciudad,
+		isnull(estado.estado,'') AS estado,
+		isnull(PD.cp,'') as cp,
+		telefono = CASE WHEN PTD.telefono != NULL THEN PTD.telefono WHEN PTC.telefono != NULL THEN PTC.telefono WHEN PTE.telefono != NULL THEN PTE.telefono WHEN PTR.telefono != NULL THEN PTR.telefono ELSE NULL END,
+		RCF.clave_cu AS customerId,
+		P.persona,
+		isnull(PD.no_interior,'') AS numeroInterior,
+		isnull(PD.no_exterior,'') AS numeroExterior,
+		'M' AS nacionalidad,
+		isnull(estado.codigo_buro,'') AS codigoEstadoburo
+		FROM  relacion_clave_finsol RCF
+		INNER JOIN personas P ON(P.persona = RCF.persona)
+		LEFT JOIN persona_domicilios PD ON (PD.persona = P.persona AND
+										    PD.tipo_domicilio = 'DIRE' AND PD.consecutivo =
+											 (SELECT MAX(consecutivo) FROM persona_domicilios WHERE persona = P.persona AND
+											  tipo_domicilio = 'DIRE' AND persona_domicilios.status != 'I' ))
+		LEFT JOIN estados estado ON (PD.codigo_estado = estado.codigo_financiera)
+		LEFT JOIN persona_telefono PTD ON (PTD.persona = P.persona AND PTD.tipo_telefono = 'DIRE' AND PTD.status != 'I'
+										AND PTD.consecutivo = (SELECT MAX(consecutivo) FROM persona_telefono
+										WHERE persona = P.persona AND tipo_telefono = 'DIRE' AND status != 'I'))
+		LEFT JOIN persona_telefono PTC ON (PTC.persona = P.persona AND PTC.tipo_telefono = 'CELU' AND PTC.status != 'I'
+										AND PTC.consecutivo = (SELECT MAX(consecutivo) FROM persona_telefono
+										WHERE persona = P.persona AND tipo_telefono = 'CELU' AND status != 'I'))
+		LEFT JOIN persona_telefono PTE ON (PTE.persona = P.persona AND PTE.tipo_telefono = 'EMPL' AND PTE.status != 'I'
+										AND PTE.consecutivo = (SELECT MAX(consecutivo) FROM persona_telefono
+										WHERE persona = P.persona AND tipo_telefono = 'EMPL' AND status != 'I'))
+		LEFT JOIN persona_telefono PTR ON (PTR.persona = P.persona AND PTR.tipo_telefono = 'RECA' AND PTR.status != 'I'
+										AND PTR.consecutivo = (SELECT MAX(consecutivo) FROM persona_telefono
+										WHERE persona = P.persona AND tipo_telefono = 'RECA' AND status != 'I'))
+		WHERE
+		RCF.persona  = #{persona}
+		AND P.personalidad = 'F'
+
+	</select>
+
+
+	<select id="consultaGetClientBCEPersonas" parameterType="java.lang.String"
+		resultType="java.lang.String">
+
+		SELECT
+		RCF.persona
+		FROM
+		relacion_clave_finsol RCF
+		WHERE
+		RCF.clave_cu LIKE '%'||#{1}||'%'
+
+	</select>
+
+
+</mapper>

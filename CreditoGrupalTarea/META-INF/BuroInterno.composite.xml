@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+		name="BuroInterno" 
+		targetNamespace="urn:independencia.creditogrupal.tarea.buro">
+
+ 	<component name="BuroInternoTarea">
+		<implementation.java class="tarea.buro.BuroInternoTareaImpl"/>
+	</component>
+ 	
+</composite>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+  "http://localhost:8080/config/ibatis-3-config.dtd">
+<configuration>
+
+	<properties resource="entidad/config.properties" />
+
+	<settings>
+	    <setting name="aggressiveLazyLoading" value="false"/>
+	    <setting name="defaultStatementTimeout" value="500"/>
+    </settings>
+
+    <environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+
+ 				<property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+				<property name="url" value="jdbc:oracle:thin:@${oracle.ip}:${oracle.puerto}:${oracle.instancia}"/>
+				<property name="username" value="${oracle.username}"/>
+				<property name="password" value="${oracle.password}"/>
+				<property name="poolMaximumActiveConnections" value="350"/>
+	   			<property name="poolMaximumIdleConnections" value="350"/>
+	   			<property name="poolMaximumCheckoutTime" value="50000"/>
+	   			<property name="poolTimeToWait" value="20000"/>
+	   			<property name="poolPingQuery" value="SELECT 1 FROM DUAL"/>
+	   			<property name="poolPingEnabled" value="true"/>
+	   			<property name="poolPingConnectionsNotUsedFor" value="1"/>
+	   			<property name="loginTimeout" value="1"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+ 		<mapper resource="entidad/operacion/OperacionOrclNTx.xml"/>
+ 		<mapper resource="entidad/operacion/OperacionOrclNTx.xml"/>
+ 		<mapper resource="entidad/verificacion/telefonica/VerificacionTelefonicaOracleNTx.xml"/>
+ 		<mapper resource="entidad/solicitudes/SolicitudesOrclNTx.xml"/>
+ 		<mapper resource="entidad/solicitudes/SolicitudesOrclTx.xml"/>
+	</mappers>
+</configuration>

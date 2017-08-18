@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" autowire="true"	name="SvcBuroInterno" targetNamespace="urn:independencia.creditogrupal.negocio">
+
+    <component name="BuroInterno">
+        <implementation.java class="negocio.buro.BuroInternoImpl"/>
+        <service name="BuroInterno">
+            <binding.ws uri="/CIOF/SvcBuroInterno"/>
+        </service>
+   	   	<reference multiplicity="1..1" name="buro" target="BuroInternoTarea"/>
+   	   	<reference multiplicity="1..1" name="transformador" target="Transformador"/>
+    </component>
+
+</composite>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+
+<mapper namespace="entidad.seguros.SolicitudesOrclNTx">
+
+	<select id="consultaSolicitudEncabezado" parameterType="java.util.HashMap"
+		resultType="utilitario.mensajes.solicitudes.SolicitudBuroOV">
+		select ct.sucursal,
+		ct.ciclo,
+		cgt.nombre,
+		to_char(ct.fecha_solicitud) AS fechaSolicitud,
+		to_char(ct.fecha_desembolso) AS fechaDesembolso,
+		nvl(estatus,' ') AS estatus,
+		nvl(des_estatus,' ') AS descripcionEstatus
+		from esiacom.credito_temp ct
+		left join esiacom.credito_grupo_temp cgt on ct.id = cgt.id_credito
+		where id = #{id}
+	</select>
+
+</mapper>

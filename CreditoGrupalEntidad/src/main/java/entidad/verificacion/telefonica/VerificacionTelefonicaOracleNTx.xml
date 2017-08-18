@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://localhost:8080/config/ibatis-3-mapper.dtd">
+<mapper namespace="entidad.verificacion.telefonica">
+
+
+	<update id="actualizacionSolicitudOracle" parameterType="java.util.HashMap">
+		UPDATE esiacom.credito_temp SET visualiza_cec = #{visualiza_cec}
+		where id =  #{id}
+    </update>
+
+
+</mapper>

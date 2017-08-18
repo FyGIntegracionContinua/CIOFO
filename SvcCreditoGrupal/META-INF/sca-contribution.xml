@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contribution xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+			  xmlns:negocio="urn:independencia.creditogrupal.negocio">
+    <deployable composite="negocio:SvcOriginacionCreditoGrupal"/>
+    <deployable composite="negocio:SvcAdministracionCreditoGrupal"/>
+    <deployable composite="negocio:SvcConsultasCreditoGrupal"/>
+    <deployable composite="negocio:SvcOperacionCreditoGrupal"/>
+    <deployable composite="negocio:SvcReportesCreditoGrupal"/>
+    <deployable composite="negocio:SvcProcesaOFSCreditoGrupal"/>
+ 	<deployable composite="negocio:SvcOperacionAdministrativaCreditoGrupal"/>
+ 	<deployable composite="negocio:SvcBuroInterno"/>
+	<deployable composite="negocio:SvcSeguros"/>
+	<deployable composite="negocio:SvcChequesCreditoGrupal"/>
+ 	<deployable composite="negocio:SvcBuroCredito"/>
+ 	<deployable composite="negocio:SvcSolicitudesCredito"/>
+ 	<deployable composite="negocio:SvcConsultasCicloCreditoGrupal"/>
+ 	<deployable composite="negocio:SvcRestModuloCEC"/>
+
+    <import.java package="utilitario"/>
+    <import.java package="tarea"/>
+    <import.java package="parser"/>
+    <import.java package="transformador"/>
+    <import.java package="datamapper"/>
+    <import.java package="javax.ws.rs" version="1.1.1"/>
+    <import.java package="javax.ws.rs.core" version="1.1.1"/>
+
+</contribution>
+"META-INF/SvcOriginacionCreditoGrupal.composite"

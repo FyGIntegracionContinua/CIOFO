@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+ 		name="OriginacionCreditoGrupal"
+ 		targetNamespace="urn:independencia.creditogrupal.tarea.originacion">
+
+ 	<component name="OriginacionCliente">
+		<implementation.java class="tarea.originacion.OriginacionClienteImpl"/>
+		<reference name="comun" target="ComunCreditoGrupal"/>
+	</component>
+
+	<component name="OriginacionGrupo">
+		<implementation.java class="tarea.originacion.OriginacionGrupoImpl"/>
+		<reference name="comun" target="ComunCreditoGrupal"/>
+	</component>
+
+	<component name="OriginacionCredito">
+		<implementation.java class="tarea.originacion.OriginacionCreditoImpl"/>
+		<reference name="grupo" target="OriginacionGrupo"/>
+		<reference name="comun" target="ComunCreditoGrupal"/>
+		<reference name="pagos" target="PagosCredito"/>
+		<reference name="consultas" target="ConsultasCreditoGrupalTarea"/>
+		<reference name="seguros" target="SegurosTarea"/>
+		<reference name="solicitudes" target="SolicitudesCreditoTarea"/>
+		<reference name="transformador" target="Transformador"/>
+	</component>
+
+	<component name="OriginacionConsultas">
+		<implementation.java class="tarea.originacion.OriginacionConsultasImpl"/>
+		<reference name="comun" target="ComunCreditoGrupal"/>
+	</component>
+
+	<component name="ChequesSIC">
+		<implementation.java class="tarea.cheques.ChequesSICImpl"/>
+		<reference name="comun" target="ComunCreditoGrupal"/>
+	</component>
+
+</composite>
+

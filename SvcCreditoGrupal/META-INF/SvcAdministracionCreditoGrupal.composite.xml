@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912" autowire="true" name="SvcAdministracionCreditoGrupal" targetNamespace="urn:independencia.creditogrupal.negocio">
+
+  	<component name="AdministracionCreditoGrupal">
+		<implementation.java class="negocio.administracion.AdministracionCreditoGrupalImpl"/>
+		<service name="AdministracionCreditoGrupal">
+            <binding.ws uri="/CIOF/SvcAdministracionCreditoGrupal"/>
+        </service>
+        <reference multiplicity="1..1" name="administracion" target="AdministracionCredito"/>
+        <reference multiplicity="1..1" name="condonaciones" target="CondonacionesManuales"/>
+        <reference multiplicity="1..1" name="transformador" target="Transformador"/>
+		<reference multiplicity="1..1" name="administracionPersona" target="AdministracionPersona"/>
+ 	</component>
+
+ 	<component name="AdministracionPersonaFINDEP">
+		<implementation.java class="negocio.administracion.AdministracionPersonaFINDEPImpl"/>
+		<service name="AdministracionPersonaFINDEP">
+            <binding.ws uri="/CIOF/AdministracionPersonaWS"/>
+        </service>
+        <reference multiplicity="1..1" name="administracionPersona" target="AdministracionPersona"/>
+        <reference multiplicity="1..1" name="transformador" target="Transformador"/>
+ 	</component>
+
+ 	<component name="AdministracionTelefonicaCreditoGrupal">
+		<implementation.java class="negocio.administracion.AdministracionTelefonicaCreditoGrupalImpl"/>
+		<service name="AdministracionTelefonicaCreditoGrupal">
+            <binding.ws uri="/CIOF/AdministracionTelefonicaWS"/>
+        </service>
+        <reference multiplicity="1..1" name="administracionTelefonica" target="AdministracionTelefonica"/>
+     </component>
+
+</composite>
