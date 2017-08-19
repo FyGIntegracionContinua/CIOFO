@@ -59,48 +59,7 @@ public class MapperSalidaImpl implements MapperSalida {
 	 */
 	private String normalizaCaracetresEspeciales( String desnormalizada ) {
 		String
-		/*normalizada  = desnormalizada.replace("À", "//01");
-		normalizada  = normalizada.replace("È", "//02");
-		normalizada  = normalizada.replace("Ì", "//03");
-		normalizada  = normalizada.replace("Ò", "//04");
-		normalizada  = normalizada.replace("Ù", "//05");
-		normalizada  = normalizada.replace("Á", "//06");
-		normalizada  = normalizada.replace("É", "//07");
-		normalizada  = normalizada.replace("Í", "//08");
-		normalizada  = normalizada.replace("Ó", "//09");
-		normalizada  = normalizada.replace("Ú", "//10");
-		normalizada  = normalizada.replace("Â", "//11");
-		normalizada  = normalizada.replace("Ê", "//12");
-		normalizada  = normalizada.replace("Î", "//13");
-		normalizada  = normalizada.replace("Ô", "//14");
-		normalizada  = normalizada.replace("Û", "//15");
-		normalizada  = normalizada.replace("Ä", "//16");
-		normalizada  = normalizada.replace("Ë", "//17");
-		normalizada  = normalizada.replace("Ï", "//18");
-		normalizada  = normalizada.replace("Ö", "//19");
-		normalizada  = normalizada.replace("Ü", "//20");
-		normalizada  = normalizada.replace("à", "//21");
-		normalizada  = normalizada.replace("è", "//22");
-		normalizada  = normalizada.replace("ì", "//23");
-		normalizada  = normalizada.replace("ò", "//24");
-		normalizada  = normalizada.replace("ù", "//25");
-		normalizada  = normalizada.replace("á", "//26");
-		normalizada  = normalizada.replace("é", "//27");
-		normalizada  = normalizada.replace("í", "//28");
-		normalizada  = normalizada.replace("ó", "//29");
-		normalizada  = normalizada.replace("ú", "//30");
-		normalizada  = normalizada.replace("â", "//31");
-		normalizada  = normalizada.replace("ê", "//32");
-		normalizada  = normalizada.replace("î", "//33");
-		normalizada  = normalizada.replace("ô", "//34");
-		normalizada  = normalizada.replace("û", "//35");
-		normalizada  = normalizada.replace("ä", "//36");
-		normalizada  = normalizada.replace("ë", "//37");
-		normalizada  = normalizada.replace("ï", "//38");
-		normalizada  = normalizada.replace("ö", "//39");
-		normalizada  = normalizada.replace("ü", "//40");
-		normalizada  = normalizada.replace("Ñ", "//41");
-		normalizada  = normalizada.replace("ñ", "//42");*/
+		
 		normalizada  = normalizada.replace(",", "//43");
 		normalizada  = normalizada.replace("'", "//44");
 		normalizada  = normalizada.replace("\"", "//45");
