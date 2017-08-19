@@ -49,7 +49,7 @@ public class ContratosActivosSaldoFavorOV implements Serializable {
 
 
     /**
-     * Método que agrega el contenido de los campos a un StringBuffer y los separa con ","
+     * Metodo que agrega el contenido de los campos a un StringBuffer y los separa con ","
      * para generar un encabezado CVS.
      *
      * @return the string buffer

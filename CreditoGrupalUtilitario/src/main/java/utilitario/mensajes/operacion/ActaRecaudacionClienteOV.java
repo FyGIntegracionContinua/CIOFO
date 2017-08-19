@@ -60,56 +60,56 @@ public class ActaRecaudacionClienteOV extends ObjetoValor {
 	private java.lang.Double	montoEntregado;		//monto que recibe cada integrante del grupo
 
 	/**
-	 * Método que regresa el valor del miémbro dato integrante.
+	 * Metodo que regresa el valor del miembro dato integrante.
 	 * @return the integrante
 	 */
 	public String getIntegrante() {
 		return integrante;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato integrante.
+	 * Metodo que establece el valor para el miembro dato integrante.
 	 * @param integrante the integrante to set
 	 */
 	public void setIntegrante(String integrante) {
 		this.integrante = integrante;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato nombre.
+	 * Metodo que regresa el valor del miembro dato nombre.
 	 * @return the nombre
 	 */
 	public String getNombre() {
 		return nombre;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato nombre.
+	 * Metodo que establece el valor para el miembro dato nombre.
 	 * @param nombre the nombre to set
 	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato apellidoPaterno.
+	 * Metodo que regresa el valor del miembro dato apellidoPaterno.
 	 * @return the apellidoPaterno
 	 */
 	public String getApellidoPaterno() {
 		return apellidoPaterno;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato apellidoPaterno.
+	 * Metodo que establece el valor para el miembro dato apellidoPaterno.
 	 * @param apellidoPaterno the apellidoPaterno to set
 	 */
 	public void setApellidoPaterno(String apellidoPaterno) {
 		this.apellidoPaterno = apellidoPaterno;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato apellidoMaterno.
+	 * Metodo que regresa el valor del miembro dato apellidoMaterno.
 	 * @return the apellidoMaterno
 	 */
 	public String getApellidoMaterno() {
 		return apellidoMaterno;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato apellidoMaterno.
+	 * Metodo que establece el valor para el miembro dato apellidoMaterno.
 	 * @param apellidoMaterno the apellidoMaterno to set
 	 */
 	public void setApellidoMaterno(String apellidoMaterno) {
@@ -117,70 +117,70 @@ public class ActaRecaudacionClienteOV extends ObjetoValor {
 	}
 
 	/**
-	 * Método que regresa el valor del miémbro dato montoTotal.
+	 * Metodo que regresa el valor del miembro dato montoTotal.
 	 * @return the montoTotal
 	 */
 	public Double getMontoTotal() {
 		return montoTotal;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato montoTotal.
+	 * Metodo que establece el valor para el miembro dato montoTotal.
 	 * @param montoTotal the montoTotal to set
 	 */
 	public void setMontoTotal(Double montoTotal) {
 		this.montoTotal = montoTotal;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato montoPago.
+	 * Metodo que regresa el valor del miembro dato montoPago.
 	 * @return the montoPago
 	 */
 	public Double getMontoPago() {
 		return montoPago;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato montoPago.
+	 * Metodo que establece el valor para el miembro dato montoPago.
 	 * @param montoPago the montoPago to set
 	 */
 	public void setMontoPago(Double montoPago) {
 		this.montoPago = montoPago;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato montoRecibido.
+	 * Metodo que regresa el valor del miembro dato montoRecibido.
 	 * @return the montoRecibido
 	 */
 	public Double getMontoRecibido() {
 		return montoRecibido;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato montoRecibido.
+	 * Metodo que establece el valor para el miembro dato montoRecibido.
 	 * @param montoRecibido the montoRecibido to set
 	 */
 	public void setMontoRecibido(Double montoRecibido) {
 		this.montoRecibido = montoRecibido;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato montoSolidario.
+	 * Metodo que regresa el valor del miembro dato montoSolidario.
 	 * @return the montoSolidario
 	 */
 	public Double getMontoSolidario() {
 		return montoSolidario;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato montoSolidario.
+	 * Metodo que establece el valor para el miembro dato montoSolidario.
 	 * @param montoSolidario the montoSolidario to set
 	 */
 	public void setMontoSolidario(Double montoSolidario) {
 		this.montoSolidario = montoSolidario;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato asistenciaIntegrante.
+	 * Metodo que regresa el valor del miembro dato asistenciaIntegrante.
 	 * @return the asistenciaIntegrante
 	 */
 	public String getAsistenciaIntegrante() {
 		return asistenciaIntegrante;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato asistenciaIntegrante.
+	 * Metodo que establece el valor para el miembro dato asistenciaIntegrante.
 	 * @param asistenciaIntegrante the asistenciaIntegrante to set
 	 */
 	public void setAsistenciaIntegrante(String asistenciaIntegrante) {

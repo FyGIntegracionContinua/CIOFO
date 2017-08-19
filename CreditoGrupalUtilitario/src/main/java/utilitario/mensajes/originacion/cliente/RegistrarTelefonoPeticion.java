@@ -12,7 +12,7 @@ import utilitario.mensajes.comun.ObjetoValor;
  * Encapsula los datos de la peticion de registrar el telefono de un cliente
  */
 public final class RegistrarTelefonoPeticion extends ObjetoValor {
-	//UID para la serialización
+	//UID para la serializacion
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
@@ -52,7 +52,7 @@ public final class RegistrarTelefonoPeticion extends ObjetoValor {
 
 		}
 
-	//Métodos - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	//Metodos - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	/**
 	 * Obtiene integrante.
 	 *

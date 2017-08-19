@@ -27,28 +27,28 @@ public class ConsolidadoCreditosAsignadosPeticion extends ObjetoValor {
 	private String asesor;
 
 	/**
-	 * Método que regresa el valor del miémbro dato sucursal.
+	 * Metodo que regresa el valor del miembro dato sucursal.
 	 * @return the sucursal
 	 */
 	public Integer getSucursal() {
 		return sucursal;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato sucursal.
+	 * Metodo que establece el valor para el miembro dato sucursal.
 	 * @param sucursal the sucursal to set
 	 */
 	public void setSucursal(Integer sucursal) {
 		this.sucursal = sucursal;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato asesor.
+	 * Metodo que regresa el valor del miembro dato asesor.
 	 * @return the asesor
 	 */
 	public String getAsesor() {
 		return asesor;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato asesor.
+	 * Metodo que establece el valor para el miembro dato asesor.
 	 * @param asesor the asesor to set
 	 */
 	public void setAsesor(String asesor) {

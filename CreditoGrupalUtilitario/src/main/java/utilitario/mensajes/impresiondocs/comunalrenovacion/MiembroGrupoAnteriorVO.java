@@ -102,7 +102,7 @@ public 	class 	MiembroGrupoAnteriorVO extends	ObjetoValor {
 	/**
 	 * valecredito java.lang.String
 	 */
-	private java.lang.String		valecredito;		// - ( un guión )
+	private java.lang.String		valecredito;		// - ( un guion )
 
 	/**
 	 * @return the noIndice

@@ -91,7 +91,7 @@ public class ContratosActivosMoraOV implements Serializable {
 
 
     /**
-     * Método que agrega el contenido de los campos a un StringBuffer y los separa con ","
+     * Metodo que agrega el contenido de los campos a un StringBuffer y los separa con ","
      * para generar un encabezado CVS.
      *
      * @param fecha the fecha
@@ -112,7 +112,7 @@ public class ContratosActivosMoraOV implements Serializable {
     	respuesta.append(COMA);
     	respuesta.append(this.primerDiaMora	!= null ? this.primerDiaMora : "");
     	respuesta.append(COMA);
-    	respuesta.append( fecha	!= null ? formatter.format(fecha) : "Fecha Inválida"); //fechaActualReporte
+    	respuesta.append( fecha	!= null ? formatter.format(fecha) : "Fecha Invalida"); //fechaActualReporte
     	respuesta.append(COMA);
     	respuesta.append(this.diasMora				!= null ? this.diasMora.intValue() : 0);
     	respuesta.append(COMA);

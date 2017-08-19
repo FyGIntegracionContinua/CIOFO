@@ -29,42 +29,42 @@ public class ConsolidadoCreditosAsignadosOV extends ObjetoValor {
 	private Double montoAsociado;
 
 	/**
-	 * Método que regresa el valor del miémbro dato creditosAsignados.
+	 * Metodo que regresa el valor del miembro dato creditosAsignados.
 	 * @return the creditosAsignados
 	 */
 	public Integer getCreditosAsignados() {
 		return creditosAsignados;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato creditosAsignados.
+	 * Metodo que establece el valor para el miembro dato creditosAsignados.
 	 * @param creditosAsignados the creditosAsignados to set
 	 */
 	public void setCreditosAsignados(Integer creditosAsignados) {
 		this.creditosAsignados = creditosAsignados;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato clientes.
+	 * Metodo que regresa el valor del miembro dato clientes.
 	 * @return the clientes
 	 */
 	public Integer getClientes() {
 		return clientes;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato clientes.
+	 * Metodo que establece el valor para el miembro dato clientes.
 	 * @param clientes the clientes to set
 	 */
 	public void setClientes(Integer clientes) {
 		this.clientes = clientes;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato montoAsociado.
+	 * Metodo que regresa el valor del miembro dato montoAsociado.
 	 * @return the montoAsociado
 	 */
 	public Double getMontoAsociado() {
 		return montoAsociado;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato montoAsociado.
+	 * Metodo que establece el valor para el miembro dato montoAsociado.
 	 * @param montoAsociado the montoAsociado to set
 	 */
 	public void setMontoAsociado(Double montoAsociado) {

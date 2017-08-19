@@ -32,28 +32,28 @@ public class ConsultarCreditosAsignadosRespuesta extends ObjetoValor {
 	private List<CreditosAsignadosOV> creditosAsignados;
 
 	/**
-	 * Método que regresa el valor del miémbro dato header.
+	 * Metodo que regresa el valor del miembro dato header.
 	 * @return the header
 	 */
 	public EncabezadoRespuesta getHeader() {
 		return header;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato header.
+	 * Metodo que establece el valor para el miembro dato header.
 	 * @param header the header to set
 	 */
 	public void setHeader(EncabezadoRespuesta header) {
 		this.header = header;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato creditosAsignados.
+	 * Metodo que regresa el valor del miembro dato creditosAsignados.
 	 * @return the creditosAsignados
 	 */
 	public List<CreditosAsignadosOV> getCreditosAsignados() {
 		return creditosAsignados;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato creditosAsignados.
+	 * Metodo que establece el valor para el miembro dato creditosAsignados.
 	 * @param creditosAsignados the creditosAsignados to set
 	 */
 	public void setCreditosAsignados(List<CreditosAsignadosOV> creditosAsignados) {

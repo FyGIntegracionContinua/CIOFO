@@ -15,7 +15,7 @@ public class MiembroGrupoPagare {
 	/**  Id del cliente? SI. */
 	private String cliente;
 
-	/**  Importe? Crédito Otorgado. */
+	/**  Importe? Credito Otorgado. */
 	private String importe;
 
 	/**  Importe en letra. */
@@ -35,7 +35,7 @@ public class MiembroGrupoPagare {
 	/** Cuenta del banco?.. De donde se obtiene? Es parametro */
 	private String ctabanco;
 
-	/**  Dirección de la sucursal. */
+	/**  Direccion de la sucursal. */
 	private String dirsucursal;
 
 	/**  Tasa moratoria anual? SI. */
@@ -69,7 +69,7 @@ public class MiembroGrupoPagare {
 	/**  Domicilio cliente (cp). */
 	private String cp;
 
-	/** Número de pagos? SI. */
+	/** Numero de pagos? SI. */
 	private String pagos;
 
 	/**  Telefono del cliente ¿domicilio? SI. */

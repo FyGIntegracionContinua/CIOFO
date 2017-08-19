@@ -28,28 +28,28 @@ public class ConsolidadoCreditosAsignadosRespuesta extends ObjetoValor {
 	private ConsolidadoCreditosAsignadosOV consolidadoCreditosAsignados;
 
 	/**
-	 * Método que regresa el valor del miémbro dato header.
+	 * Metodo que regresa el valor del miembro dato header.
 	 * @return the header
 	 */
 	public EncabezadoRespuesta getHeader() {
 		return header;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato header.
+	 * Metodo que establece el valor para el miembro dato header.
 	 * @param header the header to set
 	 */
 	public void setHeader(EncabezadoRespuesta header) {
 		this.header = header;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato consolidadoCreditosAsignados.
+	 * Metodo que regresa el valor del miembro dato consolidadoCreditosAsignados.
 	 * @return the consolidadoCreditosAsignados
 	 */
 	public ConsolidadoCreditosAsignadosOV getConsolidadoCreditosAsignados() {
 		return consolidadoCreditosAsignados;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato consolidadoCreditosAsignados.
+	 * Metodo que establece el valor para el miembro dato consolidadoCreditosAsignados.
 	 * @param consolidadoCreditosAsignados the consolidadoCreditosAsignados to set
 	 */
 	public void setConsolidadoCreditosAsignados(

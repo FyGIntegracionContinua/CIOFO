@@ -31,7 +31,7 @@ public class DesembolsoRepaymentsOV implements Serializable {
 
 
     /**
-     * Método que agrega el contenido de los campos a un StringBuffer y los separa con ","
+     * Metodo que agrega el contenido de los campos a un StringBuffer y los separa con ","
      * para generar un encabezado CVS.
      *
      * @param fechaCierre the fecha cierre
@@ -43,7 +43,7 @@ public class DesembolsoRepaymentsOV implements Serializable {
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 
     	//llenar el string buffer
-    	respuesta.append(fechaCierre 			!= null ? sdf.format( fechaCierre ) : "Fecha Inválida" ); //fecha de pago
+    	respuesta.append(fechaCierre 			!= null ? sdf.format( fechaCierre ) : "Fecha Invalida" ); //fecha de pago
     	respuesta.append(COMA);
     	respuesta.append(this.numContrato		!= null ? this.numContrato : "");
     	respuesta.append(COMA);

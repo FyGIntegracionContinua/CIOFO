@@ -44,56 +44,56 @@ public class CreditosAsignadosOV extends ObjetoValor implements Serializable {
 	private java.lang.Integer 	integrantes;
 
 	/**
-	 * Método que regresa el valor del miémbro dato contrato.
+	 * Metodo que regresa el valor del miembro dato contrato.
 	 * @return the contrato
 	 */
 	public String getContrato() {
 		return contrato;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato contrato.
+	 * Metodo que establece el valor para el miembro dato contrato.
 	 * @param contrato the contrato to set
 	 */
 	public void setContrato(String contrato) {
 		this.contrato = contrato;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato contratoLD.
+	 * Metodo que regresa el valor del miembro dato contratoLD.
 	 * @return the contratoLD
 	 */
 	public String getContratoLD() {
 		return contratoLD;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato contratoLD.
+	 * Metodo que establece el valor para el miembro dato contratoLD.
 	 * @param contratoLD the contratoLD to set
 	 */
 	public void setContratoLD(String contratoLD) {
 		this.contratoLD = contratoLD;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato codigoGrupo.
+	 * Metodo que regresa el valor del miembro dato codigoGrupo.
 	 * @return the codigoGrupo
 	 */
 	public String getCodigoGrupo() {
 		return codigoGrupo;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato codigoGrupo.
+	 * Metodo que establece el valor para el miembro dato codigoGrupo.
 	 * @param codigoGrupo the codigoGrupo to set
 	 */
 	public void setCodigoGrupo(String codigoGrupo) {
 		this.codigoGrupo = codigoGrupo;
 	}
 	/**
-	 * Método que regresa el valor del miémbro dato nombreGrupo.
+	 * Metodo que regresa el valor del miembro dato nombreGrupo.
 	 * @return the nombreGrupo
 	 */
 	public String getNombreGrupo() {
 		return nombreGrupo;
 	}
 	/**
-	 * Método que establece el valor para el miémbro dato nombreGrupo.
+	 * Metodo que establece el valor para el miembro dato nombreGrupo.
 	 * @param nombreGrupo the nombreGrupo to set
 	 */
 	public void setNombreGrupo(String nombreGrupo) {

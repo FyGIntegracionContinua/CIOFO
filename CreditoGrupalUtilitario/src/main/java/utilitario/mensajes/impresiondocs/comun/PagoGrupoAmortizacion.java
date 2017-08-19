@@ -117,7 +117,7 @@ public class PagoGrupoAmortizacion {
 		this.fechapago = fechapago;
 	}
 	/**
-	 * Número de pagos. Viene un registro por cada pago? SI
+	 * Numero de pagos. Viene un registro por cada pago? SI
 	 */
 	private String numpago;
 	/**

@@ -51,7 +51,7 @@ public class DesembolsoSEFinsol2OV implements Serializable {
     private String 	 contrato;
 
     /**
-     * Método que agrega el contenido de los campos a un StringBuffer y los separa con ","
+     * Metodo que agrega el contenido de los campos a un StringBuffer y los separa con ","
      * para generar un encabezado CVS.
      *
      * @param fechaCierre the fecha cierre
@@ -67,7 +67,7 @@ public class DesembolsoSEFinsol2OV implements Serializable {
     	respuesta.append(coma);
     	respuesta.append(this.producto 			!= null ? this.producto : "");
     	respuesta.append(coma);
-    	respuesta.append(fechaCierre			!= null ? sdf.format(fechaCierre) : "Fecha Inválida"); //Dia Pago
+    	respuesta.append(fechaCierre			!= null ? sdf.format(fechaCierre) : "Fecha Invalida"); //Dia Pago
     	respuesta.append(coma);
     	respuesta.append(this.numGrupo			!= null ? this.numGrupo : "");
     	respuesta.append(coma);

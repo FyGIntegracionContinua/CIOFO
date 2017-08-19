@@ -52,7 +52,7 @@ public 	class 	LineaContableOV extends ObjetoValor {
 		this.monto2 = monto2;
 		}
 
-	//Métodos get - set  ------------------------------------------------------------------
+	//Metodos get - set  ------------------------------------------------------------------
 	/**
 	 * @return the texto
 	 */
