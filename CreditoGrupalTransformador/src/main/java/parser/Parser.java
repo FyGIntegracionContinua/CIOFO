@@ -97,11 +97,11 @@ public interface Parser {
 	/**
 	 * E_WEB_CHEQUES_GRAL String
 	 */
-	static final String E_WEB_CHEQUES_GRAL		= "E.CLIENTES.GRAL.CHEQUES";  //Información cheques web
+	static final String E_WEB_CHEQUES_GRAL		= "E.CLIENTES.GRAL.CHEQUES";  //Informacion cheques web
 	/**
 	 * E_WEB_CHEQUES_INFO String
 	 */
-	static final String E_WEB_CHEQUES_INFO		= "E.CLIENTES.INFO.CHEQUES";  //Información clientes cheques web
+	static final String E_WEB_CHEQUES_INFO		= "E.CLIENTES.INFO.CHEQUES";  //Informacion clientes cheques web
 
 	/**
 	 * SUFFIX_CAMPO String
@@ -252,11 +252,11 @@ public interface Parser {
  	/**
  	 * WEB_CHEQUES_GRAL int
  	 */
- 	static final int WEB_CHEQUES_GRAL   	= 1012;	//Cheques web, información general
+ 	static final int WEB_CHEQUES_GRAL   	= 1012;	//Cheques web, informacion general
  	/**
  	 * WEB_CHEQUES_CLIENTES int
  	 */
- 	static final int WEB_CHEQUES_CLIENTES	= 1013; //Cheques web, información clientes
+ 	static final int WEB_CHEQUES_CLIENTES	= 1013; //Cheques web, informacion clientes
  	/**
  	 * PETICION_OFS String
  	 */

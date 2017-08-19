@@ -59,7 +59,7 @@ public class MapperSalidaImpl implements MapperSalida {
 	 */
 	private String normalizaCaracetresEspeciales( String desnormalizada ) {
 		String
-		normalizada  = desnormalizada.replace("À", "//01");
+		/*normalizada  = desnormalizada.replace("À", "//01");
 		normalizada  = normalizada.replace("È", "//02");
 		normalizada  = normalizada.replace("Ì", "//03");
 		normalizada  = normalizada.replace("Ò", "//04");
@@ -100,7 +100,7 @@ public class MapperSalidaImpl implements MapperSalida {
 		normalizada  = normalizada.replace("ö", "//39");
 		normalizada  = normalizada.replace("ü", "//40");
 		normalizada  = normalizada.replace("Ñ", "//41");
-		normalizada  = normalizada.replace("ñ", "//42");
+		normalizada  = normalizada.replace("ñ", "//42");*/
 		normalizada  = normalizada.replace(",", "//43");
 		normalizada  = normalizada.replace("'", "//44");
 		normalizada  = normalizada.replace("\"", "//45");
