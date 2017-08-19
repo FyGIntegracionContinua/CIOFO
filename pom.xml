@@ -227,7 +227,7 @@
 			<plugin>
 				    <groupId>org.codehaus.mojo</groupId>
 				    <artifactId>findbugs-maven-plugin</artifactId>
-				    <version>4.57</version>
+				    <version>3.0.5</version>
 				    <configuration>
 				        <trace>false</trace>
 				        <effort>Max</effort>
