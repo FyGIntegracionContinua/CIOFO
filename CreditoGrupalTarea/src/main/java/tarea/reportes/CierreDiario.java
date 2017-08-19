@@ -77,7 +77,7 @@ public interface CierreDiario {
 	public boolean generaReporteCarteraActiva(String uid,  Date fechaCierre, Integer totalRegistrosAProcesar );
 	
 	/**
-	 * Genera el reporte para contratos activos con mora al día actual.
+	 * Genera el reporte para contratos activos con mora al dia actual.
 	 * @param contrato
 	 * @return
 	 */

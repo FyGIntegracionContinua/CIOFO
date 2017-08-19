@@ -47,7 +47,7 @@ public interface OriginacionConsultas {
 	/**
 	 * Realiza la valiadación de la Fecha de operacion / inicio del contrato
 	 * @param ConsultaFechaOV fecha de operacion
-	 * @return ConsultaRespuesta con el identificador de éxito o falla.
+	 * @return ConsultaRespuesta con el identificador de exito o falla.
 	 */
 	ConsultaRespuesta validarFechaInicioContrato( String uid, ConsultaFechaOV fecha );
 	

@@ -58,7 +58,7 @@ public 	class 		OperacionAdministrativaEventoImpl
 			LogHandler.trace(evento.getUid(), getClass(), "==> ejecutarCierreFinsol - verificaDiaNoHabDom");
 			final java.lang.Integer fechaValida = (java.lang.Integer)sesionNTx.selectOne( "verificaDiaNoHabDom", params );
 			
-			if( fechaValida == 0)//1 significa que salio true en la verificación, de que no es un dia habil
+			if( fechaValida == 0)//1 significa que salio true en la verificacion, de que no es un dia habil
 				{			
 				
 				//Formato para la fecha

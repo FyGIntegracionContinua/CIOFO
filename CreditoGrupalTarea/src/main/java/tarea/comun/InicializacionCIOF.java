@@ -26,7 +26,6 @@ public 	class 		InicializacionCIOF
 			}
 		catch( Exception exception )
 			{
-			LogHandler.error("uid-inicial", getClass(), "Error de inicialización", exception );
-			}
+			LogHandler.error("uid-inicial", getClass(), "Error de inicializacion", exception ); }
 		}
 	}

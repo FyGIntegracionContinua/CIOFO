@@ -95,20 +95,10 @@ public final class ChequesSICImpl implements ChequesSIC {
 				resultado.setNomAsesor( asesorOV.getNombreCompleto() );
 			}
 
-			//Dirección de la sucursal sin caracteres especiales
+			//Direccion de la sucursal sin caracteres especiales
 			resultado.setSucursalDir(
 					resultado.getSucursalDir()
-					.replace( "//01" , "À" ).replace( "//02" , "È" ).replace( "//03" , "Ì" ).replace( "//04" , "Ò" )
-					.replace( "//05" , "Ù" ).replace( "//06" , "Á" ).replace( "//07" , "É" ).replace( "//08" , "Í" )
-					.replace( "//09" , "Ó" ).replace( "//10" , "Ú" ).replace( "//11" , "Â" ).replace( "//12" , "Ê" )
-					.replace( "//13" , "Î" ).replace( "//14" , "Ô" ).replace( "//15" , "Û" ).replace( "//16" , "Ä" )
-					.replace( "//17" , "Ë" ).replace( "//18" , "Ï" ).replace( "//19" , "Ö" ).replace( "//20" , "Ü" )
-					.replace( "//21" , "à" ).replace( "//22" , "è" ).replace( "//23" , "ì" ).replace( "//24" , "ò" )
-					.replace( "//25" , "ù" ).replace( "//26" , "á" ).replace( "//27" , "é" ).replace( "//28" , "í" )
-					.replace( "//29" , "ó" ).replace( "//30" , "ú" ).replace( "//31" , "â" ).replace( "//32" , "ê" )
-					.replace( "//33" , "î" ).replace( "//34" , "ô" ).replace( "//35" , "û" ).replace( "//36" , "ä" )
-					.replace( "//37" , "ë" ).replace( "//38" , "ï" ).replace( "//39" , "ö" ).replace( "//40" , "ü" )
-					.replace( "//41" , "Ñ" ).replace( "//42" , "ñ" ).replace( "//43" , "," ).replace( "//44" , "'" ) );
+					);
 
 			//Sucursal si acento
 			resultado.setSucursalDirSinAcento( resultado.getSucursalDir() );
