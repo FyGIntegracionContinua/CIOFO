@@ -234,10 +234,6 @@
 				        <threshold>Low</threshold>
 				        <xmlOutput>true</xmlOutput>
 				        <failOnError>false</failOnError>
-				        <jvmArgs>
-					        <jvmArg>-Xmx1024m</jvmArg>
-					        <jvmArg>-Xms256m</jvmArg>
-					    </jvmArgs>
 				    </configuration>
 				    <executions>
 				        <execution>
