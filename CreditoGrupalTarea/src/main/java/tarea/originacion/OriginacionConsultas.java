@@ -45,7 +45,7 @@ public interface OriginacionConsultas {
 	static final String	MENSAJE_TIMEOUT 				= "FSERROR_TIMEOUT, FECHA INICIO CONTRATO NO VALIDA. ";
 
 	/**
-	 * Realiza la valiadación de la Fecha de operacion / inicio del contrato
+	 * Realiza la valiadacion de la Fecha de operacion / inicio del contrato
 	 * @param ConsultaFechaOV fecha de operacion
 	 * @return ConsultaRespuesta con el identificador de exito o falla.
 	 */
