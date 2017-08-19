@@ -72,7 +72,7 @@ public class MiembroGrupoPagare {
 	/** Numero de pagos? SI. */
 	private String pagos;
 
-	/**  Telefono del cliente ¿domicilio? SI. */
+	/**  Telefono del cliente domicilio? SI. */
 	private String tel;
 
 	/**
