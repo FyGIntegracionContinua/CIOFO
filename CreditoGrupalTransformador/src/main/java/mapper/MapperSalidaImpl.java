@@ -59,11 +59,10 @@ public class MapperSalidaImpl implements MapperSalida {
 	 */
 	private String normalizaCaracetresEspeciales( String desnormalizada ) {
 		String
-		
+		normalizada = " ";
 		normalizada  = normalizada.replace(",", "//43");
 		normalizada  = normalizada.replace("'", "//44");
 		normalizada  = normalizada.replace("\"", "//45");
-
 		return normalizada;
 	}
 
