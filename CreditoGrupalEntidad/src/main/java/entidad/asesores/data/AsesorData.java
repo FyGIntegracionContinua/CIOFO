@@ -27,7 +27,7 @@ public final class AsesorData {
 	 */
 	private static Map<String, AsesorOV> mapAsesoresPersonas = new HashMap<String, AsesorOV>();
 
-	//Sección estática para inicializar la clase
+	//Seccion estatica para inicializar la clase
 	static
 		{
 		cargarAsesores();
@@ -77,7 +77,7 @@ public final class AsesorData {
 		}
 
 	/**
-	 * Método para recuperar la clave de persona del Asesor
+	 * Metodo para recuperar la clave de persona del Asesor
 	 * @param uid tipo string
 	 * @param numeroAsesor tipo string
 	 * @return claveAsesor
@@ -106,7 +106,7 @@ public final class AsesorData {
 		}
 
 	/**
-	 * Método para conocer el número de asesores cargados
+	 * Metodo para conocer el numero de asesores cargados
 	 * @return mapAsesores
 	 */
 	public static java.lang.Integer getNumeroAsesores() {
@@ -118,7 +118,7 @@ public final class AsesorData {
 		//return mapAsesores == null ? null : mapAsesores.size();
 	}
 
-	// Métodos privados  ------------------------------------------------------------------------------
+	// Metodos privados  ------------------------------------------------------------------------------
 	/**
 	 * metodo privado para carga de asesores
 	 */
