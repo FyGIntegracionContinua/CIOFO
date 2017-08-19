@@ -174,7 +174,7 @@ public class ProcesaOFSCreditoGrupalImpl implements ProcesaOFSCreditoGrupal {
 		 			break;
 		 		case Parser.INFO_CHEQUES_GRAL:
 	 				ovRespuesta =  cheques.consultaContratoChequesSIC(uid, (ChequesPeticion) ovPeticion);	break;
-		 		case Parser.WEB_CHEQUES_GRAL://Método para generar los cheques web
+		 		case Parser.WEB_CHEQUES_GRAL://Metodo para generar los cheques web
 		 			ovRespuesta =  cheques.consultaContratoChequesSIC(uid, (ChequesPeticion) ovPeticion);	break;
 		 		case Parser.INFO_CHEQUES_CLIENTES:
 	 				ovRespuesta =  cheques.consultaClientesChequesSIC(uid, (ChequesPeticion) ovPeticion);	break;

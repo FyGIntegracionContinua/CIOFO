@@ -34,7 +34,7 @@ public interface ProcesaOFSCreditoGrupal {
 	 *  <li>Consulta Credito Clientes SIC				E.INFO.CHEQUES.CLIENTES</li>
 	 * </ul>
 	 * CREDPROD
-	 * @param peticion cadena OFS que indica que acción se realizara.
+	 * @param peticion cadena OFS que indica que accion se realizara.
 	 * @return String cadena OFS con el resultado el procesamiento.
 	 */
 	String procesarOFSCreditoGrupal(

@@ -55,7 +55,7 @@ public class ConsultasCicloImpl implements ConsultasCiclo {
 			(ObtenerReferenciasPagoPeticion) transformador.transformaXMLAObjeto(uid, peticion, clases);
 		LogHandler.info(uid, getClass(), "obtenerReferenciasPago - Datos de entrada : " + peticionObtenerRef);
 
-		//Llamado a función principal
+		//Llamado a funcion principal
 		final ObtenerReferenciasPagoRespuesta respuesta = consultas.obtenerReferenciasPagoSeguros(peticionObtenerRef, uid);
 		LogHandler.info(uid, getClass(), "obtenerReferenciasPago - Datos de salida: " + respuesta);
 

@@ -57,7 +57,7 @@ public class BuroInternoImpl implements BuroInterno {
 			(BuroPeticionKit) transformador.transformaXMLAObjeto(uid, peticion, clases);
 		LogHandler.info(uid, getClass(), "consultaBuroInterno - Datos de entrada : " + buroPeticion);
 
-		//Llamado a función principal
+		//Llamado a funcion principal
 		final BuroInternoKitRespuesta respuesta = kitBuro.generaConsultaBuroInterno(uid, buroPeticion);
 		LogHandler.info(uid, getClass(), "consultaBuroInterno - Datos de salida: " + respuesta);
 
